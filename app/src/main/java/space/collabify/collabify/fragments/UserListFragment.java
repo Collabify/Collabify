@@ -5,9 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * This file was born on March 11 at 14:12
+ * This file was born on March 11, at 15:52
  */
-public class DjPlayerFragment extends BasePlayerFragment {
+public class UserListFragment extends CollabifyFragment {
     @Override
     public View inflateFragment(int i, LayoutInflater layoutInflater, ViewGroup viewGroup) {
         return null;

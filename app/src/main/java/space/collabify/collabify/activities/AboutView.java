@@ -1,4 +1,4 @@
-package space.collabify.collabify;
+package space.collabify.collabify.activities;
 
 import android.content.Context;
 import android.view.View;

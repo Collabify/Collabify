@@ -1,5 +1,6 @@
-package space.collabify.collabify;
+package space.collabify.collabify.activities;
 
+import space.collabify.collabify.*;
 import android.support.v7.app.ActionBarActivity;
 
 /**

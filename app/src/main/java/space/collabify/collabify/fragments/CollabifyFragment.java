@@ -1,4 +1,4 @@
-package space.collabify.collabify;
+package space.collabify.collabify.fragments;
 
 import android.view.LayoutInflater;
 import android.view.View;
