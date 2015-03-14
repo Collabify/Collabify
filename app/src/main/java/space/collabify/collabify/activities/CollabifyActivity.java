@@ -2,6 +2,7 @@ package space.collabify.collabify.activities;
 
 import space.collabify.collabify.*;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -45,7 +46,9 @@ public class CollabifyActivity extends ActionBarActivity {
 
     /** Launch settings activity */
     private void openSettings() {
+        //don't want to go to settings if we are already there
         Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(intent);
+
     }
 }
