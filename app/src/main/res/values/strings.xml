@@ -3,4 +3,11 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="collabify_login_label">Collabify Login</string>
+    <string name="mode_select_label">Collabify Choose Mode</string>
+    <string name="action_bar_settings">Settings</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
