@@ -29,11 +29,13 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // TODO: at this point don't know if the user will need streaming scope, will have to be done on choose mode
+        //may want to have some sort of 'load screen' that just shows our icon and name for like two seconds
+        // before prompting the user to sign up through spotify
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
 
-        // TODO: at this point don't know if the user will need streaming scope, will have to be done on choose mode
         builder.setScopes(new String[]{"user-read-private", "user-library-read", "user-read-private"});
         AuthenticationRequest request = builder.build();
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -46,7 +48,18 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
-            //TODO: do something with response?
+
+            //checking for successful login response
+            String error = response.getError();
+            if(error == null){
+                //good to move on?...
+                //TODO: something with the response.accessToken() but not sure what yet
+                Intent i = new Intent(this, ModeSelectActivity.class);
+                startActivity(i);
+            }else{
+                //TODO: maybe have button to try spotify login again,
+                // and show text or some shit?
+            }
         }
     }
 

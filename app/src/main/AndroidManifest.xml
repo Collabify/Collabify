@@ -13,12 +13,16 @@
         android:theme="@style/AppTheme" >
 
 
-        <activity android:name=".activities.LoginScreenActivity">
+        <activity android:name=".activities.LoginScreenActivity"
+                android:label="@string/collabify_login_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.ModeSelectActivity"
+                android:label="@string/mode_select_label"/>
 
         <!-- Needed for spotify login to work -->
         <activity
