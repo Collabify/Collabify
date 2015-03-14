@@ -3,6 +3,7 @@ package space.collabify.collabify.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -28,7 +29,9 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+    }
 
+    public void loginWithSpotify(View view) {
         // TODO: at this point don't know if the user will need streaming scope, will have to be done on choose mode
         //may want to have some sort of 'load screen' that just shows our icon and name for like two seconds
         // before prompting the user to sign up through spotify
@@ -62,6 +65,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
             }
         }
     }
+
 
     @Override
     public void onLoggedIn() {
