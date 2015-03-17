@@ -2,4 +2,103 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+  <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/create_event_button"
+    android:id="@+id/create_event_button"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"/>
+
+  <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/cancel_button"
+    android:id="@+id/cancel_button"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"/>
+
+  <EditText
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/event_field"
+    android:width="200dp"
+    android:layout_alignBottom="@+id/event_name"
+    android:layout_alignRight="@+id/create_event_button"
+    android:layout_alignEnd="@+id/create_event_button"
+    />
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:text="@string/event_name"
+    android:id="@+id/event_name"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_margin="15dp"/>
+
+  <CheckBox
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/password_protected_checkbox"
+    android:id="@+id/password_protected_checkbox"
+    android:checked="false"
+    android:button="@null"
+    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+    android:textSize="20dp"
+    android:layout_below="@+id/event_name"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_margin="15dp"/>
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:text="@string/password"
+    android:id="@+id/password"
+    android:layout_below="@+id/password_protected_checkbox"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_margin="15dp"/>
+
+  <EditText
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/password_field"
+    android:layout_alignBottom="@+id/password"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:width="200dp"/>
+
+  <CheckBox
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/allow_feedback_button"
+    android:id="@+id/allow_feedback_button"
+    android:checked="false"
+    android:button="@null"
+    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+    android:textSize="20dp"
+    android:layout_below="@+id/password"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_margin="15dp"/>
+
+  <CheckBox
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/restrict_nearby_checkbox"
+    android:id="@+id/restrict_nearby_checkbox"
+    android:checked="false"
+    android:button="@null"
+    android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+    android:textSize="20dp"
+    android:layout_below="@+id/allow_feedback_button"
+    android:layout_margin="15dp"/>
+
 </RelativeLayout>
