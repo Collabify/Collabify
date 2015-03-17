@@ -30,6 +30,7 @@
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -39,6 +40,12 @@
         <activity
             android:name=".activities.JoinEventActivity"
             android:label="@string/title_join_event" />
+        <activity
+          android:name=".activities.DjActivity"
+          android:label="@string/title_dj" />
+        <activity
+          android:name=".activities.CollabifierActivity"
+          android:label="@string/title_collabifier" />
     </application>
 
 </manifest>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="title_create_event">Create Event</string>
+
   <string name="create_event_button">Create Event</string>
-  <string name="cancel_button">Cancel</string>
   <string name="restrict_nearby_checkbox">Restrict to Nearby Users?</string>
   <string name="allow_feedback_button">Allow User Feedback?</string>
   <string name="password">Password</string>
