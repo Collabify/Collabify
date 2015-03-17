@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="title_join_event">Join Event</string>
+
+  <string name="join_event_button">Join Event</string>
+</resources>
