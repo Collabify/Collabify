@@ -47,9 +47,13 @@
           android:name=".activities.CollabifierActivity"
           android:label="@string/label_collabifier" />
 
+        <!-- Fragments -->
         <fragment
           android:name=".fragments.CollabifierPlayerFragment"
           android:label="@string/label_collabifier_player" />
+        <fragment
+          android:name=".fragments.PlaylistFragment"
+          android:label="@string/label_playlist" />
     </application>
 
 </manifest>
