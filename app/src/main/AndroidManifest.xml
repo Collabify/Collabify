@@ -13,7 +13,7 @@
             android:name=".activities.LoginScreenActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/collabify_login_label" >
+            android:label="@string/label_collabify_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +24,7 @@
             android:name=".activities.ModeSelectActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/mode_select_label" />
+            android:label="@string/label_mode_select" />
 
         <!-- Needed for spotify login to work -->
         <activity
@@ -33,19 +33,23 @@
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/label_settings" />
         <activity
             android:name=".activities.CreateEventActivity"
-            android:label="@string/title_create_event" />
+            android:label="@string/label_create_event" />
         <activity
             android:name=".activities.JoinEventActivity"
-            android:label="@string/title_join_event" />
+            android:label="@string/label_join_event" />
         <activity
           android:name=".activities.DjActivity"
-          android:label="@string/title_dj" />
+          android:label="@string/label_dj" />
         <activity
           android:name=".activities.CollabifierActivity"
-          android:label="@string/title_collabifier" />
+          android:label="@string/label_collabifier" />
+
+        <fragment
+          android:name=".fragments.CollabifierPlayerFragment"
+          android:label="@string/label_collabifier_player" />
     </application>
 
 </manifest>
