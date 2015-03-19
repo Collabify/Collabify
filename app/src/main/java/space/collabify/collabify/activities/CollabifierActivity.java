@@ -21,18 +21,22 @@ public class CollabifierActivity extends PrimaryViewActivity {
     // Adding tabs
     TabHost.TabSpec tab1 = myTabHost.newTabSpec("tab_creation");
     TabHost.TabSpec tab2 = myTabHost.newTabSpec("tab_creation");
+    TabHost.TabSpec tab3 = myTabHost.newTabSpec("tab_creation");
 
     // text and image of tab
     tab1.setIndicator("Player",getResources().getDrawable(android.R.drawable.ic_menu_add));
-    tab2.setIndicator("List",getResources().getDrawable(android.R.drawable.ic_menu_add));
+    tab2.setIndicator("Playlist",getResources().getDrawable(android.R.drawable.ic_menu_add));
+    tab3.setIndicator("DJ Tracks",getResources().getDrawable(android.R.drawable.ic_menu_add));
 
     // specify layout of tab
     tab1.setContent(R.id.tab1);
     tab2.setContent(R.id.tab2);
+    tab3.setContent(R.id.tab3);
 
     // adding tab in TabHost
     myTabHost.addTab(tab1);
     myTabHost.addTab(tab2);
+    myTabHost.addTab(tab3);
 
   }
 

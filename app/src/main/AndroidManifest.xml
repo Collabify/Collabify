@@ -54,6 +54,9 @@
         <fragment
           android:name=".fragments.PlaylistFragment"
           android:label="@string/label_playlist" />
+        <fragment
+          android:name=".fragments.DjTracksFragment"
+          android:label="@string/label_dj_tracks" />
     </application>
 
 </manifest>
