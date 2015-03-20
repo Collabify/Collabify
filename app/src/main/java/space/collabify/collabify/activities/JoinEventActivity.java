@@ -4,13 +4,14 @@ package space.collabify.collabify.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 import space.collabify.collabify.R;
 
 /**
  * This file was born on March 11 at 14:00
  */
-public class JoinEventActivity extends CollabifyActivity{
+public class JoinEventActivity extends CollabifyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
