@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+
+  <TabHost
+    android:id="@+id/TabHost01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+      android:layout_height="fill_parent"
+      android:layout_width="fill_parent">
+      <TabWidget
+        android:id="@android:id/tabs"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+      <FrameLayout
+        android:id="@android:id/tabcontent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="5dp">
+
+        <include
+          android:id="@+id/tab1"
+          android:layout_width="fill_parent"
+          android:layout_height="match_parent"
+          layout="@layout/fragment_collabifier_player" />
+
+        <include
+          android:id="@+id/tab2"
+          android:layout_width="fill_parent"
+          android:layout_height="match_parent"
+          layout="@layout/fragment_playlist" />
+
+        <include
+          android:id="@+id/tab3"
+          android:layout_width="fill_parent"
+          android:layout_height="match_parent"
+          layout="@layout/fragment_dj_tracks" />
+      </FrameLayout>
+    </RelativeLayout>
+  </TabHost>
+
+</RelativeLayout>
