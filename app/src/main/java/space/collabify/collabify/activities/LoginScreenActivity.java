@@ -55,14 +55,16 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
 
             //checking for successful login response
             String error = response.getError();
-            if(error == null){
-                //good to move on?...
+            if(error != null) {
+                //TODO: not sure yet what may cause this case
+                // and show text or some shit?
+                return;
+            }
+
+            if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
                 //TODO: something with the response.accessToken() but not sure what yet
                 Intent i = new Intent(this, ModeSelectActivity.class);
                 startActivity(i);
-            }else{
-                //TODO: maybe have button to try spotify login again,
-                // and show text or some shit?
             }
         }
     }
