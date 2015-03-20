@@ -41,11 +41,11 @@
             android:name=".activities.JoinEventActivity"
             android:label="@string/label_join_event" />
         <activity
-          android:name=".activities.DjActivity"
-          android:label="@string/label_dj" />
-        <activity
           android:name=".activities.CollabifierActivity"
           android:label="@string/label_collabifier" />
+        <activity
+          android:name=".activities.DjActivity"
+          android:label="@string/label_dj" />
 
         <!-- Fragments -->
         <fragment
@@ -57,6 +57,12 @@
         <fragment
           android:name=".fragments.DjTracksFragment"
           android:label="@string/label_dj_tracks" />
+        <fragment
+          android:name=".fragments.DjPlayerFragment"
+          android:label="@string/label_dj_player" />
+        <fragment
+          android:name=".fragments.UserListFragment"
+          android:label="@string/label_user_list" />
     </application>
 
 </manifest>

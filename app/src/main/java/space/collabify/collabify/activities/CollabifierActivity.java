@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 import space.collabify.collabify.*;
+
 /**
  * This file was born on March 11 at 14:02
  */
@@ -14,7 +15,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_collabifier);
 
-    myTabHost =(TabHost) findViewById(R.id.TabHost01);
+    myTabHost = (TabHost) findViewById(R.id.collabifier_tab_host);
     // Before adding tabs, it is imperative to call the method setup()
     myTabHost.setup();
 
@@ -29,9 +30,9 @@ public class CollabifierActivity extends PrimaryViewActivity {
     tab3.setIndicator("DJ Tracks",getResources().getDrawable(android.R.drawable.ic_menu_add));
 
     // specify layout of tab
-    tab1.setContent(R.id.tab1);
-    tab2.setContent(R.id.tab2);
-    tab3.setContent(R.id.tab3);
+    tab1.setContent(R.id.collabifier_tab1);
+    tab2.setContent(R.id.collabifier_tab2);
+    tab3.setContent(R.id.collabifier_tab3);
 
     // adding tab in TabHost
     myTabHost.addTab(tab1);
