@@ -6,7 +6,7 @@
 
 
   <TabHost
-    android:id="@+id/TabHost01"
+    android:id="@+id/collabifier_tab_host"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <RelativeLayout
@@ -24,19 +24,19 @@
         android:padding="5dp">
 
         <include
-          android:id="@+id/tab1"
+          android:id="@+id/collabifier_tab1"
           android:layout_width="fill_parent"
           android:layout_height="match_parent"
           layout="@layout/fragment_collabifier_player" />
 
         <include
-          android:id="@+id/tab2"
+          android:id="@+id/collabifier_tab2"
           android:layout_width="fill_parent"
           android:layout_height="match_parent"
           layout="@layout/fragment_playlist" />
 
         <include
-          android:id="@+id/tab3"
+          android:id="@+id/collabifier_tab3"
           android:layout_width="fill_parent"
           android:layout_height="match_parent"
           layout="@layout/fragment_dj_tracks" />
