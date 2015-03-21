@@ -28,7 +28,7 @@
 
                 <include
                     android:id="@+id/dj_tab1"
-                    layout="@layout/fragment_collabifier_player"
+                    layout="@layout/fragment_base_player"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent" />
 

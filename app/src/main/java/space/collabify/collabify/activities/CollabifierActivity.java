@@ -1,5 +1,6 @@
 package space.collabify.collabify.activities;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TabHost;
 
 import space.collabify.collabify.*;
@@ -38,6 +39,9 @@ public class CollabifierActivity extends PrimaryViewActivity {
     myTabHost.addTab(tab1);
     myTabHost.addTab(tab2);
     myTabHost.addTab(tab3);
+
+    View djControls = findViewById(R.id.player_dj);
+    djControls.setVisibility(View.GONE);
 
   }
 
