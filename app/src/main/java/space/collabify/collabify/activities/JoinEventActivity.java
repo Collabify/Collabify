@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,6 +18,7 @@ import com.google.android.gms.location.LocationServices;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.fragments.JoinEventListFragment;
+import space.collabify.collabify.models.Event;
 
 /**
  * This file was born on March 11 at 14:00
@@ -81,14 +83,35 @@ public class JoinEventActivity extends CollabifyActivity implements
                 .build();
     }
 
+    /**
+     * Returns user to choose mode screen
+     * @param view
+     */
     public void toModeSelect(View view) {
         finish();
     }
 
-    public void toCollabifier(View view) {
+
+    public void toCollabifier(Event event) {
+        //TODO: work out exact communication with servermanager
+        mServerManager.joinEvent(event, mAppManager.getUser());
         Intent intent = new Intent(this, CollabifierActivity.class);
         startActivity(intent);
     }
+
+    public void toCollabifier(Event event, String password){
+        //TODO may have to change how password is handled/displayed
+        if(event.getPassword().equalsIgnoreCase(password)){
+            mServerManager.joinEvent(event, mAppManager.getUser());
+            Intent intent = new Intent(this, CollabifierActivity.class);
+            startActivity(intent);
+        }else {
+            //bad password, don't do anything
+            Toast.makeText(JoinEventActivity.this, "Bad Password!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 
     @Override
     public void onConnected(Bundle connectionHint) {

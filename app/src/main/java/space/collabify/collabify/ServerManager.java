@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.User;
 
 /**
  * This file was born on March 11 at 13:43
@@ -32,6 +33,11 @@ public class ServerManager {
         return mInstance;
     }
 
+    /**
+     * Queries the server for events
+     * @param request query information
+     * @return list of events based off of request param
+     */
     public List<Event> getEvents(LoadEventsRequest request){
         //TODO fill in with actual server stuff
 
@@ -60,5 +66,9 @@ public class ServerManager {
 
 
         return events;
+    }
+
+    public void joinEvent(Event event, User user){
+        //TODO: implementation
     }
 }

@@ -17,6 +17,8 @@ public class CollabifyActivity extends ActionBarActivity {
     protected ServerManager mServerManager;
 
     public CollabifyActivity(){
+        mAppManager = AppManager.getInstance();
+        mServerManager = ServerManager.getInstance();
     }
 
     public CollabifyActivity(AppManager mAppManager, ServerManager mServerManager) {

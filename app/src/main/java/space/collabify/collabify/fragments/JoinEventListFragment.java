@@ -1,12 +1,15 @@
 package space.collabify.collabify.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.app.ListFragment;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -29,6 +33,7 @@ import java.util.List;
 import space.collabify.collabify.LoadEventsRequest;
 import space.collabify.collabify.R;
 import space.collabify.collabify.ServerManager;
+import space.collabify.collabify.activities.JoinEventActivity;
 import space.collabify.collabify.models.Event;
 
 /**
@@ -60,10 +65,81 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         //super.onListItemClick(l, v, position, id);
-        String item = (String)l.getItemAtPosition(position);
+        final Event item = (Event)l.getItemAtPosition(position);
+
+        //either prompt to join event, or to enter password
+        if(item == null){
+            //not sure if possible, but can't do anything
+            return;
+        }
+
+        if(item.isProtectedEvent()){
+            setupPasswordDialog(item);
+        }else {
+            setupJoinDialog(item);
+        }
 
     }
 
+    /**
+     * Prompts user if they want to actually join the event they clicked on
+     * see helpful link: http://stackoverflow.com/questions/10903754/input-text-dialog-android
+     * @param event
+     */
+    private void setupJoinDialog(final Event event){
+        //just prompt to join
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.join_event_dialog_title));
+        builder.setMessage(event.getName());
+        builder.setPositiveButton(getString(R.string.join_event_dialog_positive_text),
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //go on to event
+                ((JoinEventActivity) getActivity()).toCollabifier(event);
+            }
+        });
+        builder.setNegativeButton(getString(R.string.join_event_dialog_negative_text),
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * Prompts user for event password and verifies it before going on
+     * @param event
+     */
+    private void setupPasswordDialog(final Event event){
+        //TODO: may have to change how password is handled/displayed
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Join Password Protected Event?");
+        builder.setMessage(event.getName() + " - password:");
+
+        //set up password input
+        final EditText input = new EditText(getActivity());
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+        builder.setPositiveButton(getString(R.string.join_event_dialog_positive_text),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //maybe go on to event
+                        ((JoinEventActivity) getActivity()).toCollabifier(event, input.getText().toString());
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.join_event_dialog_negative_text),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
     /**
      * Starts a LoadEventsTask in background with user location
      */
