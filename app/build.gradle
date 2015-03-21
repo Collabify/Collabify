@@ -30,4 +30,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.spotify.sdk:spotifysdk:1.0.0-beta8@aar'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.google.android.gms:play-services:7.0.0'
 }
