@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -58,6 +59,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
             if(error != null) {
                 //TODO: not sure yet what may cause this case
                 // and show text or some shit?
+                Toast.makeText(this, "response error occured", Toast.LENGTH_LONG);
                 return;
             }
 
