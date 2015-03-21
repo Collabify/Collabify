@@ -12,4 +12,14 @@
     android:layout_gravity="center_horizontal"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"/>
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:text="DJ Only!"
+    android:id="@+id/player_dj"
+    android:layout_below="@+id/textView"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="20dp"/>
 </RelativeLayout>

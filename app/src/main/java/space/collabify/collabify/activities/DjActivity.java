@@ -1,5 +1,6 @@
 package space.collabify.collabify.activities;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TabHost;
 
 import space.collabify.collabify.*;
