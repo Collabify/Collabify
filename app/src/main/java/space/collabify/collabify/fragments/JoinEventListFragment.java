@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,18 +35,12 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
 
     private Location mLastUserLocation;
 
-
-    public View inflateFragment(int i, LayoutInflater layoutInflater, ViewGroup viewGroup) {
-        return null;
-    }
-
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         ArrayList<String> temp = new ArrayList<>();
-        temp.add("empty");
+        temp.add("Waiting for server...");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
@@ -77,8 +74,16 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
         setRefreshing(false);
     }
 
+
     public void updateLocation(Location location) {
         mLastUserLocation = location;
+    }
+
+    public void initializeList() {
+        if(!isRefreshing()){
+            setRefreshing(true);
+            initiateRefresh();
+        }
     }
 
 

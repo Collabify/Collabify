@@ -35,6 +35,13 @@ public class ServerManager {
     public List<Event> getEvents(LoadEventsRequest request){
         //TODO fill in with actual server stuff
 
+        //fake some server delay
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ArrayList<Event> events = new ArrayList<>();
         events.add(new Event("Android", false, null));
         events.add(new Event("iPhone", false, null));
@@ -50,6 +57,7 @@ public class ServerManager {
         events.add(new Event("List", false, null));
         events.add(new Event("Items", false, null));
         events.add(new Event("Here", false, null));
+
 
         return events;
     }

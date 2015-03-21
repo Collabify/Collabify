@@ -2,20 +2,18 @@ package space.collabify.collabify.activities;
 
 
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.fragments.JoinEventListFragment;
@@ -53,6 +51,23 @@ public class JoinEventActivity extends CollabifyActivity implements
         }
         //set up location services
         buildGoogleApiClient();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //update list
+        //TODO: find less hacky way to do this
+        //without the post delayed, it doesn't work on the
+        //the first call, but it does on subsequent
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mJoinEventListFragment.initializeList();
+            }
+        }, 10);
     }
 
     protected synchronized void buildGoogleApiClient(){
