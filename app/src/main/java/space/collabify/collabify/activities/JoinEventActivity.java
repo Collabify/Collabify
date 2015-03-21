@@ -70,6 +70,9 @@ public class JoinEventActivity extends CollabifyActivity implements
         }, 10);
     }
 
+    /**
+     * Initializes the google api for location services
+     */
     protected synchronized void buildGoogleApiClient(){
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

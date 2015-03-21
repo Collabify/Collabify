@@ -44,7 +44,7 @@ public class ServerManager {
 
         ArrayList<Event> events = new ArrayList<>();
         events.add(new Event("Android", false, null));
-        events.add(new Event("iPhone", false, null));
+        events.add(new Event("iPhone", true, "$$$"));
         events.add(new Event("WindowsMobile", false, null));
         events.add(new Event("Blackberry", false, null));
         events.add(new Event("WebOS", false, null));
