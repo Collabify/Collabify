@@ -7,7 +7,7 @@ import space.collabify.collabify.*;
 /**
  * This file was born on March 11 at 14:02
  */
-public class DjActivity extends PrimaryViewActivity {
+public class DjActivity extends CollabifyActivity {
   private TabHost myTabHost;
 
   @Override
