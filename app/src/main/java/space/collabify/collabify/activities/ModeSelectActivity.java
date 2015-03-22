@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import space.collabify.collabify.*;
+import space.collabify.collabify.base.CollabifyActivity;
+
 /**
  * This file was born on March 11 at 13:59
  */

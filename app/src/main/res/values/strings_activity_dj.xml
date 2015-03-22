@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="label_dj">DJ Mode</string>
+    <string name="title_end_event">End Event</string>
+    <string name="label_end_event">Are you sure you want to end your event?</string>
 </resources>

@@ -21,11 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.ModeSelectActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_mode_select" />
+
+
 
         <!-- Needed for spotify login to work -->
         <activity
@@ -35,18 +32,42 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/label_settings" />
+
+        <!-- Mode Activities-->
+        <activity
+            android:name=".activities.ModeSelectActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/label_mode_select" />
+
         <activity
             android:name=".activities.CreateEventActivity"
-            android:label="@string/label_create_event" />
+            android:label="@string/label_create_event" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ModeSelectActivity" />
+        </activity>
+
+        <!-- Tab Activites-->
+        <activity
+            android:name=".activities.CollabifierActivity"
+            android:label="@string/label_collabifier" />
+
+        <activity
+            android:name=".activities.DjActivity"
+            android:label="@string/label_dj" />
+
         <activity
             android:name=".activities.JoinEventActivity"
-            android:label="@string/label_join_event" />
-        <activity
-          android:name=".activities.CollabifierActivity"
-          android:label="@string/label_collabifier" />
-        <activity
-          android:name=".activities.DjActivity"
-          android:label="@string/label_dj" />
+            android:label="@string/label_join_event" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ModeSelectActivity" />
+        </activity>
+
+
 
         <!-- Fragments -->
         <fragment
