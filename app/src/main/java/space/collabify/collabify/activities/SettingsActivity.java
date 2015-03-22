@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import space.collabify.collabify.R;
+import space.collabify.collabify.base.CollabifyActivity;
 
 public class SettingsActivity extends CollabifyActivity {
 

@@ -16,7 +16,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 
 
+import space.collabify.collabify.CollabifyClient;
 import space.collabify.collabify.R;
+import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.JoinEventListFragment;
 import space.collabify.collabify.models.Event;
 
@@ -26,6 +28,7 @@ import space.collabify.collabify.models.Event;
 public class JoinEventActivity extends CollabifyActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+
     private static final String TAG = JoinEventActivity.class.getSimpleName();
     private JoinEventListFragment mJoinEventListFragment;
     private GoogleApiClient mGoogleApiClient;
@@ -94,7 +97,7 @@ public class JoinEventActivity extends CollabifyActivity implements
 
     public void toCollabifier(Event event) {
         //TODO: work out exact communication with servermanager
-        mServerManager.joinEvent(event, mAppManager.getUser());
+        collabifyClient.joinEvent(event, mAppManager.getUser());
         Intent intent = new Intent(this, CollabifierActivity.class);
         startActivity(intent);
     }
@@ -102,7 +105,7 @@ public class JoinEventActivity extends CollabifyActivity implements
     public void toCollabifier(Event event, String password){
         //TODO may have to change how password is handled/displayed
         if(event.getPassword().equalsIgnoreCase(password)){
-            mServerManager.joinEvent(event, mAppManager.getUser());
+            collabifyClient.joinEvent(event, mAppManager.getUser());
             Intent intent = new Intent(this, CollabifierActivity.class);
             startActivity(intent);
         }else {

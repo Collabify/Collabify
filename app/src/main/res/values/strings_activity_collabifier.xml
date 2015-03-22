@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="label_collabifier">Collabifier Mode</string>
+    <string name="title_exit_event">Exit Event</string>
+    <string name="label_exit_event">Are you sure you want to leave this event?</string>
 </resources>

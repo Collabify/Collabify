@@ -1,4 +1,4 @@
-package space.collabify.collabify;
+package space.collabify.collabify.managers;
 
 import space.collabify.collabify.models.User;
 
@@ -6,7 +6,7 @@ import space.collabify.collabify.models.User;
  * This file was born on March 11 at 13:43
  */
 public class AppManager {
-    private static AppManager mInstance;
+    private static AppManager instance;
 
     private User user;
 
@@ -16,15 +16,16 @@ public class AppManager {
 
     /**
      * Gets instance of AppManager singleton
+     *
      * @return instance of the app manager
      */
     public static AppManager getInstance(){
-        if(mInstance == null){
+        if(instance == null){
             //create new instance
-            mInstance = new AppManager();
+            instance = new AppManager();
         }
 
-        return mInstance;
+        return instance;
     }
 
     public User getUser() {

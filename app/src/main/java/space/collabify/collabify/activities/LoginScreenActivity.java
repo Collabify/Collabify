@@ -12,6 +12,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.playback.ConnectionStateCallback;
 
 import space.collabify.collabify.*;
+import space.collabify.collabify.base.CollabifyActivity;
 
 /**
  * This file was born on March 11 at 13:57
@@ -59,7 +60,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
             if(error != null) {
                 //TODO: not sure yet what may cause this case
                 // and show text or some shit?
-                Toast.makeText(this, "response error occured", Toast.LENGTH_LONG);
+                Toast.makeText(this, "response error occured", Toast.LENGTH_LONG).show();
                 return;
             }
 

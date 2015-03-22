@@ -1,36 +1,27 @@
 package space.collabify.collabify;
 
-import android.location.Location;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.User;
 
 /**
- * This file was born on March 11 at 13:43
+ * Created by ricardolopez on 3/22/15.
  */
-public class ServerManager {
-    private static ServerManager mInstance;
+public class CollabifyClient {
 
-    private ServerManager(){
-        //private because singleton
-        //TODO probably set up some server connections
+    private static CollabifyClient instance;
+
+    private CollabifyClient() {
+
     }
 
-    /**
-     * Gets instance of ServerManager singleton
-     * @return instance of the server manager
-     */
-    public static ServerManager getInstance(){
-        if(mInstance == null){
-            //create new instance
-            mInstance = new ServerManager();
+    public static CollabifyClient getInstance() {
+        if (instance == null) {
+            instance = new CollabifyClient();
         }
-
-        return mInstance;
+        return instance;
     }
 
     /**

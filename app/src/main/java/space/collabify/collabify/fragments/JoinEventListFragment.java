@@ -4,35 +4,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.app.ListFragment;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.google.android.gms.location.LocationListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import space.collabify.collabify.CollabifyClient;
 import space.collabify.collabify.LoadEventsRequest;
 import space.collabify.collabify.R;
-import space.collabify.collabify.ServerManager;
 import space.collabify.collabify.activities.JoinEventActivity;
 import space.collabify.collabify.models.Event;
 
@@ -84,6 +75,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     /**
      * Prompts user if they want to actually join the event they clicked on
      * see helpful link: http://stackoverflow.com/questions/10903754/input-text-dialog-android
+     *
      * @param event
      */
     private void setupJoinDialog(final Event event){
@@ -220,7 +212,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     private class LoadEventsTask extends AsyncTask<LoadEventsRequest, Void, List<Event>> {
         @Override
         protected List<Event> doInBackground(LoadEventsRequest... params) {
-            return ServerManager.getInstance().getEvents(params[0]);
+            return CollabifyClient.getInstance().getEvents(params[0]);
         }
 
         @Override

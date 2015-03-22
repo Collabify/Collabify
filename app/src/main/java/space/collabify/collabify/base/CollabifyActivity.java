@@ -1,8 +1,9 @@
-package space.collabify.collabify.activities;
+package space.collabify.collabify.base;
 
 import space.collabify.collabify.*;
+import space.collabify.collabify.activities.SettingsActivity;
+import space.collabify.collabify.managers.AppManager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -14,16 +15,16 @@ import android.view.MenuItem;
  */
 public class CollabifyActivity extends ActionBarActivity {
     protected AppManager mAppManager;
-    protected ServerManager mServerManager;
+    protected CollabifyClient collabifyClient;
 
     public CollabifyActivity(){
-        mAppManager = AppManager.getInstance();
-        mServerManager = ServerManager.getInstance();
+        this.mAppManager = AppManager.getInstance();
+        this.collabifyClient = collabifyClient.getInstance();
     }
 
-    public CollabifyActivity(AppManager mAppManager, ServerManager mServerManager) {
+    public CollabifyActivity(AppManager mAppManager, CollabifyClient collabifyClient) {
         this.mAppManager = mAppManager;
-        this.mServerManager = mServerManager;
+        this.collabifyClient = collabifyClient;
     }
 
     @Override
