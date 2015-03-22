@@ -8,12 +8,12 @@ public class Song {
   private String mArtist;
   private String mAlbum;
   private int mYear;
-  private int mId;
+  private String mId;
 
   // TODO: Probably want to cache artwork somehow
   private String mArtwork;
 
-  public Song(String mTitle, String mArtist, String mAlbum, int mYear, int mId, String mArtwork) {
+  public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork) {
     this.mTitle = mTitle;
     this.mArtist = mArtist;
     this.mAlbum = mAlbum;
@@ -54,11 +54,11 @@ public class Song {
     this.mYear = mYear;
   }
 
-  public int getId() {
+  public String getId() {
     return mId;
   }
 
-  public void setId(int mId) {
+  public void setId(String mId) {
     this.mId = mId;
   }
 

@@ -48,9 +48,16 @@ public class Playlist {
     // TODO: something here
   }
 
+  public Song getCurrent() {
+    // TODO: something here
+    return new Song("Firework", "Katy Perry", "Teenage Dream", 2010,
+      "1mXuMM6zjPgjL4asbBsgnt", "https://i.scdn.co/image/409c641ca368b7b9c589103bb9ca8a5914c640dc");
+  }
+
   public Song getNext() {
     // TODO: something here
-    return new Song();
+    return new Song("Firework", "Katy Perry", "Teenage Dream", 2010,
+      "1mXuMM6zjPgjL4asbBsgnt", "https://i.scdn.co/image/409c641ca368b7b9c589103bb9ca8a5914c640dc");
   }
 
   public void update() {
