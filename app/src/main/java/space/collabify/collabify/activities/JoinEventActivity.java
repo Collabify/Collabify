@@ -86,15 +86,6 @@ public class JoinEventActivity extends CollabifyActivity implements
                 .build();
     }
 
-    /**
-     * Returns user to choose mode screen
-     * @param view
-     */
-    public void toModeSelect(View view) {
-        finish();
-    }
-
-
     public void toCollabifier(Event event) {
         //TODO: work out exact communication with servermanager
         collabifyClient.joinEvent(event, mAppManager.getUser());

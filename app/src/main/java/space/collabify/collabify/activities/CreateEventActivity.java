@@ -17,10 +17,6 @@ public class CreateEventActivity extends CollabifyActivity {
         setContentView(R.layout.activity_create_event);
     }
 
-    public void toModeSelect(View view) {
-      finish();
-    }
-
     public void toDj(View view) {
       Intent intent = new Intent(this, DjActivity.class);
       startActivity(intent);
