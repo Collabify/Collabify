@@ -2,6 +2,8 @@ package space.collabify.collabify.unit;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ApplicationTestCase;
 import android.test.TouchUtils;
@@ -13,6 +15,7 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import space.collabify.collabify.R;
 import space.collabify.collabify.activities.LoginScreenActivity;
 import space.collabify.collabify.activities.ModeSelectActivity;
+import space.collabify.collabify.managers.AppManager;
 
 /**
  * This file was born on March 20, at 14:08
@@ -21,6 +24,7 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
 
     private ImageButton mLoginButton;
     private LoginScreenActivity mActivity;
+    private AppManager mAppManager;
 
     public LoginScreenActivityTest(){
         super(LoginScreenActivity.class);
@@ -34,6 +38,7 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = getActivity();
+        mAppManager = AppManager.getInstance();
         mLoginButton = (ImageButton) mActivity.findViewById(R.id.loginButton);
     }
 
@@ -43,6 +48,9 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
      * allow user to continue to mode select
      */
     public void testBackDoesntGoToModeSelect() {
+        //first log user out of spotify
+         mAppManager.spotifyLogout(getInstrumentation().getTargetContext());
+
         Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(ModeSelectActivity.class.getName(), null, false);
 
         //click on the login button

@@ -1,5 +1,9 @@
 package space.collabify.collabify.managers;
 
+import android.content.Context;
+
+import com.spotify.sdk.android.authentication.AuthenticationClient;
+
 import space.collabify.collabify.models.User;
 
 /**
@@ -30,5 +34,17 @@ public class AppManager {
 
     public User getUser() {
         return user;
+    }
+
+    /** Logs the to user out of spotify */
+    public void spotifyLogout(Context context){
+        AuthenticationClient.logout(context);
+    }
+
+    /** Clears any user, event or other data that shouldn't persist after a
+     * user hits 'logout' and is returned to the login screen
+     */
+    public void clearData() {
+        user = null;
     }
 }

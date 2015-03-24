@@ -1,11 +1,6 @@
 <resources>
     <string name="app_name">Collabify</string>
 
-    <string name="action_bar_settings">Settings</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Cancel</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

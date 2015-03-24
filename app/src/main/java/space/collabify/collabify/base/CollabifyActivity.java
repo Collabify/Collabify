@@ -1,6 +1,7 @@
 package space.collabify.collabify.base;
 
 import space.collabify.collabify.*;
+import space.collabify.collabify.activities.LoginScreenActivity;
 import space.collabify.collabify.activities.SettingsActivity;
 import space.collabify.collabify.managers.AppManager;
 
@@ -30,7 +31,7 @@ public class CollabifyActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_collabify_actions, menu);
+        inflater.inflate(R.menu.menu_collabify_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -41,6 +42,13 @@ public class CollabifyActivity extends ActionBarActivity {
         switch (item.getItemId()){
             case R.id.action_settings:
                 openSettings();
+                return true;
+
+            case R.id.action_logout:
+                mAppManager.spotifyLogout(getApplicationContext());
+                //return to login activity
+                Intent intent = new Intent(this, LoginScreenActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
