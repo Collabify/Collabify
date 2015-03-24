@@ -32,6 +32,9 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setBackgroundDrawableResource(R.drawable.background);
+
+        //don't want any user or event information to persist after a user logs out
+        mAppManager.clearData();
     }
 
     public void loginWithSpotify(View view) {
