@@ -36,7 +36,6 @@ public class AppManager {
         return user;
     }
 
-
     /** Logs the to user out of spotify */
     public void spotifyLogout(Context context){
         AuthenticationClient.logout(context);

@@ -31,7 +31,7 @@ public class CollabifyActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_collabify_actions, menu);
+        inflater.inflate(R.menu.menu_collabify_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

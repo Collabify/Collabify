@@ -6,4 +6,5 @@
     <!-- for developer convenience, may want to remove -->
     <item android:id="@+id/action_logout"
         android:title="@string/action_logout" />
+
 </menu>
