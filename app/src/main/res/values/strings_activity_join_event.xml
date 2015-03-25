@@ -3,6 +3,4 @@
     <string name="label_join_event">Choose Event to Join</string>
     <string name="join_event_button">Join Event</string>
     <string name="refresh_menu_item_title">Refresh</string>
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Cancel</string>
 </resources>
