@@ -31,6 +31,8 @@
 
         <activity
             android:name=".activities.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_settings" />
 
         <!-- Mode Activities-->
@@ -42,6 +44,8 @@
 
         <activity
             android:name=".activities.CreateEventActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_create_event" >
 
             <meta-data
@@ -52,14 +56,20 @@
         <!-- Tab Activites-->
         <activity
             android:name=".activities.CollabifierActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_collabifier" />
 
         <activity
             android:name=".activities.DjActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_dj" />
 
         <activity
             android:name=".activities.JoinEventActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_join_event" >
 
             <meta-data
