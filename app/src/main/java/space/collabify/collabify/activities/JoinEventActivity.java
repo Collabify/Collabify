@@ -54,7 +54,7 @@ public class JoinEventActivity extends CollabifyActivity implements
             transaction.replace(R.id.event_list_frame, mJoinEventListFragment);
             transaction.commit();
         }else {
-            //TODO: get join event fragment reference
+            //TODO: get join event fragment reference from savedInstanceState?
         }
         //set up location services
         buildGoogleApiClient();

@@ -21,10 +21,6 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
   // Tab titles
   private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_collabifier);
 
     // Initilization
     viewPager = (ViewPager) findViewById(R.id.collabifierPager);
@@ -59,7 +55,6 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
         .setTabListener(this));
     }
 
-  }
 
   @Override
   public void onBackPressed() {
