@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-    <TabHost
+    <FragmentTabHost
         android:id="@+id/collabifier_tab_host"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -26,7 +26,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:padding="5dp">
-
+<!--
                 <include
                     android:id="@+id/collabifier_tab1"
                     layout="@layout/fragment_base_player"
@@ -44,8 +44,9 @@
                     layout="@layout/fragment_dj_tracks"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent" />
+                    -->
             </FrameLayout>
         </RelativeLayout>
-    </TabHost>
+    </FragmentTabHost>
 
 </RelativeLayout>

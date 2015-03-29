@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -43,12 +44,14 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
             View customView  = inflater.inflate(R.layout.playlist_collabifier_list_row, parent, false);
 
             Song songItem = getItem(position);
-            ImageView albumArt
-            ImageView rowImage = (ImageView) customView.findViewById(R.id.join_event_row_image);
+            TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
+            //TODO: set upvote,downvote button image backgrounds depending on user vote?
+            ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
 
-            rowText.setText(eventItem.getName());
-            int visibility = eventItem.isProtectedEvent()? View.VISIBLE: View.INVISIBLE;
-            rowImage.setVisibility(visibility);
+            String newSongDescription = songItem.getArtist() + " - " + songItem.getTitle();
+            songDescriptionTextView.setText(newSongDescription);
+            int visibility = songItem.wasAddedByUser()? View.VISIBLE: View.INVISIBLE;
+            deleteButton.setVisibility(visibility);
 
             return customView;
         }
