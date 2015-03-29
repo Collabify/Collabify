@@ -6,6 +6,7 @@ package space.collabify.collabify;
  */
 
 import space.collabify.collabify.fragments.BasePlayerFragment;
+import space.collabify.collabify.fragments.CollabifierPlaylistFragment;
 import space.collabify.collabify.fragments.DjTracksFragment;
 import space.collabify.collabify.fragments.PlaylistFragment;
 import space.collabify.collabify.fragments.UserListFragment;
@@ -31,7 +32,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         return new BasePlayerFragment();
       case 1:
         // Playlist fragment activity
-        return new PlaylistFragment();
+        return new CollabifierPlaylistFragment();
       case 2:
         // DJ Tracks fragment activity
         return new DjTracksFragment();
