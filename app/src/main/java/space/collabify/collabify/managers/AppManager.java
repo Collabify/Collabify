@@ -15,6 +15,7 @@ public class AppManager {
     private User user;
 
     private AppManager(){
+      user = new User();
         //private because singleton
     }
 
@@ -45,6 +46,6 @@ public class AppManager {
      * user hits 'logout' and is returned to the login screen
      */
     public void clearData() {
-        user = null;
+        user = new User();
     }
 }

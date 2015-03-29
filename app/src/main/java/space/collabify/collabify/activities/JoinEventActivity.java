@@ -21,6 +21,8 @@ import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.JoinEventListFragment;
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.Role;
+import space.collabify.collabify.models.User;
 
 /**
  * This file was born on March 11 at 14:00
@@ -88,6 +90,7 @@ public class JoinEventActivity extends CollabifyActivity implements
 
     public void toCollabifier(Event event) {
         //TODO: work out exact communication with servermanager
+        mAppManager.getUser().setRole(Role.COLLABIFIER);
         collabifyClient.joinEvent(event, mAppManager.getUser());
         Intent intent = new Intent(this, CollabifierActivity.class);
         startActivity(intent);
@@ -96,6 +99,7 @@ public class JoinEventActivity extends CollabifyActivity implements
     public void toCollabifier(Event event, String password){
         //TODO may have to change how password is handled/displayed
         if(event.getPassword().equalsIgnoreCase(password)){
+            mAppManager.getUser().setRole(Role.COLLABIFIER);
             collabifyClient.joinEvent(event, mAppManager.getUser());
             Intent intent = new Intent(this, CollabifierActivity.class);
             startActivity(intent);
