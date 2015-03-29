@@ -79,15 +79,18 @@ public class CollabifyClient {
     }
 
     ArrayList<User> users = new ArrayList<>();
+    users.add(new User("Best Singers Ever!!!", 0));
     users.add(new User("Katy Perry", 1));
-    users.add(new User("Miley Cyrus", 8));
-    users.add(new User("Spice Girls", 3));
-    users.add(new User("Beyonce", 6));
-    users.add(new User("Madonna", 4));
-    users.add(new User("Taylor Swift", 7));
-    users.add(new User("Brittney Spears", 3));
-    users.add(new User("Lady Gaga", 5));
+    users.add(new User("Taylor Swift", 2));
+    users.add(new User("Miley Cyrus", 3));
+    users.add(new User("Spice Girls", 4));
+    users.add(new User("Beyonce", 5));
+    users.add(new User("Madonna", 6));
+    users.add(new User("Brittney Spears", 7));
+    users.add(new User("Lady Gaga", 8));
     users.add(new User("Avril Lavigne", 9));
+    users.add(new User("P!nk", 10));
+    users.add(new User("Alanis Morissette", 11));
 
     return users;
   }

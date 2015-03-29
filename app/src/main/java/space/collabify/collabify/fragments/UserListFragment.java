@@ -93,7 +93,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
       TextView rowId = (TextView) customView.findViewById(R.id.user_row_id);
 
       rowName.setText(userItem.getName());
-      rowId.setText(String.valueOf(userItem.getId()));
+      rowId.setText("id: " + String.valueOf(userItem.getId()));
 
       return customView;
     }
