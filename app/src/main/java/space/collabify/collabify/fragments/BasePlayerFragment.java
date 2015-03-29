@@ -19,11 +19,13 @@ import space.collabify.collabify.managers.AppManager;
  */
 public class BasePlayerFragment extends Fragment {
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_base_player, container, false);
 
         if (!AppManager.getInstance().getUser().getRole().isDJ()) {
             View djControls = rootView.findViewById(R.id.player_dj);
             djControls.setVisibility(View.GONE);
-            return null;
         }
 
         return rootView;
