@@ -16,16 +16,16 @@ import android.view.MenuItem;
  */
 public class CollabifyActivity extends ActionBarActivity {
     protected AppManager mAppManager;
-    protected CollabifyClient collabifyClient;
+    protected CollabifyClient mCollabifyClient;
 
     public CollabifyActivity(){
         this.mAppManager = AppManager.getInstance();
-        this.collabifyClient = collabifyClient.getInstance();
+        this.mCollabifyClient = mCollabifyClient.getInstance();
     }
 
     public CollabifyActivity(AppManager mAppManager, CollabifyClient collabifyClient) {
         this.mAppManager = mAppManager;
-        this.collabifyClient = collabifyClient;
+        this.mCollabifyClient = collabifyClient;
     }
 
     @Override

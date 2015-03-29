@@ -3,6 +3,7 @@ package space.collabify.collabify.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentTabHost;
@@ -12,14 +13,18 @@ import android.widget.TabHost;
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.CollabifierPlaylistFragment;
+import space.collabify.collabify.models.Playlist;
 
 /**
  * This file was born on March 11 at 14:02
  */
-public class CollabifierActivity extends CollabifyActivity implements ActionBar.TabListener {
+public class CollabifierActivity extends CollabifyActivity implements ActionBar.TabListener, CollabifierPlaylistFragment.OnPlaylistUpdateRequestListener{
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+
+    private CollabifierPlaylistFragment mPlaylistFragment;
+
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
 
@@ -49,7 +54,7 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
 
 
         actionBar = getSupportActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), mAppManager.getUser().getRole());
 
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
@@ -60,6 +65,7 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
             actionBar.addTab(actionBar.newTab().setText(tab_name)
                     .setTabListener(this));
         }
+
     }
 
 
@@ -107,5 +113,18 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
     @Override
     public void onTabReselected (ActionBar.Tab tab, android.support.v4.app.FragmentTransaction
     fragmentTransaction){
+    }
+
+    @Override
+    public void onPlaylistUpdateRequest() {
+        Playlist currentPlaylist = mCollabifyClient.getEventPlaylist();
+        final int PLAYLIST_POSITION = 1;
+        Fragment currentFragment =  mAdapter.getRegisteredFragment(PLAYLIST_POSITION);
+        if(currentFragment instanceof CollabifierPlaylistFragment){
+            CollabifierPlaylistFragment playlistFragment = (CollabifierPlaylistFragment) currentFragment;
+            playlistFragment.updatePlaylist(currentPlaylist);
+        }else {
+            //can't update if not visible
+        }
     }
 }

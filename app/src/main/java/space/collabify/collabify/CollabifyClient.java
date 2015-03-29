@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.Playlist;
+import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
 
 /**
@@ -12,6 +14,9 @@ import space.collabify.collabify.models.User;
 public class CollabifyClient {
 
     private static CollabifyClient instance;
+
+    private Event mJoinedEvent;
+    private Playlist mEventPlaylist;
 
     private CollabifyClient() {
 
@@ -61,5 +66,18 @@ public class CollabifyClient {
 
     public void joinEvent(Event event, User user){
         //TODO: implementation
+    }
+
+
+    public Playlist getEventPlaylist(){
+        //TODO: actual server stuff to get the playlist
+        ArrayList<Song> fakeSongList = new ArrayList<>();
+        fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
+        fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
+        fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957, "0", "", true));
+        fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
+
+        Playlist fakePlaylist = new Playlist("sick playlist", 0, fakeSongList);
+        return fakePlaylist;
     }
 }

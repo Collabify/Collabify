@@ -44,7 +44,7 @@ public class DjActivity extends CollabifyActivity implements ActionBar.TabListen
 
 
     actionBar = getSupportActionBar();
-    mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+    mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), mAppManager.getUser().getRole());
 
     viewPager.setAdapter(mAdapter);
     actionBar.setHomeButtonEnabled(false);
