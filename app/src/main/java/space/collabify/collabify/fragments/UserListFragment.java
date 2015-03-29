@@ -1,8 +1,10 @@
 package space.collabify.collabify.fragments;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +15,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import space.collabify.collabify.CollabifyClient;
+import space.collabify.collabify.LoadEventsRequest;
+import space.collabify.collabify.LoadUsersRequest;
 import space.collabify.collabify.R;
+import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.User;
 
 /**
  * This file was born on March 11, at 15:52
  */
 public class UserListFragment extends SwipeRefreshListFragment {
+  private static final String TAG = UserListFragment.class.getSimpleName();
+
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
@@ -33,9 +41,34 @@ public class UserListFragment extends SwipeRefreshListFragment {
     setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
-        //initiateRefresh();
+        initiateRefresh();
       }
     });
+  }
+
+  /**
+   * Starts a LoadUsersTask in background
+   */
+  private void initiateRefresh() {
+    Log.i(TAG, "initiate event list refresh");
+    LoadUsersRequest request = new LoadUsersRequest();
+    new LoadUsersTask().execute(request);
+  }
+
+  /**
+   * Callback from the LoadUsersTask for when the data has been fetched from server
+   * @param users list of users in event
+   */
+  private void onRefreshComplete(List<User> users){
+    // Remove all items from the ListAdapter, and then replace them with the new items
+    UserListAdapter adapter = (UserListAdapter) getListAdapter();
+    adapter.clear();
+    for (User user: users) {
+      adapter.add(user);
+    }
+
+    // Stop the refreshing indicator
+    setRefreshing(false);
   }
 
   /**
@@ -63,6 +96,24 @@ public class UserListFragment extends SwipeRefreshListFragment {
       rowId.setText(String.valueOf(userItem.getId()));
 
       return customView;
+    }
+  }
+
+  /**
+   * A background task to fetch events from our server without slowing ui
+   */
+  private class LoadUsersTask extends AsyncTask<LoadUsersRequest, Void, List<User>> {
+    @Override
+    protected List<User> doInBackground(LoadUsersRequest... params) {
+      return CollabifyClient.getInstance().getUsers(params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(List<User> users) {
+      super.onPostExecute(users);
+
+      //post results
+      onRefreshComplete(users);
     }
   }
 }
