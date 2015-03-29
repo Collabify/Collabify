@@ -68,7 +68,6 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
 
     }
 
-
     @Override
     public void onBackPressed () {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
