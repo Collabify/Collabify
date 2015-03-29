@@ -46,7 +46,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
   @Override
   public int getCount() {
     // get item count - equal to number of tabs
-    if (AppManager.getInstance().getUser().getRole().equals(Role.DJ)) {
+    if (AppManager.getInstance().getUser().getRole().isDJ()) {
       return 4;
     } else {
       return 3;

@@ -28,7 +28,7 @@ public class BasePlayerFragment extends CollabifyFragment {
       View djControls = rootView.findViewById(R.id.player_dj);
       djControls.setVisibility(View.GONE);
     }
-    
+
     return rootView;
   }
 }
