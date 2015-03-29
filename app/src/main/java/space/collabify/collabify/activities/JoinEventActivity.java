@@ -1,7 +1,7 @@
 package space.collabify.collabify.activities;
 
 
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -49,9 +49,9 @@ public class JoinEventActivity extends CollabifyActivity implements
         setContentView(R.layout.activity_join_event);
 
         if(savedInstanceState == null){
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mJoinEventListFragment = new JoinEventListFragment();
-            transaction.replace(R.id.event_list_frame, mJoinEventListFragment);
+            transaction.replace(R.id.event_list_frame, mJoinEventListFragment, TAG);
             transaction.commit();
         }else {
             //TODO: get join event fragment reference
