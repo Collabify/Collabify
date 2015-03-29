@@ -1,10 +1,15 @@
 package space.collabify.collabify.fragments;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyFragment;
 
@@ -13,12 +18,7 @@ import space.collabify.collabify.managers.AppManager;
 /**
  * This file was born on March 11 at 14:11
  */
-public class BasePlayerFragment extends CollabifyFragment {
-
-  @Override
-  public View inflateFragment(int i, LayoutInflater layoutInflater, ViewGroup viewGroup) {
-    return null;
-  }
+public class BasePlayerFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class BasePlayerFragment extends CollabifyFragment {
     if (!AppManager.getInstance().getUser().getRole().isDJ()) {
       View djControls = rootView.findViewById(R.id.player_dj);
       djControls.setVisibility(View.GONE);
+        return null;
     }
 
     return rootView;

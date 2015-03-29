@@ -51,13 +51,13 @@ public class Playlist {
   public Song getCurrent() {
     // TODO: something here
     return new Song("Firework", "Katy Perry", "Teenage Dream", 2010,
-      "1mXuMM6zjPgjL4asbBsgnt", "https://i.scdn.co/image/409c641ca368b7b9c589103bb9ca8a5914c640dc");
+      "1mXuMM6zjPgjL4asbBsgnt", "https://i.scdn.co/image/409c641ca368b7b9c589103bb9ca8a5914c640dc", true);
   }
 
   public Song getNext() {
     // TODO: something here
     return new Song("Firework", "Katy Perry", "Teenage Dream", 2010,
-      "1mXuMM6zjPgjL4asbBsgnt", "https://i.scdn.co/image/409c641ca368b7b9c589103bb9ca8a5914c640dc");
+      "1mXuMM6zjPgjL4asbBsgnt", "https://i.scdn.co/image/409c641ca368b7b9c589103bb9ca8a5914c640dc", true);
   }
 
   public void update() {

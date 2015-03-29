@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v4.app.FragmentTabHost;
 import android.view.View;
 import android.widget.TabHost;
 
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.fragments.CollabifierPlaylistFragment;
 
 /**
  * This file was born on March 11 at 14:02
