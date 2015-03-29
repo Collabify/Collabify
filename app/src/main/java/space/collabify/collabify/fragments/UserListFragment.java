@@ -46,6 +46,12 @@ public class UserListFragment extends SwipeRefreshListFragment {
     });
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    initiateRefresh();
+  }
+
   /**
    * Starts a LoadUsersTask in background
    */
