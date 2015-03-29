@@ -15,8 +15,8 @@ public class AppManager {
     private User user;
 
     private AppManager(){
-      user = new User();
-        //private because singleton
+      //private because singleton
+      newUser();
     }
 
     /**
@@ -46,6 +46,10 @@ public class AppManager {
      * user hits 'logout' and is returned to the login screen
      */
     public void clearData() {
-        user = new User();
+      newUser();
+    }
+
+    private void newUser() {
+      user = new User("NEW USER", 12345);
     }
 }

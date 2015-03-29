@@ -62,4 +62,36 @@ public class CollabifyClient {
     public void joinEvent(Event event, User user){
         //TODO: implementation
     }
+
+  /**
+   * Queries the server for users
+   * @param request query information
+   * @return list of events based off of request param
+   */
+  public List<User> getUsers(LoadUsersRequest request){
+    //TODO fill in with actual server stuff
+
+    //fake some server delay
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    ArrayList<User> users = new ArrayList<>();
+    users.add(new User("Best Singers Ever!!!", 0));
+    users.add(new User("Katy Perry", 1));
+    users.add(new User("Taylor Swift", 2));
+    users.add(new User("Miley Cyrus", 3));
+    users.add(new User("Spice Girls", 4));
+    users.add(new User("Beyonce", 5));
+    users.add(new User("Madonna", 6));
+    users.add(new User("Brittney Spears", 7));
+    users.add(new User("Lady Gaga", 8));
+    users.add(new User("Avril Lavigne", 9));
+    users.add(new User("P!nk", 10));
+    users.add(new User("Alanis Morissette", 11));
+
+    return users;
+  }
 }

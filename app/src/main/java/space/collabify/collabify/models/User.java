@@ -11,7 +11,9 @@ public class User {
     private int mId;
     private Location mLocation;
 
-    public User() {
+    public User(String name, int id) {
+      mName = name;
+      mId = id;
       mRole = new Role();
     }
 
