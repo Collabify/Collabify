@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.R;
+import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.controls.ImageToggleButton;
 import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
+import space.collabify.collabify.models.User;
 
 /**
  * This file was born on March 28 at 14:58
@@ -31,20 +33,25 @@ import space.collabify.collabify.models.Song;
 public class CollabifierPlaylistFragment extends PlaylistFragment {
     private static final String TAG = CollabifierPlaylistFragment.class.getSimpleName();
     private final int ID_POS = 0;
+    private final int ALBUM_ART_POS = 1;
+    private final int SONG_DESCRIPTION_POS = 2;
     private final int UPVOTE_POS = 3;
     private final int DOWNVOTE_POS = 4;
-    private ImageButton mUpvoteButton;
-    private ImageButton mDownvoteButton;
-    private ImageButton mDeleteButton;
-    private OnPlaylistUpdateRequestListener mListener;
+    private final int DELETE_POS  = 5;
 
+    private OnPlaylistUpdateRequestListener mListener;
+    private CollabifyActivity mParentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_playlist, container, false);
+        mParentActivity = (CollabifyActivity)getActivity();
+
+        //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
         temp.add(new Song("temsong", "temp artist", "temp album", -1, "temp id", "no artwork", false));
-        CollabifierPlaylistListAdapter adapter = new CollabifierPlaylistListAdapter(getActivity().getApplicationContext(), temp);
+        CollabifierPlaylistListAdapter adapter =
+                new CollabifierPlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser());
         setListAdapter(adapter);
         return view;
     }
@@ -155,8 +162,10 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
 
 
     private class CollabifierPlaylistListAdapter extends ArrayAdapter<Song> {
-        public CollabifierPlaylistListAdapter(Context context, List<Song> songs){
+        private User mUser;
+        public CollabifierPlaylistListAdapter(Context context, List<Song> songs, User user){
             super(context,  R.layout.playlist_collabifier_list_row, songs);
+            this.mUser = user;
         }
 
 
@@ -196,10 +205,15 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
 
             String newSongDescription = songItem.getArtist() + " - " + songItem.getTitle();
             songDescriptionTextView.setText(newSongDescription);
-            int visibility = songItem.wasAddedByUser()? View.VISIBLE: View.INVISIBLE;
+            int visibility = isDeleteVisible(songItem)? View.VISIBLE: View.INVISIBLE;
             deleteButton.setVisibility(visibility);
 
             return customView;
+        }
+
+
+        private boolean isDeleteVisible(Song song){
+            return song.wasAddedByUser() || mUser.getRole().isDJ();
         }
     }
 }

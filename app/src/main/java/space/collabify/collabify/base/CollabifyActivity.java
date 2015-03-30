@@ -4,6 +4,7 @@ import space.collabify.collabify.*;
 import space.collabify.collabify.activities.LoginScreenActivity;
 import space.collabify.collabify.activities.SettingsActivity;
 import space.collabify.collabify.managers.AppManager;
+import space.collabify.collabify.models.User;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -62,5 +63,19 @@ public class CollabifyActivity extends ActionBarActivity {
         Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
         startActivity(intent);
 
+    }
+
+
+    /**
+     * Gets the current user from the appmanager....
+     * Not sure if Appmanager should be public, or if it is
+     * better to expose parts of it in this way...
+     * @return this User, or null if not possible
+     */
+    public User getCurrentUser(){
+        if(mAppManager == null){
+            return null;
+        }
+        return mAppManager.getUser();
     }
 }
