@@ -14,6 +14,7 @@ import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.CollabifierPlaylistFragment;
 import space.collabify.collabify.models.Playlist;
+import space.collabify.collabify.models.Song;
 
 /**
  * This file was born on March 11 at 14:02
@@ -125,5 +126,31 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
         }else {
             //can't update if not visible
         }
+    }
+
+    @Override
+    public Song getSongFromId(String songId) {
+        //assumes that all songs are uniquely identified by their id
+        return mCollabifyClient.getSongById(songId);
+    }
+
+    @Override
+    public void upvoteSong(Song song) {
+        mCollabifyClient.upvoteSong(mAppManager.getUser(), song);
+    }
+
+    @Override
+    public void downvoteSong(Song song) {
+        mCollabifyClient.downvoteSong(mAppManager.getUser(), song);
+    }
+
+    @Override
+    public void deleteSong(Song song) {
+        mCollabifyClient.deleteSong(mAppManager.getUser(), song);
+    }
+
+    @Override
+    public void clearSongVote(Song song) {
+        mCollabifyClient.clearSongVote(mAppManager.getUser(), song);
     }
 }
