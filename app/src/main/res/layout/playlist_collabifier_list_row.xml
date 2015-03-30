@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,19 +15,28 @@
         android:layout_centerInParent="true"
         android:text="collabifier list row"/>
 
-    <ToggleButton android:id="@+id/playlist_collabifier_upvote_button"
+    <space.collabify.collabify.controls.ImageToggleButton
+        android:id="@+id/playlist_collabifier_upvote_button"
         android:layout_toLeftOf="@+id/playlist_collabifier_downvote_button"
         android:layout_alignParentTop="true"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:textOn=""
+        android:textOff=""
+        app:checkedSrc="@drawable/upvote_checked"
+        app:uncheckedSrc="@drawable/upvote_icon" />
 
-    <ToggleButton android:id="@+id/playlist_collabifier_downvote_button"
+    <space.collabify.collabify.controls.ImageToggleButton
+        android:id="@+id/playlist_collabifier_downvote_button"
         android:layout_toLeftOf="@+id/playlist_collabifier_delete_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="fitXY"
-        android:src="@drawable/downvote_icon"/>
+        android:textOn=""
+        android:textOff=""
+        app:checkedSrc="@drawable/downvote_checked"
+        app:uncheckedSrc="@drawable/downvote_icon"   />
 
     <ImageButton android:id="@+id/playlist_collabifier_delete_button"
         android:layout_alignParentRight="true"
