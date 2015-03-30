@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
         }
     }
 
+
     public interface OnPlaylistUpdateRequestListener {
         public void onPlaylistUpdateRequest();
     }
@@ -73,6 +76,24 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
         mListener.onPlaylistUpdateRequest();
     }
 
+
+    private void onUpvoteClick(View view){
+        //upvote_icon, or unupvote the song in the row
+        RelativeLayout layout = (RelativeLayout) view.getParent();
+
+        //get song characteristics
+
+    }
+
+    private void onDownvoteClick(View view){
+
+    }
+
+    private void onDeleteClick(View view){
+
+    }
+
+
     private class CollabifierPlaylistListAdapter extends ArrayAdapter<Song> {
         public CollabifierPlaylistListAdapter(Context context, List<Song> songs){
             super(context,  R.layout.playlist_collabifier_list_row, songs);
@@ -86,8 +107,32 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
 
             Song songItem = getItem(position);
             TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
-            //TODO: set upvote,downvote button image backgrounds depending on user vote?
+            //TODO: set upvote_icon,downvote_icon button image backgrounds depending on user vote?
             ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
+            ToggleButton upvoteButton = (ToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
+            ToggleButton downvoteButton = (ToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
+
+            //add onclick listeners to the row
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDeleteClick(v);
+                }
+            });
+
+            upvoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onUpvoteClick(v);
+                }
+            });
+
+            downvoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDownvoteClick(v);
+                }
+            });
 
             String newSongDescription = songItem.getArtist() + " - " + songItem.getTitle();
             songDescriptionTextView.setText(newSongDescription);
