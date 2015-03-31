@@ -17,6 +17,7 @@ public class DjActivity extends CollabifyActivity implements ActionBar.TabListen
   private ActionBar actionBar;
   // Tab titles
   private String[] tabs = {"Player", "Playlist", "DJ Tracks", "User List"};
+  private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj, R.drawable.ic_users};
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,10 @@ public class DjActivity extends CollabifyActivity implements ActionBar.TabListen
     actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
     // Adding Tabs
-    for (String tab_name : tabs) {
-      actionBar.addTab(actionBar.newTab().setText(tab_name)
+    for (int i=0; i < tabs.length; i++) {
+      actionBar.addTab(actionBar.newTab()
+        .setText(tabs[i])
+        .setIcon(icons[i])
         .setTabListener(this));
     }
 
