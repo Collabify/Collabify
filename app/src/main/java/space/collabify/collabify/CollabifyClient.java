@@ -11,57 +11,67 @@ import space.collabify.collabify.models.User;
  */
 public class CollabifyClient {
 
-    private static CollabifyClient instance;
+  private static CollabifyClient instance;
 
-    private CollabifyClient() {
+  private boolean eventUpdating;
+  private boolean usersUpdating;
 
+  private CollabifyClient() {
+
+  }
+
+  public static CollabifyClient getInstance() {
+    if (instance == null) {
+      instance = new CollabifyClient();
+    }
+    return instance;
+  }
+
+  /**
+   * Queries the server for events
+   * @param request query information
+   * @return list of events based off of request param
+   */
+  public List<Event> getEvents(LoadEventsRequest request){
+    //TODO fill in with actual server stuff
+    eventUpdating = true;
+
+    //fake some server delay
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
 
-    public static CollabifyClient getInstance() {
-        if (instance == null) {
-            instance = new CollabifyClient();
-        }
-        return instance;
-    }
+    ArrayList<Event> events = new ArrayList<>();
+    events.add(new Event("Android", false, null));
+    events.add(new Event("iPhone", true, "$$$"));
+    events.add(new Event("WindowsMobile", false, null));
+    events.add(new Event("Blackberry", false, null));
+    events.add(new Event("WebOS", false, null));
+    events.add(new Event("Ubuntu", false, null));
+    events.add(new Event("Windows7", false, null));
+    events.add(new Event( "Max OS X", false, null));
+    events.add(new Event("Linux", false, null));
+    events.add(new Event("OS/2", false, null));
+    events.add(new Event("More", false, null));
+    events.add(new Event("List", false, null));
+    events.add(new Event("Items", false, null));
+    events.add(new Event("Here", false, null));
 
-    /**
-     * Queries the server for events
-     * @param request query information
-     * @return list of events based off of request param
-     */
-    public List<Event> getEvents(LoadEventsRequest request){
-        //TODO fill in with actual server stuff
+    // TODO: On successful return of event list
+    eventUpdating = false;
 
-        //fake some server delay
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    return events;
+  }
 
-        ArrayList<Event> events = new ArrayList<>();
-        events.add(new Event("Android", false, null));
-        events.add(new Event("iPhone", true, "$$$"));
-        events.add(new Event("WindowsMobile", false, null));
-        events.add(new Event("Blackberry", false, null));
-        events.add(new Event("WebOS", false, null));
-        events.add(new Event("Ubuntu", false, null));
-        events.add(new Event("Windows7", false, null));
-        events.add(new Event( "Max OS X", false, null));
-        events.add(new Event("Linux", false, null));
-        events.add(new Event("OS/2", false, null));
-        events.add(new Event("More", false, null));
-        events.add(new Event("List", false, null));
-        events.add(new Event("Items", false, null));
-        events.add(new Event("Here", false, null));
+  public boolean isEventUpdating() {
+    return eventUpdating;
+  }
 
-
-        return events;
-    }
-
-    public void joinEvent(Event event, User user){
-        //TODO: implementation
-    }
+  public void joinEvent(Event event, User user){
+    //TODO: implementation
+  }
 
   /**
    * Queries the server for users
@@ -70,6 +80,8 @@ public class CollabifyClient {
    */
   public List<User> getUsers(LoadUsersRequest request){
     //TODO fill in with actual server stuff
+
+    usersUpdating = true;
 
     //fake some server delay
     try {
@@ -92,6 +104,12 @@ public class CollabifyClient {
     users.add(new User("P!nk", 10));
     users.add(new User("Alanis Morissette", 11));
 
+    usersUpdating = false;
+
     return users;
+  }
+
+  public boolean isUsersUpdating() {
+    return usersUpdating;
   }
 }
