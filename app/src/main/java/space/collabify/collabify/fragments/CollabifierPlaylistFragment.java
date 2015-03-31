@@ -41,6 +41,7 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
 
     private OnPlaylistUpdateRequestListener mListener;
     private CollabifyActivity mParentActivity;
+    private CollabifierPlaylistListAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,9 +51,8 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
         temp.add(new Song("temsong", "temp artist", "temp album", -1, "temp id", "no artwork", false));
-        CollabifierPlaylistListAdapter adapter =
-                new CollabifierPlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser());
-        setListAdapter(adapter);
+        mAdapter = new CollabifierPlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser());
+        setListAdapter(mAdapter);
         return view;
     }
 
@@ -141,6 +141,8 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
         }
 
         if(isChecked){
+            //TODO: warning, causes onDownvoteClick to be called, resulting in
+            //two calls to the server when only one may be necessary...
             upvoteButton.setChecked(false);
             mListener.downvoteSong(song);
         }else if(!upvoteButton.isChecked()){
@@ -158,6 +160,9 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
         }
 
         mListener.deleteSong(song);
+
+        //need to redraw the listview?
+        mListener.onPlaylistUpdateRequest();
     }
 
 
@@ -174,8 +179,8 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View customView  = inflater.inflate(R.layout.playlist_collabifier_list_row, parent, false);
 
-            Song songItem = getItem(position);
             TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
+            TextView songIdView = (TextView)customView.findViewById(R.id.playlist_row_song_id);
             //TODO: set upvote_icon,downvote_icon button image backgrounds depending on user vote?
             ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
             ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
@@ -203,8 +208,14 @@ public class CollabifierPlaylistFragment extends PlaylistFragment {
                 }
             });
 
+
+            //set up the row elements
+            Song songItem = getItem(position);
             String newSongDescription = songItem.getArtist() + " - " + songItem.getTitle();
             songDescriptionTextView.setText(newSongDescription);
+            songIdView.setText(songItem.getId());
+
+
             int visibility = isDeleteVisible(songItem)? View.VISIBLE: View.INVISIBLE;
             deleteButton.setVisibility(visibility);
 

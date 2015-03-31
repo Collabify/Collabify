@@ -81,16 +81,17 @@ public class CollabifyClient {
      */
     public Playlist getEventPlaylist(){
         //TODO: actual server stuff to get the playlist
-        ArrayList<Song> fakeSongList = new ArrayList<>();
-        fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
-        fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
-        fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957, "0", "", true));
-        fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
-        fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry", "random", "sonny side up", 1957, "0", "", false));
+        if(mEventPlaylist == null){
+            ArrayList<Song> fakeSongList = new ArrayList<>();
+            fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
+            fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up", 1957, "1", "", false));
+            fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957, "2", "", true));
+            fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up", 1957, "3", "", false));
+            fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry", "random", "sonny side up", 1957, "5", "", false));
 
-
-        Playlist fakePlaylist = new Playlist("sick playlist", 0, fakeSongList);
-        return fakePlaylist;
+            mEventPlaylist = new Playlist("sick playlist", 0, fakeSongList);
+        }
+        return mEventPlaylist;
     }
 
     /**
@@ -157,7 +158,7 @@ public class CollabifyClient {
     public Song getSongById(String songId){
         //can improve performance here by doing smarter search
         for(Song song: mEventPlaylist.getmList()){
-            if(song.getId().equals(songId) && song.wasAddedByUser()){
+            if(song.getId().equalsIgnoreCase(songId)){
                 return song;
             }
         }
