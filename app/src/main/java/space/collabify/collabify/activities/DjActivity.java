@@ -2,8 +2,13 @@ package space.collabify.collabify.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
@@ -57,6 +62,28 @@ public class DjActivity extends CollabifyActivity implements ActionBar.TabListen
     }
 
   }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+
+        getMenuInflater().inflate(R.menu.song_search, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused){
+                if(!queryTextFocused){
+                    searchItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
 
   @Override
   public void onBackPressed() {
