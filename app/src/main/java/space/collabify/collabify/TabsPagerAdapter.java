@@ -6,8 +6,6 @@ package space.collabify.collabify;
  */
 
 import space.collabify.collabify.fragments.BasePlayerFragment;
-import space.collabify.collabify.fragments.CollabifierPlaylistFragment;
-import space.collabify.collabify.fragments.DjPlaylistFragment;
 import space.collabify.collabify.fragments.DjTracksFragment;
 import space.collabify.collabify.fragments.PlaylistFragment;
 import space.collabify.collabify.fragments.UserListFragment;
@@ -45,15 +43,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return new BasePlayerFragment();
             case 1:
                 // Playlist fragment activity
-                if(mRole.isCollabifier())
-                    return new CollabifierPlaylistFragment();
-                else if(mRole.isDJ())
-                    return new DjPlaylistFragment();
-                else {
-                    //TODO
-                    //Role should be set by this point... there is an error
-                    return new PlaylistFragment();
-                }
+                return new PlaylistFragment();
             case 2:
                 // DJ Tracks fragment activity
                 return new DjTracksFragment();
