@@ -58,12 +58,12 @@ public class CollabifyClient {
           Boolean passwordProtected = oneObject.getBoolean("passwordProtected");
           String password = oneObject.getString("password");
           events.add(new Event(name, passwordProtected, password));
-          eventUpdating = false;
         } catch (Exception e) {
           events.add(new Event("Whoops, something went wrong!", false, null));
           events.add(new Event("Please pull to refresh", false, null));
         }
       }
+      eventUpdating = false;
     } else {
       events.add(new Event("Whoops, something went wrong!", false, null));
       events.add(new Event("Please pull to refresh", false, null));
