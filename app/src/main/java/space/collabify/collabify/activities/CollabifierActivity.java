@@ -12,15 +12,11 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import space.collabify.collabify.*;
-import space.collabify.collabify.base.CollabifyActivity;
 
 /**
  * This file was born on March 11 at 14:02
  */
-public class CollabifierActivity extends CollabifyActivity implements ActionBar.TabListener {
-    private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
+public class CollabifierActivity extends PrimaryViewActivity {
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj};
@@ -31,13 +27,13 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
         setContentView(R.layout.activity_collabifier);
 
         // Initilization
-        viewPager = (ViewPager) findViewById(R.id.collabifierPager);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager = (ViewPager) findViewById(R.id.collabifierPager);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 // on changing the page
                 // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
+                mActionBar.setSelectedNavigationItem(position);
             }
 
             @Override
@@ -78,8 +74,11 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
 
     }
 
+
+    }
+
     @Override
-    public void onBackPressed() {
+    public void onBackPressed () {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // construct the dialog
         builder.setTitle(R.string.title_exit_event);
@@ -108,16 +107,4 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
         builder.show();
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-    }
 }

@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,10 +112,6 @@ public class UserListFragment extends SwipeRefreshListFragment {
    * A background task to fetch events from our server without slowing ui
    */
   private class LoadUsersTask extends AsyncTask<LoadUsersRequest, Void, List<User>> {
-    @Override
-    protected List<User> doInBackground(LoadUsersRequest... params) {
-      return CollabifyClient.getInstance().getUsers(params[0]);
-    }
 
     @Override
     protected void onPostExecute(List<User> users) {
