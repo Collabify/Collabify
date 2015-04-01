@@ -1,10 +1,16 @@
 package space.collabify.collabify;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.User;
+import space.collabify.collabify.Json;
 
 /**
  * Created by ricardolopez on 3/22/15.
@@ -15,6 +21,9 @@ public class CollabifyClient {
 
   private boolean eventUpdating;
   private boolean usersUpdating;
+
+  // TODO: Find a better place for endpoints
+  private String EVENTS = "http://collabify.space/event.json";
 
   private CollabifyClient() {
 
@@ -36,32 +45,31 @@ public class CollabifyClient {
     //TODO fill in with actual server stuff
     eventUpdating = true;
 
-    //fake some server delay
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    ArrayList<Event> events = new ArrayList<>();
+
+    // Get json data
+    JSONArray jArray = Json.getJsonArray("events", EVENTS);
+    if (jArray != null) {
+      for (int i = 0; i < jArray.length(); i++) {
+        try {
+          JSONObject oneObject = jArray.getJSONObject(i);
+          // Pulling items from the array
+          String name = oneObject.getString("name");
+          Boolean passwordProtected = oneObject.getBoolean("passwordProtected");
+          String password = oneObject.getString("password");
+          events.add(new Event(name, passwordProtected, password));
+        } catch (Exception e) {
+          events.add(new Event("Whoops, something went wrong!", false, null));
+          events.add(new Event("Please pull to refresh", false, null));
+        }
+      }
+      eventUpdating = false;
+    } else {
+      events.add(new Event("Whoops, something went wrong!", false, null));
+      events.add(new Event("Please pull to refresh", false, null));
     }
 
-    ArrayList<Event> events = new ArrayList<>();
-    events.add(new Event("Android", false, null));
-    events.add(new Event("iPhone", true, "$$$"));
-    events.add(new Event("WindowsMobile", false, null));
-    events.add(new Event("Blackberry", false, null));
-    events.add(new Event("WebOS", false, null));
-    events.add(new Event("Ubuntu", false, null));
-    events.add(new Event("Windows7", false, null));
-    events.add(new Event( "Max OS X", false, null));
-    events.add(new Event("Linux", false, null));
-    events.add(new Event("OS/2", false, null));
-    events.add(new Event("More", false, null));
-    events.add(new Event("List", false, null));
-    events.add(new Event("Items", false, null));
-    events.add(new Event("Here", false, null));
-
     // TODO: On successful return of event list
-    eventUpdating = false;
-
     return events;
   }
 
@@ -112,4 +120,5 @@ public class CollabifyClient {
   public boolean isUsersUpdating() {
     return usersUpdating;
   }
+
 }
