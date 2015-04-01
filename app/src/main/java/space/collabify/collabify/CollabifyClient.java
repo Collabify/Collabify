@@ -83,10 +83,6 @@ public class CollabifyClient {
         return eventUpdating;
     }
 
-    public void joinEvent(Event event, User user) {
-        //TODO: implementation
-    }
-
     /**
      * Queries the server for users
      *
@@ -126,6 +122,8 @@ public class CollabifyClient {
 
     public boolean isUsersUpdating() {
         return usersUpdating;
+    }
+
     /**
      * Register a user to an event
      * @param event

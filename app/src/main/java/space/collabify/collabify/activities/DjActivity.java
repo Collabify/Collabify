@@ -44,12 +44,12 @@ public class DjActivity extends PrimaryViewActivity {
         });
 
 
-        actionBar = getSupportActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mActionBar = getSupportActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), mAppManager.getUser().getRole());
 
-        viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        mViewPager.setAdapter(mAdapter);
+        mActionBar.setHomeButtonEnabled(false);
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Adding Tabs
         for (int i = 0; i < tabs.length; i++) {
@@ -65,15 +65,13 @@ public class DjActivity extends PrimaryViewActivity {
             ImageView tabImage = (ImageView) tabView.findViewById(R.id.tabIcon);
             tabImage.setImageDrawable(getResources().getDrawable(icons[i]));
 
-            actionBar.addTab(actionBar.newTab()
+            mActionBar.addTab(mActionBar.newTab()
                     .setCustomView(tabView)
                     .setTabListener(this));
         }
 
     }
 
-
-    }
 
     @Override
     public void onBackPressed() {

@@ -10,6 +10,7 @@ import space.collabify.collabify.fragments.DjTracksFragment;
 import space.collabify.collabify.fragments.PlaylistFragment;
 import space.collabify.collabify.fragments.UserListFragment;
 import space.collabify.collabify.managers.AppManager;
+import space.collabify.collabify.models.Role;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
