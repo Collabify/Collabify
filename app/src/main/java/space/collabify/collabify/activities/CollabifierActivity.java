@@ -2,6 +2,7 @@ package space.collabify.collabify.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -82,6 +83,25 @@ public class CollabifierActivity extends CollabifyActivity implements ActionBar.
                   searchItem.collapseActionView();
                   searchView.setQuery("", false);
               }
+          }
+      });
+
+      searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+          @Override
+          public boolean onQueryTextSubmit(String query){
+
+              Intent intent = new Intent(CollabifierActivity.this, DetailedSearchActivity.class);
+
+              intent.putExtra("query", query);
+
+              startActivity(intent);
+
+              return true;
+          }
+
+          @Override
+          public boolean onQueryTextChange(String query){
+              return true;
           }
       });
 

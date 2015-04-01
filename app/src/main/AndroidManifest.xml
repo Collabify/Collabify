@@ -77,6 +77,11 @@
                 android:value=".activities.ModeSelectActivity" />
         </activity>
 
+        <!-- make for sending search string in an intent -->
+        <activity android:name=".activities.DetailedSearchActivity"
+                  android:screenOrientation="portrait"
+                  android:configChanges="keyboardHidden|orientation|screenSize">
+        </activity>
 
 
         <!-- Fragments -->
