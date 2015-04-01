@@ -4,6 +4,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
@@ -53,9 +56,20 @@ public class DjActivity extends CollabifyActivity implements ActionBar.TabListen
 
     // Adding Tabs
     for (int i=0; i < tabs.length; i++) {
+//      actionBar.addTab(actionBar.newTab()
+//        .setText(tabs[i])
+//        .setIcon(icons[i])
+//        .setCustomView(R.layout.tab_layout)
+//        .setTabListener(this));
+      View tabView = getLayoutInflater().inflate(R.layout.tab_layout, null);
+      TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
+      tabText.setText(tabs[i]);
+
+      ImageView tabImage = (ImageView) tabView.findViewById(R.id.tabIcon);
+      tabImage.setImageDrawable(getResources().getDrawable(icons[i]));
+
       actionBar.addTab(actionBar.newTab()
-        .setText(tabs[i])
-        .setIcon(icons[i])
+        .setCustomView(tabView)
         .setTabListener(this));
     }
 
