@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import space.collabify.collabify.managers.AppManager;
 import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.User;
 import space.collabify.collabify.Json;
@@ -18,9 +19,6 @@ import space.collabify.collabify.Json;
 public class CollabifyClient {
 
   private static CollabifyClient instance;
-
-  private User currentUser;
-  private Event currentEvent;
 
   private boolean eventUpdating;
   private boolean usersUpdating;
@@ -61,20 +59,27 @@ public class CollabifyClient {
           String name = oneObject.getString("name");
           int id = oneObject.getInt("eventId");
           JSONObject settings = oneObject.getJSONObject("settings");
-          String password = settings.getString("password");
-          Boolean passwordProtected = !settings.isNull("password");
+
+          String password;
+          if (settings.isNull("password")) {
+            password = "";
+          } else {
+            password = settings.getString("password");
+          }
           Boolean allowVoting = settings.getBoolean("allowVoting");
-          events.add(new Event(name, id, passwordProtected, password, allowVoting));
+          Boolean filterLocation = settings.getBoolean("locationRestricted");
+
+          events.add(new Event(name, id, password, allowVoting, filterLocation));
         } catch (Exception e) {
-          events.add(new Event("Whoops, something went wrong!", 0, false, null, false));
-          events.add(new Event("Please pull to refresh", 0, false, null, false));
+          events.add(new Event("Whoops, something went wrong!", 0, "", false, false));
+          events.add(new Event("Please pull to refresh", 0, "", false, false));
           break;
         }
       }
       eventUpdating = false;
     } else {
-      events.add(new Event("Whoops, something went wrong!", 0, false, null, false));
-      events.add(new Event("Please pull to refresh", 0, false, null, false));
+      events.add(new Event("Whoops, something went wrong!", 0, "", false, false));
+      events.add(new Event("Please pull to refresh", 0, "", false, false));
     }
 
     // TODO: On successful return of event list
@@ -86,8 +91,7 @@ public class CollabifyClient {
   }
 
   public void joinEvent(Event event, User user){
-    currentEvent = event;
-    currentUser = user;
+    // TODO
   }
 
   /**
@@ -103,7 +107,7 @@ public class CollabifyClient {
     ArrayList<User> users = new ArrayList<>();
 
     // Get json data
-    String eventUsers = USERS.replace(":eventId", String.valueOf(currentEvent.getId()));
+    String eventUsers = USERS.replace(":eventId", String.valueOf(AppManager.getInstance().getEvent().getId()));
     JSONArray jArray = Json.getJsonArray(eventUsers);
     if (jArray != null) {
       for (int i = 0; i < jArray.length(); i++) {

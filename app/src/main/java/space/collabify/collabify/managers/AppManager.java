@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 
+import java.util.ArrayList;
+
 import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.User;
 
@@ -58,5 +60,14 @@ public class AppManager {
 
     private void newUser() {
       user = new User("NEW USER", 12345);
+    }
+
+    public void createEvent(Event e) {
+      // Add DJ to Event
+      ArrayList<User> userlist = new ArrayList<>();
+      userlist.add(user);
+      e.setmUserList(userlist);
+
+      event = e;
     }
 }
