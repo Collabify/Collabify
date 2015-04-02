@@ -19,11 +19,15 @@ public class CollabifyClient {
 
   private static CollabifyClient instance;
 
+  private User currentUser;
+  private Event currentEvent;
+
   private boolean eventUpdating;
   private boolean usersUpdating;
 
   // TODO: Find a better place for endpoints
-  private String EVENTS = "http://collabify.space/event.json";
+  private String EVENTS = "http://collabify.space:1337/events/";
+  private String USERS = "http://collabify.space:1337/events/:eventId/users/";
 
   private CollabifyClient() {
 
@@ -48,25 +52,29 @@ public class CollabifyClient {
     ArrayList<Event> events = new ArrayList<>();
 
     // Get json data
-    JSONArray jArray = Json.getJsonArray("events", EVENTS);
+    JSONArray jArray = Json.getJsonArray(EVENTS);
     if (jArray != null) {
       for (int i = 0; i < jArray.length(); i++) {
         try {
           JSONObject oneObject = jArray.getJSONObject(i);
           // Pulling items from the array
           String name = oneObject.getString("name");
-          Boolean passwordProtected = oneObject.getBoolean("passwordProtected");
-          String password = oneObject.getString("password");
-          events.add(new Event(name, passwordProtected, password));
+          int id = oneObject.getInt("eventId");
+          JSONObject settings = oneObject.getJSONObject("settings");
+          String password = settings.getString("password");
+          Boolean passwordProtected = !settings.isNull("password");
+          Boolean allowVoting = settings.getBoolean("allowVoting");
+          events.add(new Event(name, id, passwordProtected, password, allowVoting));
         } catch (Exception e) {
-          events.add(new Event("Whoops, something went wrong!", false, null));
-          events.add(new Event("Please pull to refresh", false, null));
+          events.add(new Event("Whoops, something went wrong!", 0, false, null, false));
+          events.add(new Event("Please pull to refresh", 0, false, null, false));
+          break;
         }
       }
       eventUpdating = false;
     } else {
-      events.add(new Event("Whoops, something went wrong!", false, null));
-      events.add(new Event("Please pull to refresh", false, null));
+      events.add(new Event("Whoops, something went wrong!", 0, false, null, false));
+      events.add(new Event("Please pull to refresh", 0, false, null, false));
     }
 
     // TODO: On successful return of event list
@@ -78,7 +86,8 @@ public class CollabifyClient {
   }
 
   public void joinEvent(Event event, User user){
-    //TODO: implementation
+    currentEvent = event;
+    currentUser = user;
   }
 
   /**
@@ -91,28 +100,30 @@ public class CollabifyClient {
 
     usersUpdating = true;
 
-    //fake some server delay
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
     ArrayList<User> users = new ArrayList<>();
-    users.add(new User("Best Singers Ever!!!", 0));
-    users.add(new User("Katy Perry", 1));
-    users.add(new User("Taylor Swift", 2));
-    users.add(new User("Miley Cyrus", 3));
-    users.add(new User("Spice Girls", 4));
-    users.add(new User("Beyonce", 5));
-    users.add(new User("Madonna", 6));
-    users.add(new User("Brittney Spears", 7));
-    users.add(new User("Lady Gaga", 8));
-    users.add(new User("Avril Lavigne", 9));
-    users.add(new User("P!nk", 10));
-    users.add(new User("Alanis Morissette", 11));
 
-    usersUpdating = false;
+    // Get json data
+    String eventUsers = USERS.replace(":eventId", String.valueOf(currentEvent.getId()));
+    JSONArray jArray = Json.getJsonArray(eventUsers);
+    if (jArray != null) {
+      for (int i = 0; i < jArray.length(); i++) {
+        try {
+          JSONObject oneObject = jArray.getJSONObject(i);
+          // Pulling items from the array
+          String name = oneObject.getString("name");
+          int id = oneObject.getInt("userId");
+          users.add(new User(name, id));
+        } catch (Exception e) {
+          users.add(new User("Whoops, something went wrong!", 0));
+          users.add(new User("Please pull to refresh", 0));
+          break;
+        }
+      }
+      usersUpdating = false;
+    } else {
+      users.add(new User("Whoops, something went wrong!", 0));
+      users.add(new User("Please pull to refresh", 0));
+    }
 
     return users;
   }

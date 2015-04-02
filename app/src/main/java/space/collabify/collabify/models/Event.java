@@ -9,15 +9,18 @@ public class Event {
     private String mName;
     private boolean mPrivateEvent;
     private boolean mProtectedEvent;
+    private boolean mAllowVoting;
     private String mPassword;
     private int mId;
     private List<User> mUserList;
 
     //just for server manager getEvents stub
-    public Event(String name, boolean passwordProtected, String password){
+    public Event(String name, int id, boolean passwordProtected, String password, boolean allowVoting){
         this.mName = name;
+        this.mId = id;
         this.mProtectedEvent = passwordProtected;
         this.mPassword = password;
+        this.mAllowVoting = allowVoting;
     }
 
     public String getName() {
@@ -58,6 +61,14 @@ public class Event {
 
     public void setId(int mId) {
         this.mId = mId;
+    }
+
+    public boolean isAllowVoting() {
+      return mAllowVoting;
+    }
+
+    public void setAllowVoting(boolean allowVoting) {
+      mAllowVoting = allowVoting;
     }
 
     public List<User> getmUserList() {

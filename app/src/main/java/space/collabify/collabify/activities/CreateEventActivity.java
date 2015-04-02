@@ -6,6 +6,7 @@ import android.view.View;
 
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.Role;
 
 /**
@@ -20,6 +21,7 @@ public class CreateEventActivity extends CollabifyActivity {
 
     public void toDj(View view) {
       mAppManager.getUser().setRole(Role.DJ);
+      mAppManager.createEvent(new Event("123"));
       Intent intent = new Intent(this, DjActivity.class);
       startActivity(intent);
     }

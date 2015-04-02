@@ -50,13 +50,38 @@ public class Json {
   }
 
   /**
-   * Return the JSONArray of a given JSON string
+   * Get JSONArray from given uri, wraps helper functions together
+   * @param uri URI of the given JSON resource
+   * @return A JSONArray
+   */
+  public static JSONArray getJsonArray(String uri) {
+    String content = getJSONString(uri);
+    return toJSONArray(content);
+  }
+
+  /**
+   * Return the JSONArray of a given JSON object and key
    * @param key JSON array key
    * @return JSONArray from the given string
    */
   public static JSONArray toJSONArray(String key, JSONObject object) {
     try {
       return object.getJSONArray(key);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+
+  /**
+   * Return the JSONArray of a given JSON string
+   * @param content JSON string
+   * @return JSONArray from the given string
+   */
+  public static JSONArray toJSONArray(String content) {
+    try {
+      return new JSONArray(content);
     } catch (Exception e) {
       e.printStackTrace();
     }
