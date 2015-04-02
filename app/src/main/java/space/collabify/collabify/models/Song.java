@@ -4,83 +4,89 @@ package space.collabify.collabify.models;
  * This file was born on March 20, at 19:46
  */
 public class Song {
-  private String mTitle;
-  private String mArtist;
-  private String mAlbum;
-  private int mYear;
-  private String mId;
+    private String mTitle;
+    private String mArtist;
+    private String mAlbum;
+    private int mYear;
+    private String mId;
 
-  // TODO: Probably want to cache artwork somehow
-  private String mArtwork;
+    // TODO: Probably want to cache artwork somehow
+    private String mArtwork;
+    private boolean mAddedByUser;
 
-  public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork) {
-    this.mTitle = mTitle;
-    this.mArtist = mArtist;
-    this.mAlbum = mAlbum;
-    this.mYear = mYear;
-    this.mId = mId;
-    this.mArtwork = mArtwork;
-  }
+    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, boolean mAddedByUser) {
+        this.mTitle = mTitle;
+        this.mArtist = mArtist;
+        this.mAlbum = mAlbum;
+        this.mYear = mYear;
+        this.mId = mId;
+        this.mArtwork = mArtwork;
+        this.mAddedByUser = mAddedByUser;
+    }
 
-  public String getTitle() {
-    return mTitle;
-  }
+    public boolean wasAddedByUser() {
+        return mAddedByUser;
+    }
 
-  public void setTitle(String mTitle) {
-    this.mTitle = mTitle;
-  }
+    public String getTitle() {
+        return mTitle;
+    }
 
-  public String getArtist() {
-    return mArtist;
-  }
+    public void setTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
 
-  public void setArtist(String mArtist) {
-    this.mArtist = mArtist;
-  }
+    public String getArtist() {
+        return mArtist;
+    }
 
-  public String getAlbum() {
-    return mAlbum;
-  }
+    public void setArtist(String mArtist) {
+        this.mArtist = mArtist;
+    }
 
-  public void setAlbum(String mAlbum) {
-    this.mAlbum = mAlbum;
-  }
+    public String getAlbum() {
+        return mAlbum;
+    }
 
-  public int getYear() {
-    return mYear;
-  }
+    public void setAlbum(String mAlbum) {
+        this.mAlbum = mAlbum;
+    }
 
-  public void setYear(int mYear) {
-    this.mYear = mYear;
-  }
+    public int getYear() {
+        return mYear;
+    }
 
-  public String getId() {
-    return mId;
-  }
+    public void setYear(int mYear) {
+        this.mYear = mYear;
+    }
 
-  public void setId(String mId) {
-    this.mId = mId;
-  }
+    public String getId() {
+        return mId;
+    }
 
-  public String getArtwork() {
-    return mArtwork;
-  }
+    public void setId(String mId) {
+        this.mId = mId;
+    }
 
-  public void setArtwork(String mArtwork) {
-    this.mArtwork = mArtwork;
-  }
+    public String getArtwork() {
+        return mArtwork;
+    }
 
-  public void upvote() {
-    // TODO: something here
-  }
+    public void setArtwork(String mArtwork) {
+        this.mArtwork = mArtwork;
+    }
 
-  public void downvote() {
-    // TODO: something here
-  }
+    public void upvote() {
+        // TODO: something here
+    }
 
-  public String getLyrics() {
-    // TODO: something here
-    return "I found some lyrics!\nYou should fix me though ;)";
-  }
+    public void downvote() {
+        // TODO: something here
+    }
+
+    public String getLyrics() {
+        // TODO: something here
+        return "I found some lyrics!\nYou should fix me though ;)";
+    }
 
 }

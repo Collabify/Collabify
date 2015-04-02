@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageToggleButton">
+        <attr name="checkedSrc" format="reference" />
+        <attr name="uncheckedSrc" format="reference" />
+    </declare-styleable>
+</resources>
