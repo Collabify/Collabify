@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 
+import java.util.ArrayList;
+
+import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.User;
 
 /**
@@ -13,6 +16,7 @@ public class AppManager {
     private static AppManager instance;
 
     private User user;
+    private Event event;
 
     private AppManager(){
       //private because singleton
@@ -37,6 +41,10 @@ public class AppManager {
         return user;
     }
 
+    public Event getEvent() {
+      return event;
+    }
+
     /** Logs the to user out of spotify */
     public void spotifyLogout(Context context){
         AuthenticationClient.logout(context);
@@ -47,9 +55,19 @@ public class AppManager {
      */
     public void clearData() {
       newUser();
+      event = null;
     }
 
     private void newUser() {
       user = new User("NEW USER", 12345);
+    }
+
+    public void createEvent(Event e) {
+      // Add DJ to Event
+      ArrayList<User> userlist = new ArrayList<>();
+      userlist.add(user);
+      e.setmUserList(userlist);
+
+      event = e;
     }
 }
