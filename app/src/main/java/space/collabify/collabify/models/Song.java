@@ -1,5 +1,7 @@
 package space.collabify.collabify.models;
 
+import space.collabify.collabify.managers.AppManager;
+
 /**
  * This file was born on March 20, at 19:46
  */
@@ -9,23 +11,31 @@ public class Song {
     private String mAlbum;
     private int mYear;
     private String mId;
+    private int mUserId;
 
     // TODO: Probably want to cache artwork somehow
     private String mArtwork;
-    private boolean mAddedByUser;
 
-    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, boolean mAddedByUser) {
+    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, int mUserId) {
         this.mTitle = mTitle;
         this.mArtist = mArtist;
         this.mAlbum = mAlbum;
         this.mYear = mYear;
         this.mId = mId;
         this.mArtwork = mArtwork;
-        this.mAddedByUser = mAddedByUser;
+        this.mUserId = mUserId;
     }
 
     public boolean wasAddedByUser() {
-        return mAddedByUser;
+      return ((Integer) AppManager.getInstance().getUser().getId()).equals(mUserId);
+    }
+
+    public int getUserId() {
+      return mUserId;
+    }
+
+    public void setUserId(int mUserId) {
+      this.mUserId = mUserId;
     }
 
     public String getTitle() {

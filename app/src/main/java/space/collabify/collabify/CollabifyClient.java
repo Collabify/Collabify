@@ -27,9 +27,13 @@ public class CollabifyClient {
     private boolean eventUpdating;
     private boolean usersUpdating;
 
-  // TODO: Find a better place for endpoints
-  private String EVENTS = "http://collabify.space:1337/events/";
-  private String USERS = "http://collabify.space:1337/events/:eventId/users/";
+    // TODO: Find a better place for endpoints
+    private int PORT = 1337;
+    private String EVENTS = "http://collabify.space:" + PORT + "/events/";
+    private String USERS = "http://collabify.space:" + PORT + "/events/:eventId/users/";
+    private String PLAYLIST = "http://collabify.space:" + PORT + "/events/:eventId/playlist/";
+
+    private AppManager mAppManger = AppManager.getInstance();
 
     private CollabifyClient() {
 
@@ -116,7 +120,7 @@ public class CollabifyClient {
       ArrayList<User> users = new ArrayList<>();
 
       // Get json data
-      String eventUsers = USERS.replace(":eventId", String.valueOf(AppManager.getInstance().getEvent().getId()));
+      String eventUsers = USERS.replace(":eventId", String.valueOf(mAppManger.getEvent().getId()));
       JSONArray jArray = Json.getJsonArray(eventUsers);
       if (jArray != null) {
         for (int i = 0; i < jArray.length(); i++) {
@@ -154,11 +158,16 @@ public class CollabifyClient {
         //TODO: actual server stuff to get the playlist
         if(mEventPlaylist == null){
             ArrayList<Song> fakeSongList = new ArrayList<>();
-            fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
-            fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up", 1957, "1", "", false));
-            fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957, "2", "", true));
-            fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up", 1957, "3", "", false));
-            fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry", "random", "sonny side up", 1957, "5", "", false));
+            fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.",
+              "sonny side up", 1957, "0", "", 0));
+            fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.",
+              "sonny side up", 1957, "1", "", mAppManger.getUser().getId()));
+            fakeSongList.add(new Song("after hours", "sonny stitt, etc.",
+              "sonny side up", 1957, "2", "", 0));
+            fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.",
+              "sonny side up", 1957, "3", "", 0));
+            fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry",
+              "random", "sonny side up", 1957, "5", "", 0));
 
             mEventPlaylist = new Playlist("sick playlist", 0, fakeSongList);
         }

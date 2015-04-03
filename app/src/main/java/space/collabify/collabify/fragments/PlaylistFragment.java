@@ -46,7 +46,7 @@ public class PlaylistFragment extends ListFragment {
 
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
-        temp.add(new Song("temsong", "temp artist", "temp album", -1, "temp id", "no artwork", false));
+        temp.add(new Song("temsong", "temp artist", "temp album", -1, "temp id", "no artwork", -1));
         User user = mParentActivity.getCurrentUser();
         mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
