@@ -53,11 +53,7 @@ public class DjActivity extends PrimaryViewActivity {
 
         // Adding Tabs
         for (int i = 0; i < tabs.length; i++) {
-//      actionBar.addTab(actionBar.newTab()
-//        .setText(tabs[i])
-//        .setIcon(icons[i])
-//        .setCustomView(R.layout.tab_layout)
-//        .setTabListener(this));
+
             View tabView = getLayoutInflater().inflate(R.layout.tab_layout, null);
             TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
             tabText.setText(tabs[i]);
@@ -69,6 +65,8 @@ public class DjActivity extends PrimaryViewActivity {
                     .setCustomView(tabView)
                     .setTabListener(this));
         }
+
+        mViewPager.setCurrentItem(1);
 
     }
 
