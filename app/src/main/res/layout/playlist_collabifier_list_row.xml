@@ -16,12 +16,12 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/test_album_art"
-        android:layout_margin="2dp"/>
+        android:layout_margin="5dp"/>
 
     <TextView android:id="@+id/playlist_collabifier_song_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="2"
+        android:maxLines="3"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
 
@@ -31,7 +31,7 @@
         android:layout_toLeftOf="@+id/playlist_collabifier_upvote_button"
         android:layout_toStartOf="@+id/playlist_collabifier_upvote_button"
         android:layout_alignBottom="@+id/playlist_collabifier_album_art"
-        android:layout_margin="7dp"/>
+        android:layout_margin="3dp"/>
 
     <space.collabify.collabify.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_upvote_button"
@@ -42,27 +42,29 @@
         android:textOff=""
         app:checkedSrc="@drawable/upvote_checked"
         app:uncheckedSrc="@drawable/upvote_icon"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/playlist_row_song_id"
         android:layout_toLeftOf="@+id/playlist_collabifier_downvote_button"
         android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentRight="false"/>
+        android:layout_marginTop="12dp"/>
 
     <space.collabify.collabify.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_downvote_button"
-        android:layout_toLeftOf="@+id/playlist_collabifier_delete_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:scaleType="fitXY"
         android:textOn=""
         android:textOff=""
         app:checkedSrc="@drawable/downvote_checked"
-        app:uncheckedSrc="@drawable/downvote_icon"   />
+        app:uncheckedSrc="@drawable/downvote_icon"
+        android:layout_alignTop="@+id/playlist_collabifier_upvote_button"
+        android:layout_toLeftOf="@+id/playlist_collabifier_delete_button"
+        android:layout_toStartOf="@+id/playlist_collabifier_delete_button"/>
 
     <ImageButton android:id="@+id/playlist_collabifier_delete_button"
-        android:layout_alignParentRight="true"
-        android:layout_width="30dp"
+                 android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/delete"/>
+        android:src="@drawable/delete"
+        android:layout_alignTop="@+id/playlist_collabifier_downvote_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 </RelativeLayout>
