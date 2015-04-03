@@ -166,6 +166,7 @@ public class CollabifyClient {
      */
     public Playlist getEventPlaylist(){
         //TODO: actual server stuff to get the playlist
+        /*
         if(mEventPlaylist == null) {
           playlistUpdating = true;
 
@@ -203,6 +204,24 @@ public class CollabifyClient {
             mEventPlaylist = null;
           }
 
+        }
+        return mEventPlaylist;
+        */
+
+        if(mEventPlaylist == null){
+          ArrayList<Song> fakeSongList = new ArrayList<>();
+          fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.",
+            "sonny side up", 1957, "0", "", 0));
+          fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up",
+            1957, "1", "", mAppManger.getUser().getId()));
+          fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957,
+            "2", "", 0));
+          fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up",
+            1957, "3", "", 0));
+          fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry",
+            "random", "sonny side up", 1957, "5", "", 0));
+
+          mEventPlaylist = new Playlist("sick playlist", 0, fakeSongList);
         }
         return mEventPlaylist;
     }
@@ -280,5 +299,9 @@ public class CollabifyClient {
 
     public boolean isPlaylistUpdating() {
       return playlistUpdating;
+    }
+
+    public void resetPlaylist() {
+      mEventPlaylist = null;
     }
 }

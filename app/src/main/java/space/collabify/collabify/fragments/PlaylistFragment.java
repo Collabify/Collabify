@@ -43,17 +43,17 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     private CollabifyClient mClient = CollabifyClient.getInstance();
 
     @Override
-    public View onViewCreated(ViewGroup container, Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.fragment_playlist, container, false);
-        mParentActivity = (CollabifyActivity)getActivity();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      View view  = inflater.inflate(R.layout.fragment_playlist, container, false);
+      mParentActivity = (CollabifyActivity)getActivity();
 
-        //will probably just want empty list, but this is useful for debug
-        List<Song> temp = new ArrayList<>();
-        temp.add(new Song("temsong", "temp artist", "temp album", -1, "temp id", "no artwork", -1));
-        User user = mParentActivity.getCurrentUser();
-        mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
-        setListAdapter(mAdapter);
-        return view;
+      //will probably just want empty list, but this is useful for debug
+      List<Song> temp = new ArrayList<>();
+      temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "no artwork", 0));
+      User user = mParentActivity.getCurrentUser();
+      mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
+      setListAdapter(mAdapter);
+      return view;
     }
 
     /**

@@ -87,7 +87,8 @@ public class CollabifierActivity extends PrimaryViewActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                      mCollabifyClient.resetPlaylist();
+                      finish();
                     }
                 }
         );

@@ -7,6 +7,7 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import java.util.ArrayList;
 
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.User;
 import space.collabify.collabify.CollabifyClient;
 
@@ -62,6 +63,7 @@ public class AppManager {
     public void clearData() {
       user = null;
       event = null;
+      mClient.resetPlaylist();
     }
 
     private void newUser() {
