@@ -21,12 +21,13 @@ import space.collabify.collabify.controls.ImageToggleButton;
 import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
+import space.collabify.collabify.CollabifyClient;
 
 
 /**
  * This file was born on March 11, at 15:52
  */
-public class PlaylistFragment extends ListFragment {
+public class PlaylistFragment extends SwipeRefreshListFragment {
     protected static final String TAG = PlaylistFragment.class.getSimpleName();
     protected final int ID_POS = 0;
     protected final int ALBUM_ART_POS = 1;
@@ -39,8 +40,10 @@ public class PlaylistFragment extends ListFragment {
     protected CollabifyActivity mParentActivity;
     protected PlaylistListAdapter mAdapter;
 
+    private CollabifyClient mClient = CollabifyClient.getInstance();
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onViewCreated(ViewGroup container, Bundle savedInstanceState) {
         View view  = inflater.inflate(R.layout.fragment_playlist, container, false);
         mParentActivity = (CollabifyActivity)getActivity();
 
@@ -105,60 +108,66 @@ public class PlaylistFragment extends ListFragment {
     }
 
     protected void onUpvoteClick(CompoundButton view, boolean isChecked){
-        //upvote_icon, or unupvote the song in the row
-        ViewGroup rowLayout = (ViewGroup) view.getParent();
-        ImageToggleButton downvoteButton = (ImageToggleButton)rowLayout.getChildAt(DOWNVOTE_POS);
+        if (!mClient.isPlaylistUpdating()) {
+          //upvote_icon, or unupvote the song in the row
+          ViewGroup rowLayout = (ViewGroup) view.getParent();
+          ImageToggleButton downvoteButton = (ImageToggleButton) rowLayout.getChildAt(DOWNVOTE_POS);
 
-        //get the song in the same listview row
-        Song song =  getSongFromLayout(rowLayout);
-        if(song == null) {
+          //get the song in the same listview row
+          Song song = getSongFromLayout(rowLayout);
+          if (song == null) {
             Log.w(TAG, "Song couldn't be found in the playlist row");
             return;
-        }
+          }
 
-        if(isChecked){
+          if (isChecked) {
             downvoteButton.setChecked(false);
             mListener.upvoteSong(song);
-        }else if(!downvoteButton.isChecked()){
+          } else if (!downvoteButton.isChecked()) {
             mListener.clearSongVote(song);
+          }
         }
     }
 
     protected void onDownvoteClick(CompoundButton view, boolean isChecked){
-        //upvote_icon, or unupvote the song in the row
-        ViewGroup rowLayout = (ViewGroup) view.getParent();
-        ImageToggleButton upvoteButton  = (ImageToggleButton)rowLayout.getChildAt(UPVOTE_POS);
+        if (!mClient.isPlaylistUpdating()) {
+          //upvote_icon, or unupvote the song in the row
+          ViewGroup rowLayout = (ViewGroup) view.getParent();
+          ImageToggleButton upvoteButton = (ImageToggleButton) rowLayout.getChildAt(UPVOTE_POS);
 
-        //get the song in the same listview row
-        Song song =  getSongFromLayout(rowLayout);
-        if(song == null) {
+          //get the song in the same listview row
+          Song song = getSongFromLayout(rowLayout);
+          if (song == null) {
             Log.w(TAG, "Song couldn't be found in the playlist row");
             return;
-        }
+          }
 
-        if(isChecked){
+          if (isChecked) {
             //TODO: warning, causes onDownvoteClick to be called, resulting in
             //two calls to the server when only one may be necessary...
             upvoteButton.setChecked(false);
             mListener.downvoteSong(song);
-        }else if(!upvoteButton.isChecked()){
+          } else if (!upvoteButton.isChecked()) {
             mListener.clearSongVote(song);
+          }
         }
     }
 
     protected void onDeleteClick(View view){
-        ViewGroup rowViewGroup = (ViewGroup) view.getParent();
-        Song song = getSongFromLayout(rowViewGroup);
+        if (!mClient.isPlaylistUpdating()) {
+          ViewGroup rowViewGroup = (ViewGroup) view.getParent();
+          Song song = getSongFromLayout(rowViewGroup);
 
-        if(song == null){
+          if (song == null) {
             Log.e(TAG, "Couldn't find song to delete");
             return;
+          }
+
+          mListener.deleteSong(song);
+
+          //need to redraw the listview?
+          mListener.onPlaylistUpdateRequest();
         }
-
-        mListener.deleteSong(song);
-
-        //need to redraw the listview?
-        mListener.onPlaylistUpdateRequest();
     }
 
 }
