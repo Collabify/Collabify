@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
@@ -25,19 +26,25 @@ public class CreateEventActivity extends CollabifyActivity {
       mAppManager.getUser().setRole(Role.DJ);
 
       EditText mName = (EditText) findViewById(R.id.event_field);
-      CheckBox mPasswordProtect = (CheckBox) findViewById(R.id.password_protected_checkbox);
       EditText mPassword = (EditText) findViewById(R.id.password_field);
+      CheckBox mPasswordProtected = (CheckBox) findViewById(R.id.password_protected_checkbox);
       CheckBox mAllowFeedback = (CheckBox) findViewById(R.id.allow_feedback_checkbox);
       CheckBox mRestrictNearby = (CheckBox) findViewById(R.id.restrict_nearby_checkbox);
 
       String name = mName.getText().toString();
-      boolean passwordProtect = mPasswordProtect.isChecked();
       String password = mPassword.getText().toString();
+      boolean passwordProtected = mPasswordProtected.isChecked();
       boolean allowFeedback = mAllowFeedback.isChecked();
       boolean restrictNearby = mRestrictNearby.isChecked();
 
-      mAppManager.createEvent(new Event(name, 0, password, allowFeedback, restrictNearby));
-      Intent intent = new Intent(this, DjActivity.class);
-      startActivity(intent);
+      if (password.equals("") && passwordProtected) {
+        Toast.makeText(CreateEventActivity.this, "Please enter a password", Toast.LENGTH_LONG).show();
+      } else if (name.equals("")) {
+        Toast.makeText(CreateEventActivity.this, "Please enter an event name", Toast.LENGTH_LONG).show();
+      } else {
+        mAppManager.createEvent(new Event(name, 0, password, allowFeedback, restrictNearby));
+        Intent intent = new Intent(this, DjActivity.class);
+        startActivity(intent);
+      }
     }
 }

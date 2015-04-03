@@ -110,7 +110,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
     }
 
     /**
-     * A background task to fetch events from our server without slowing ui
+     * A background task to fetch users from our server without slowing ui
      */
     private class LoadUsersTask extends AsyncTask<LoadUsersRequest, Void, List<User>> {
         @Override

@@ -88,7 +88,7 @@ public class JoinEventActivity extends CollabifyActivity implements
     public void toCollabifier(Event event) {
         //TODO: work out exact communication with servermanager
         mAppManager.getUser().setRole(Role.COLLABIFIER);
-        mCollabifyClient.joinEvent(event, mAppManager.getUser());
+        mAppManager.joinEvent(event);
         Intent intent = new Intent(this, CollabifierActivity.class);
         startActivity(intent);
     }
@@ -97,7 +97,7 @@ public class JoinEventActivity extends CollabifyActivity implements
         //TODO may have to change how password is handled/displayed
         if(event.getPassword().equalsIgnoreCase(password)){
             mAppManager.getUser().setRole(Role.COLLABIFIER);
-            mCollabifyClient.joinEvent(event, mAppManager.getUser());
+            mAppManager.joinEvent(event);
             Intent intent = new Intent(this, CollabifierActivity.class);
             startActivity(intent);
         }else {

@@ -66,7 +66,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
         //set up the row elements
         Song songItem = getItem(position);
-        String newSongDescription = songItem.getArtist() + " - " + songItem.getTitle();
+        String newSongDescription = songItem.getTitle() + "\n" + songItem.getArtist();
         songDescriptionTextView.setText(newSongDescription);
         songIdView.setText(songItem.getId());
 

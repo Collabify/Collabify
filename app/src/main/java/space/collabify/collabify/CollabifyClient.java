@@ -26,10 +26,15 @@ public class CollabifyClient {
 
     private boolean eventUpdating;
     private boolean usersUpdating;
+    private boolean playlistUpdating;
 
-  // TODO: Find a better place for endpoints
-  private String EVENTS = "http://collabify.space:1337/events/";
-  private String USERS = "http://collabify.space:1337/events/:eventId/users/";
+    // TODO: Find a better place for endpoints
+    private int PORT = 1337;
+    private String EVENTS = "http://collabify.space:" + PORT + "/events/";
+    private String USERS = "http://collabify.space:" + PORT + "/events/:eventId/users/";
+    private String PLAYLIST = "http://collabify.space:" + PORT + "/events/:eventId/playlist/";
+
+    private AppManager mAppManger = AppManager.getInstance();
 
     private CollabifyClient() {
 
@@ -95,12 +100,21 @@ public class CollabifyClient {
     }
 
     /**
-     * Register a user to an event
-     * @param event
-     * @param user
+     * Register a user to an event (server-side)
+     * @param event Event to join
+     * @param user Current user
      */
     public void joinEvent(Event event, User user){
       //TODO: implementation
+    }
+
+  /**
+   * Create a new event (server-side)
+   * @param event Event to create
+   * @param user Current user
+   */
+    public void createEvent(Event event, User user) {
+      // TODO: implementation
     }
 
     /**
@@ -116,7 +130,7 @@ public class CollabifyClient {
       ArrayList<User> users = new ArrayList<>();
 
       // Get json data
-      String eventUsers = USERS.replace(":eventId", String.valueOf(AppManager.getInstance().getEvent().getId()));
+      String eventUsers = USERS.replace(":eventId", String.valueOf(mAppManger.getEvent().getId()));
       JSONArray jArray = Json.getJsonArray(eventUsers);
       if (jArray != null) {
         for (int i = 0; i < jArray.length(); i++) {
@@ -152,15 +166,62 @@ public class CollabifyClient {
      */
     public Playlist getEventPlaylist(){
         //TODO: actual server stuff to get the playlist
-        if(mEventPlaylist == null){
-            ArrayList<Song> fakeSongList = new ArrayList<>();
-            fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.", "sonny side up", 1957, "0", "", false));
-            fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up", 1957, "1", "", false));
-            fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957, "2", "", true));
-            fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up", 1957, "3", "", false));
-            fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry", "random", "sonny side up", 1957, "5", "", false));
+        /*
+        if(mEventPlaylist == null) {
+          playlistUpdating = true;
 
-            mEventPlaylist = new Playlist("sick playlist", 0, fakeSongList);
+          ArrayList<Song> tempList = new ArrayList<>();
+
+          // Get json data
+          String eventPlaylist = PLAYLIST.replace(":eventId", String.valueOf(mAppManger.getEvent().getId()));
+          JSONArray jArray = Json.getJsonArray(eventPlaylist);
+          if (jArray != null) {
+            for (int i = 0; i < jArray.length(); i++) {
+              try {
+                JSONObject oneObject = jArray.getJSONObject(i);
+                // Pulling items from the array
+                String title = oneObject.getString("title");
+                String artist = oneObject.getString("artist");
+                String album = oneObject.getString("album");
+                int year = oneObject.getInt("year");
+                String id = oneObject.getString("songId");
+                String albumArtwork = oneObject.getString("artworkUrl");
+                int userId = oneObject.getInt("userId");
+
+                tempList.add(new Song(title, artist, album, year, id, albumArtwork, userId));
+              } catch (Exception e) {
+                tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", 0));
+                tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", 0));
+                mEventPlaylist = null;
+                break;
+              }
+            }
+            mEventPlaylist = new Playlist("Cool new playlist", 0, tempList);
+            playlistUpdating = false;
+          } else {
+            tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", 0));
+            tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", 0));
+            mEventPlaylist = null;
+          }
+
+        }
+        return mEventPlaylist;
+        */
+
+        if(mEventPlaylist == null){
+          ArrayList<Song> fakeSongList = new ArrayList<>();
+          fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.",
+            "sonny side up", 1957, "0", "", 0));
+          fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up",
+            1957, "1", "", mAppManger.getUser().getId()));
+          fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957,
+            "2", "", 0));
+          fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up",
+            1957, "3", "", 0));
+          fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry",
+            "random", "sonny side up", 1957, "5", "", 0));
+
+          mEventPlaylist = new Playlist("sick playlist", 0, fakeSongList);
         }
         return mEventPlaylist;
     }
@@ -234,5 +295,13 @@ public class CollabifyClient {
             }
         }
         return null;
+    }
+
+    public boolean isPlaylistUpdating() {
+      return playlistUpdating;
+    }
+
+    public void resetPlaylist() {
+      mEventPlaylist = null;
     }
 }

@@ -7,13 +7,16 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import java.util.ArrayList;
 
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.User;
+import space.collabify.collabify.CollabifyClient;
 
 /**
  * This file was born on March 11 at 13:43
  */
 public class AppManager {
     private static AppManager instance;
+    private static CollabifyClient mClient;
 
     private User user;
     private Event event;
@@ -32,13 +35,17 @@ public class AppManager {
         if(instance == null){
             //create new instance
             instance = new AppManager();
+            mClient = CollabifyClient.getInstance();
         }
 
         return instance;
     }
 
     public User getUser() {
-        return user;
+      if (user == null) {
+        newUser();
+      }
+      return user;
     }
 
     public Event getEvent() {
@@ -54,20 +61,36 @@ public class AppManager {
      * user hits 'logout' and is returned to the login screen
      */
     public void clearData() {
-      newUser();
+      user = null;
       event = null;
+      mClient.resetPlaylist();
     }
 
     private void newUser() {
       user = new User("NEW USER", 12345);
     }
 
+  /**
+   * Create a local copy of the event
+   * @param e Event to create
+   */
     public void createEvent(Event e) {
       // Add DJ to Event
       ArrayList<User> userlist = new ArrayList<>();
-      userlist.add(user);
+      userlist.add(getUser());
       e.setmUserList(userlist);
 
       event = e;
+      mClient.createEvent(event, user);
+    }
+
+  /**
+   * Join event and set local data
+   * @param e Event to join
+   */
+    public void joinEvent(Event e) {
+      event = e;
+      event.getmUserList().add(getUser());
+      mClient.joinEvent(event, user);
     }
 }

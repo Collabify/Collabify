@@ -1,5 +1,6 @@
 package space.collabify.collabify.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public class Event {
         this.mPassword = password;
         this.mAllowVoting = allowVoting;
         this.mPrivateEvent = privateEvent;
+        this.mUserList = new ArrayList<>();
     }
 
     public String getName() {
