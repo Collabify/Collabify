@@ -33,6 +33,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.playlist_collabifier_list_row, parent, false);
+        Song songItem = getItem(position);
 
         TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
         TextView songIdView = (TextView) customView.findViewById(R.id.playlist_row_song_id);
@@ -41,6 +42,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
         ImageToggleButton downvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
 
+        //initialize button states
+        upvoteButton.setChecked(songItem.isUpvoted());
+        downvoteButton.setChecked(songItem.isDownvoted());
+        
         //add onclick listeners to the row
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +70,6 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
 
         //set up the row elements
-        Song songItem = getItem(position);
         String title = songItem.getTitle();
         title = title.substring(0, Math.min(title.length(), 30));
         String artist = songItem.getArtist();

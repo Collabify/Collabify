@@ -77,6 +77,12 @@
                 android:value=".activities.ModeSelectActivity" />
         </activity>
 
+        <!-- only for testing fragments -->
+        <activity
+            android:name=".test.TestFragmentActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
 
 
         <!-- Fragments -->
