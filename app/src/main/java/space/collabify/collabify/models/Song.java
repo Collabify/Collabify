@@ -13,6 +13,10 @@ public class Song {
     private String mId;
     private int mUserId;
 
+
+    private boolean mIsUpvoted;
+    private boolean mIsDownvoted;
+
     // TODO: Probably want to cache artwork somehow
     private String mArtwork;
 
@@ -24,6 +28,8 @@ public class Song {
         this.mId = mId;
         this.mArtwork = mArtwork;
         this.mUserId = mUserId;
+        this.mIsUpvoted = false;
+        this.mIsDownvoted = false;
     }
 
     public boolean wasAddedByUser() {
@@ -86,12 +92,30 @@ public class Song {
         this.mArtwork = mArtwork;
     }
 
+
+    public boolean isDownvoted() {
+        return mIsDownvoted;
+    }
+
+    public boolean isUpvoted() {
+        return mIsUpvoted;
+    }
+
+    public void clearVote(){
+        mIsDownvoted = false;
+        mIsUpvoted = false;
+    }
+
     public void upvote() {
         // TODO: something here
+        mIsUpvoted = true;
+        mIsDownvoted = false;
     }
 
     public void downvote() {
         // TODO: something here
+        mIsUpvoted = false;
+        mIsDownvoted = true;
     }
 
     public String getLyrics() {

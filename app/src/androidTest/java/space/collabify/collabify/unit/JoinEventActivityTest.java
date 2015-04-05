@@ -49,7 +49,7 @@ public class JoinEventActivityTest extends ActivityInstrumentationTestCase2<Join
     public void testInvalidEventPassword_toCollabify(){
         Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(CollabifierActivity.class.getName(), null, false);
 
-        Event event = new Event("test", true, "password");
+        Event event = new Event("test", 1, "password", true, false);
         mActivity.toCollabifier(event, "not the password");
 
         //shouldn't go to next
@@ -57,4 +57,17 @@ public class JoinEventActivityTest extends ActivityInstrumentationTestCase2<Join
 
         assertNull("Bad event password shouldn't continue to collabifier activity", nextActivity);
     }
+
+    public void testValidEventPassword_toCollabify(){
+        Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(CollabifierActivity.class.getName(), null, false);
+
+        Event event = new Event("test", 1, "password", true, false);
+        mActivity.toCollabifier(event, "password");
+
+        //shoul go to next
+        Activity nextActivity = getInstrumentation().waitForMonitorWithTimeout(monitor, 2000);
+
+        assertNotNull("Correct event password should continue to collabifier activity", nextActivity);
+    }
+
 }

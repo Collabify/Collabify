@@ -236,6 +236,7 @@ public class CollabifyClient {
             Log.w(TAG, "Tried to upvote null song");
             return;
         }
+        song.upvote();
         //TODO: server stuff
     }
 
@@ -249,6 +250,7 @@ public class CollabifyClient {
             Log.w(TAG, "Tried to delete null song");
             return;
         }
+
         //TODO: actual server stuff
         if(user.getRole().isDJ() || song.wasAddedByUser()){
             mEventPlaylist.removeSong(song);
@@ -265,6 +267,7 @@ public class CollabifyClient {
             Log.w(TAG, "Tried to downvote null song");
             return;
         }
+        song.downvote();
         //TODO: server stuff
     }
 
@@ -278,6 +281,7 @@ public class CollabifyClient {
             Log.w(TAG, "Tried to clear null song vote");
             return;
         }
+        song.clearVote();
         //TODO: server stuff
     }
 
