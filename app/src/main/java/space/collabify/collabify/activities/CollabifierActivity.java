@@ -2,12 +2,17 @@ package space.collabify.collabify.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.support.v7.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -16,6 +21,7 @@ import space.collabify.collabify.*;
 /**
  * This file was born on March 11 at 14:02
  */
+
 public class CollabifierActivity extends PrimaryViewActivity {
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
@@ -68,6 +74,48 @@ public class CollabifierActivity extends PrimaryViewActivity {
                     .setTabListener(this));
         }
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+
+        getMenuInflater().inflate(R.menu.song_search, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused){
+                if(!queryTextFocused){
+                    searchItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query){
+
+                Intent intent = new Intent(CollabifierActivity.this, DetailedSearchActivity.class);
+
+                intent.putExtra("query", query);
+
+                startActivity(intent);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query){
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
 
