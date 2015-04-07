@@ -20,6 +20,9 @@ public class Role {
   }
 
   public String getRole() {
+    if (role == null) {
+      role = COLLABIFIER;
+    }
     return role;
   }
 

@@ -1,6 +1,8 @@
 package space.collabify.collabify.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +26,9 @@ import space.collabify.collabify.CollabifyClient;
 import space.collabify.collabify.LoadEventsRequest;
 import space.collabify.collabify.LoadUsersRequest;
 import space.collabify.collabify.R;
+import space.collabify.collabify.activities.CollabifierActivity;
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.Role;
 import space.collabify.collabify.models.User;
 
 /**
@@ -31,14 +37,17 @@ import space.collabify.collabify.models.User;
 public class UserListFragment extends SwipeRefreshListFragment {
     private static final String TAG = UserListFragment.class.getSimpleName();
 
+    List<User> userlist;
+    UserListAdapter adapter;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        User tmpUser = new User("Waiting for server", 999);
+        User tmpUser = new User("Waiting for server", 9999);
         List<User> temp = new ArrayList<>();
         temp.add(tmpUser);
-        UserListAdapter adapter = new UserListAdapter(getActivity().getApplicationContext(), temp);
+        adapter = new UserListAdapter(getActivity().getApplicationContext(), temp);
         setListAdapter(adapter);
 
         setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -87,6 +96,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
     private class UserListAdapter extends ArrayAdapter<User> {
         private UserListAdapter(Context context, List<User> objects) {
             super(context, R.layout.user_list_row, objects);
+            userlist = objects;
         }
 
         private UserListAdapter(Context context, User[] users) {
@@ -100,10 +110,23 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
             User userItem = getItem(position);
             TextView rowName = (TextView) customView.findViewById(R.id.user_row_name);
-            TextView rowId = (TextView) customView.findViewById(R.id.user_row_id);
+            ImageView rowIcon = (ImageView) customView.findViewById(R.id.user_row_icon);
 
             rowName.setText(userItem.getName());
-            rowId.setText("id: " + String.valueOf(userItem.getId()));
+
+            if (userlist.get(0).getId() != 9999) {
+              switch (userlist.get(position).getRole().getRole()) {
+                case Role.PROMOTED:
+                  rowIcon.setImageResource(R.drawable.promoted_user);
+                  break;
+                case Role.BLACKLISTED:
+                  rowIcon.setImageResource(R.drawable.blacklisted_icon);
+                  break;
+                default:
+                  rowIcon.setImageResource(R.drawable.collabifier_icon);
+                  break;
+              }
+            }
 
             return customView;
         }
@@ -124,6 +147,46 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
             //post results
             onRefreshComplete(users);
+
+          userlist = users;
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+      final User u = userlist.get(position);
+
+      final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
+
+      int rolePos;
+      switch(u.getRole().getRole()) {
+        case Role.PROMOTED:
+          rolePos = 0;
+          break;
+        case Role.BLACKLISTED:
+          rolePos = 2;
+          break;
+        default:
+          rolePos = 1;
+          break;
+      }
+      roles[rolePos] += " (Current)";
+
+      if (!CollabifyClient.getInstance().isUsersUpdating()) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        builder.setTitle("Change User Role:");
+        builder.setItems(roles, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int item) {
+            // Do something with the selection
+            Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
+            u.getRole().setRole(roles[item]);
+            adapter.notifyDataSetChanged();
+          }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        AlertDialog alert = builder.create();
+        alert.show();
+      }
     }
 }

@@ -141,15 +141,15 @@ public class CollabifyClient {
             int id = oneObject.getInt("userId");
             users.add(new User(name, id));
           } catch (Exception e) {
-            users.add(new User("Whoops, something went wrong!", 0));
-            users.add(new User("Please pull to refresh", 0));
+            users.add(new User("Whoops, something went wrong!", 9999));
+            users.add(new User("Please pull to refresh (Inside)", 9999));
             break;
           }
         }
         usersUpdating = false;
       } else {
-        users.add(new User("Whoops, something went wrong!", 0));
-        users.add(new User("Please pull to refresh", 0));
+        users.add(new User("Whoops, something went wrong!", 9999));
+        users.add(new User("Please pull to refresh", 9999));
       }
 
       return users;
