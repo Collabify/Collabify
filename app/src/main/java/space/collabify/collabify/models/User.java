@@ -19,7 +19,7 @@ public class User {
 
     public Role getRole() {
         return mRole;
-    }
+    }   //TODO: use this for settings
 
     public void setRole(String mRole) {
         this.mRole.setRole(mRole);

@@ -30,10 +30,20 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
+            android:name=".activities.CollabifierSettingsActivity"
+            android:label="CollabifierSettings" />
+
+        <!-- need 2 new activities for settings? -->
+        <activity
+            android:name=".activities.DjSettingsActivity"
+            android:label="DjSettingsActivity" />
+
+        <activity
             android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_settings" />
+
 
         <!-- Mode Activities-->
         <activity
