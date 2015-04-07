@@ -6,6 +6,7 @@ import space.collabify.collabify.activities.DjSettingsActivity;
 import space.collabify.collabify.activities.LoginScreenActivity;
 import space.collabify.collabify.activities.SettingsActivity;
 import space.collabify.collabify.managers.AppManager;
+import space.collabify.collabify.models.User;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -18,16 +19,16 @@ import android.view.MenuItem;
  */
 public class CollabifyActivity extends ActionBarActivity {
     protected AppManager mAppManager;
-    protected CollabifyClient collabifyClient;
+    protected CollabifyClient mCollabifyClient;
 
     public CollabifyActivity(){
         this.mAppManager = AppManager.getInstance();
-        this.collabifyClient = collabifyClient.getInstance();
+        this.mCollabifyClient = mCollabifyClient.getInstance();
     }
 
     public CollabifyActivity(AppManager mAppManager, CollabifyClient collabifyClient) {
         this.mAppManager = mAppManager;
-        this.collabifyClient = collabifyClient;
+        this.mCollabifyClient = collabifyClient;
     }
 
     @Override
@@ -62,6 +63,7 @@ public class CollabifyActivity extends ActionBarActivity {
                 Intent intent = new Intent(this, LoginScreenActivity.class);
                 startActivity(intent);
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -74,7 +76,6 @@ public class CollabifyActivity extends ActionBarActivity {
         startActivity(intent);
 
     }
-
     /** Launch Collabifier settings activity */
     private void openCollabifierSettings() {
         //don't want to go to settings if we are already there
@@ -91,5 +92,16 @@ public class CollabifyActivity extends ActionBarActivity {
 
     }
 
-
+    /**
+     * Gets the current user from the appmanager....
+     * Not sure if Appmanager should be public, or if it is
+     * better to expose parts of it in this way...
+     * @return this User, or null if not possible
+     */
+    public User getCurrentUser(){
+        if(mAppManager == null){
+            return null;
+        }
+        return mAppManager.getUser();
+    }
 }

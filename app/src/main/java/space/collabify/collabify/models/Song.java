@@ -1,86 +1,126 @@
 package space.collabify.collabify.models;
 
+import space.collabify.collabify.managers.AppManager;
+
 /**
  * This file was born on March 20, at 19:46
  */
 public class Song {
-  private String mTitle;
-  private String mArtist;
-  private String mAlbum;
-  private int mYear;
-  private String mId;
+    private String mTitle;
+    private String mArtist;
+    private String mAlbum;
+    private int mYear;
+    private String mId;
+    private int mUserId;
 
-  // TODO: Probably want to cache artwork somehow
-  private String mArtwork;
 
-  public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork) {
-    this.mTitle = mTitle;
-    this.mArtist = mArtist;
-    this.mAlbum = mAlbum;
-    this.mYear = mYear;
-    this.mId = mId;
-    this.mArtwork = mArtwork;
-  }
+    private boolean mIsUpvoted;
+    private boolean mIsDownvoted;
 
-  public String getTitle() {
-    return mTitle;
-  }
+    // TODO: Probably want to cache artwork somehow
+    private String mArtwork;
 
-  public void setTitle(String mTitle) {
-    this.mTitle = mTitle;
-  }
+    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, int mUserId) {
+        this.mTitle = mTitle;
+        this.mArtist = mArtist;
+        this.mAlbum = mAlbum;
+        this.mYear = mYear;
+        this.mId = mId;
+        this.mArtwork = mArtwork;
+        this.mUserId = mUserId;
+        this.mIsUpvoted = false;
+        this.mIsDownvoted = false;
+    }
 
-  public String getArtist() {
-    return mArtist;
-  }
+    public boolean wasAddedByUser() {
+      return ((Integer) AppManager.getInstance().getUser().getId()).equals(mUserId);
+    }
 
-  public void setArtist(String mArtist) {
-    this.mArtist = mArtist;
-  }
+    public int getUserId() {
+      return mUserId;
+    }
 
-  public String getAlbum() {
-    return mAlbum;
-  }
+    public void setUserId(int mUserId) {
+      this.mUserId = mUserId;
+    }
 
-  public void setAlbum(String mAlbum) {
-    this.mAlbum = mAlbum;
-  }
+    public String getTitle() {
+        return mTitle;
+    }
 
-  public int getYear() {
-    return mYear;
-  }
+    public void setTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
 
-  public void setYear(int mYear) {
-    this.mYear = mYear;
-  }
+    public String getArtist() {
+        return mArtist;
+    }
 
-  public String getId() {
-    return mId;
-  }
+    public void setArtist(String mArtist) {
+        this.mArtist = mArtist;
+    }
 
-  public void setId(String mId) {
-    this.mId = mId;
-  }
+    public String getAlbum() {
+        return mAlbum;
+    }
 
-  public String getArtwork() {
-    return mArtwork;
-  }
+    public void setAlbum(String mAlbum) {
+        this.mAlbum = mAlbum;
+    }
 
-  public void setArtwork(String mArtwork) {
-    this.mArtwork = mArtwork;
-  }
+    public int getYear() {
+        return mYear;
+    }
 
-  public void upvote() {
-    // TODO: something here
-  }
+    public void setYear(int mYear) {
+        this.mYear = mYear;
+    }
 
-  public void downvote() {
-    // TODO: something here
-  }
+    public String getId() {
+        return mId;
+    }
 
-  public String getLyrics() {
-    // TODO: something here
-    return "I found some lyrics!\nYou should fix me though ;)";
-  }
+    public void setId(String mId) {
+        this.mId = mId;
+    }
+
+    public String getArtwork() {
+        return mArtwork;
+    }
+
+    public void setArtwork(String mArtwork) {
+        this.mArtwork = mArtwork;
+    }
+
+
+    public boolean isDownvoted() {
+        return mIsDownvoted;
+    }
+
+    public boolean isUpvoted() {
+        return mIsUpvoted;
+    }
+
+    public void clearVote(){
+        mIsDownvoted = false;
+        mIsUpvoted = false;
+    }
+
+    public void upvote() {
+        // TODO: something here
+        mIsUpvoted = true;
+        mIsDownvoted = false;
+    }
+
+    public void downvote() {
+        // TODO: something here
+        mIsUpvoted = false;
+        mIsDownvoted = true;
+    }
+
+    public String getLyrics() {
+        // TODO: something here
+        return "I found some lyrics!\nYou should fix me though ;)";
+    }
 
 }

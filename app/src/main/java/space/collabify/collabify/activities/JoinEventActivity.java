@@ -1,13 +1,12 @@
 package space.collabify.collabify.activities;
 
 
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,11 +15,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 
 
-import space.collabify.collabify.CollabifyClient;
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.JoinEventListFragment;
 import space.collabify.collabify.models.Event;
+import space.collabify.collabify.models.Role;
 
 /**
  * This file was born on March 11 at 14:00
@@ -47,12 +46,12 @@ public class JoinEventActivity extends CollabifyActivity implements
         setContentView(R.layout.activity_join_event);
 
         if(savedInstanceState == null){
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mJoinEventListFragment = new JoinEventListFragment();
-            transaction.replace(R.id.event_list_frame, mJoinEventListFragment);
+            transaction.replace(R.id.event_list_frame, mJoinEventListFragment, TAG);
             transaction.commit();
         }else {
-            //TODO: get join event fragment reference
+            //TODO: get join event fragment reference from savedInstanceState?
         }
         //set up location services
         buildGoogleApiClient();
@@ -88,7 +87,8 @@ public class JoinEventActivity extends CollabifyActivity implements
 
     public void toCollabifier(Event event) {
         //TODO: work out exact communication with servermanager
-        collabifyClient.joinEvent(event, mAppManager.getUser());
+        mAppManager.getUser().setRole(Role.COLLABIFIER);
+        mAppManager.joinEvent(event);
         Intent intent = new Intent(this, CollabifierActivity.class);
         startActivity(intent);
     }
@@ -96,7 +96,8 @@ public class JoinEventActivity extends CollabifyActivity implements
     public void toCollabifier(Event event, String password){
         //TODO may have to change how password is handled/displayed
         if(event.getPassword().equalsIgnoreCase(password)){
-            collabifyClient.joinEvent(event, mAppManager.getUser());
+            mAppManager.getUser().setRole(Role.COLLABIFIER);
+            mAppManager.joinEvent(event);
             Intent intent = new Intent(this, CollabifierActivity.class);
             startActivity(intent);
         }else {

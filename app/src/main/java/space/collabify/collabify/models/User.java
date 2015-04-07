@@ -6,17 +6,23 @@ import android.location.Location;
  * This file was born on March 20, at 19:46
  */
 public class User {
-    private IRole mRole;
+    private Role mRole;
     private String mName;
     private int mId;
     private Location mLocation;
 
-    public IRole getRole() {
+    public User(String name, int id) {
+      mName = name;
+      mId = id;
+      mRole = new Role();
+    }
+
+    public Role getRole() {
         return mRole;
     }   //TODO: use this for settings
 
-    public void setRole(IRole mRole) {
-        this.mRole = mRole;
+    public void setRole(String mRole) {
+        this.mRole.setRole(mRole);
     }
 
     public String getName() {
