@@ -142,15 +142,15 @@ public class CollabifyClient {
             users.add(new User(name, id));
           } catch (Exception e) {
             users.add(new User("Whoops, something went wrong!", 0));
-            users.add(new User("Please pull to refresh", 0));
+            users.add(new User("Please pull to refresh (Inside)", 0));
             break;
           }
         }
-        usersUpdating = false;
       } else {
         users.add(new User("Whoops, something went wrong!", 0));
         users.add(new User("Please pull to refresh", 0));
       }
+        usersUpdating = false;
 
       return users;
     }
