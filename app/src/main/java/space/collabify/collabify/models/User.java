@@ -13,7 +13,7 @@ public class User {
 
     public IRole getRole() {
         return mRole;
-    }
+    }   //TODO: use this for settings
 
     public void setRole(IRole mRole) {
         this.mRole = mRole;

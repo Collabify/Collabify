@@ -1,6 +1,8 @@
 package space.collabify.collabify.base;
 
 import space.collabify.collabify.*;
+import space.collabify.collabify.activities.CollabifierSettingsActivity;
+import space.collabify.collabify.activities.DjSettingsActivity;
 import space.collabify.collabify.activities.LoginScreenActivity;
 import space.collabify.collabify.activities.SettingsActivity;
 import space.collabify.collabify.managers.AppManager;
@@ -44,6 +46,16 @@ public class CollabifyActivity extends ActionBarActivity {
                 openSettings();
                 return true;
 
+            //case for Collabifier settings
+            case R.id.action_Collabifier_settings:
+                openCollabifierSettings();
+                return true;
+
+            //case for DJ settings
+            case R.id.action_DJ_settings:
+                openDJSettings();
+                return true;
+
             case R.id.action_logout:
                 mAppManager.spotifyLogout(getApplicationContext());
                 //return to login activity
@@ -62,4 +74,22 @@ public class CollabifyActivity extends ActionBarActivity {
         startActivity(intent);
 
     }
+
+    /** Launch Collabifier settings activity */
+    private void openCollabifierSettings() {
+        //don't want to go to settings if we are already there
+        Intent intent = new Intent(getApplicationContext(), CollabifierSettingsActivity.class);
+        startActivity(intent);
+
+    }
+
+    /** Launch DJ settings activity */
+    private void openDJSettings() {
+        //don't want to go to settings if we are already there
+        Intent intent = new Intent(getApplicationContext(), DjSettingsActivity.class);
+        startActivity(intent);
+
+    }
+
+
 }

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings" />
+
+    <!-- do we have 3 different setting modes? -->
+    <item android:id="@+id/action_Collabifier_settings"
+        android:title="@string/action_Collabifier_settings" />
+
+    <item android:id="@+id/action_DJ_settings"
+        android:title="@string/action_DJ_settings" />
+
 
     <!-- for developer convenience, may want to remove -->
     <item android:id="@+id/action_logout"

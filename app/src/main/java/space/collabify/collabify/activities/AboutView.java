@@ -11,3 +11,8 @@ public class AboutView extends View {
         super(context);
     }
 }
+
+
+
+
+//TODO: add "leave event" for collabifier and "end event" for DJ in settings dropdown menu
