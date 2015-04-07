@@ -22,7 +22,6 @@
     android:layout_alignParentTop="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
-    android:src="@drawable/promoted_user"
     android:layout_margin="5dp"/>
 
 

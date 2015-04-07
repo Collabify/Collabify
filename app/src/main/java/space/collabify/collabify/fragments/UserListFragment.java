@@ -44,7 +44,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        User tmpUser = new User("Waiting for server", 999);
+        User tmpUser = new User("Waiting for server", 9999);
         List<User> temp = new ArrayList<>();
         temp.add(tmpUser);
         adapter = new UserListAdapter(getActivity().getApplicationContext(), temp);
@@ -114,7 +114,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
             rowName.setText(userItem.getName());
 
-            if (userlist.get(0).getName() == "Whoops, something went wrong!") {
+            if (userlist.get(0).getId() != 9999) {
               switch (userlist.get(position).getRole().getRole()) {
                 case Role.PROMOTED:
                   rowIcon.setImageResource(R.drawable.promoted_user);
@@ -158,6 +158,20 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
       final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
 
+      int rolePos;
+      switch(u.getRole().getRole()) {
+        case Role.PROMOTED:
+          rolePos = 0;
+          break;
+        case Role.BLACKLISTED:
+          rolePos = 2;
+          break;
+        default:
+          rolePos = 1;
+          break;
+      }
+      roles[rolePos] += " (Current)";
+
       if (!CollabifyClient.getInstance().isUsersUpdating()) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
@@ -170,6 +184,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
             adapter.notifyDataSetChanged();
           }
         });
+        builder.setNegativeButton(android.R.string.cancel, null);
         AlertDialog alert = builder.create();
         alert.show();
       }
