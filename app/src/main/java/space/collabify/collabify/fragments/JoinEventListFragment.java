@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.CollabifyClient;
-import space.collabify.collabify.LoadEventsRequest;
+import space.collabify.collabify.requests.EventsRequest;
 import space.collabify.collabify.R;
 import space.collabify.collabify.activities.JoinEventActivity;
 import space.collabify.collabify.models.Event;
@@ -139,7 +139,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
    */
   private void initiateRefresh() {
     Log.i(TAG, "initiate event list refresh");
-    LoadEventsRequest request = new LoadEventsRequest();
+    EventsRequest request = new EventsRequest();
     request.userLocation = mLastUserLocation;
     new LoadEventsTask().execute(request);
   }
@@ -211,9 +211,9 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
   /**
    * A background task to fetch events from our server without slowing ui
    */
-  private class LoadEventsTask extends AsyncTask<LoadEventsRequest, Void, List<Event>> {
+  private class LoadEventsTask extends AsyncTask<EventsRequest, Void, List<Event>> {
     @Override
-    protected List<Event> doInBackground(LoadEventsRequest... params) {
+    protected List<Event> doInBackground(EventsRequest... params) {
       return CollabifyClient.getInstance().getEvents(params[0]);
     }
 

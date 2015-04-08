@@ -13,6 +13,8 @@ import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
+import space.collabify.collabify.requests.EventsRequest;
+import space.collabify.collabify.requests.UsersRequest;
 
 /**
  * Created by ricardolopez on 3/22/15.
@@ -27,12 +29,6 @@ public class CollabifyClient {
     private boolean eventUpdating;
     private boolean usersUpdating;
     private boolean playlistUpdating;
-
-    // TODO: Find a better place for endpoints
-    private int PORT = 1337;
-    private String EVENTS = "http://collabify.space:" + PORT + "/events/";
-    private String USERS = "http://collabify.space:" + PORT + "/events/:eventId/users/";
-    private String PLAYLIST = "http://collabify.space:" + PORT + "/events/:eventId/playlist/";
 
     private AppManager mAppManger = AppManager.getInstance();
 
@@ -52,46 +48,18 @@ public class CollabifyClient {
      * @param request query information
      * @return list of events based off of request param
      */
-    public List<Event> getEvents(LoadEventsRequest request){
-      //TODO fill in with actual server stuff
+    public List<Event> getEvents(EventsRequest request){
       eventUpdating = true;
+      ArrayList<Event> events = request.get();
 
-      ArrayList<Event> events = new ArrayList<>();
-
-      // Get json data
-      JSONArray jArray = Json.getJsonArray(EVENTS);
-      if (jArray != null) {
-        for (int i = 0; i < jArray.length(); i++) {
-          try {
-            JSONObject oneObject = jArray.getJSONObject(i);
-            // Pulling items from the array
-            String name = oneObject.getString("name");
-            int id = oneObject.getInt("eventId");
-            JSONObject settings = oneObject.getJSONObject("settings");
-
-            String password;
-            if (settings.isNull("password")) {
-              password = "";
-            } else {
-              password = settings.getString("password");
-            }
-            Boolean allowVoting = settings.getBoolean("allowVoting");
-            Boolean filterLocation = settings.getBoolean("locationRestricted");
-
-            events.add(new Event(name, id, password, allowVoting, filterLocation));
-          } catch (Exception e) {
-            events.add(new Event("Whoops, something went wrong!", 0, "", false, false));
-            events.add(new Event("Please pull to refresh", 0, "", false, false));
-            break;
-          }
-        }
-        eventUpdating = false;
+      if (events == null) {
+        events = new ArrayList<>();
+        events.add(new Event("Whoops, something went wrong!", 9999, "", false, false));
+        events.add(new Event("Please pull to refresh", 9999, "", false, false));
       } else {
-        events.add(new Event("Whoops, something went wrong!", 0, "", false, false));
-        events.add(new Event("Please pull to refresh", 0, "", false, false));
+        eventUpdating = false;
       }
 
-      // TODO: On successful return of event list
       return events;
     }
 
@@ -122,34 +90,16 @@ public class CollabifyClient {
      * @param request query information
      * @return list of events based off of request param
      */
-    public List<User> getUsers(LoadUsersRequest request){
-      //TODO fill in with actual server stuff
-
+    public List<User> getUsers(UsersRequest request){
       usersUpdating = true;
+      ArrayList<User> users = request.get(mAppManger.getEvent().getId());
 
-      ArrayList<User> users = new ArrayList<>();
-
-      // Get json data
-      String eventUsers = USERS.replace(":eventId", String.valueOf(mAppManger.getEvent().getId()));
-      JSONArray jArray = Json.getJsonArray(eventUsers);
-      if (jArray != null) {
-        for (int i = 0; i < jArray.length(); i++) {
-          try {
-            JSONObject oneObject = jArray.getJSONObject(i);
-            // Pulling items from the array
-            String name = oneObject.getString("name");
-            int id = oneObject.getInt("userId");
-            users.add(new User(name, id));
-          } catch (Exception e) {
-            users.add(new User("Whoops, something went wrong!", 9999));
-            users.add(new User("Please pull to refresh (Inside)", 9999));
-            break;
-          }
-        }
-        usersUpdating = false;
-      } else {
+      if (users == null) {
+        users = new ArrayList<>();
         users.add(new User("Whoops, something went wrong!", 9999));
         users.add(new User("Please pull to refresh", 9999));
+      } else {
+        usersUpdating = false;
       }
 
       return users;

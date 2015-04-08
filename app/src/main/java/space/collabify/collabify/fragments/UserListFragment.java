@@ -7,9 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.CollabifyClient;
-import space.collabify.collabify.LoadEventsRequest;
-import space.collabify.collabify.LoadUsersRequest;
+import space.collabify.collabify.requests.UsersRequest;
 import space.collabify.collabify.R;
-import space.collabify.collabify.activities.CollabifierActivity;
-import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.Role;
 import space.collabify.collabify.models.User;
 
@@ -69,7 +63,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
      */
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
-        LoadUsersRequest request = new LoadUsersRequest();
+        UsersRequest request = new UsersRequest();
         new LoadUsersTask().execute(request);
     }
 
@@ -135,9 +129,9 @@ public class UserListFragment extends SwipeRefreshListFragment {
     /**
      * A background task to fetch users from our server without slowing ui
      */
-    private class LoadUsersTask extends AsyncTask<LoadUsersRequest, Void, List<User>> {
+    private class LoadUsersTask extends AsyncTask<UsersRequest, Void, List<User>> {
         @Override
-        protected List<User> doInBackground(LoadUsersRequest... params) {
+        protected List<User> doInBackground(UsersRequest... params) {
             return CollabifyClient.getInstance().getUsers(params[0]);
         }
 

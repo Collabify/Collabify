@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import space.collabify.collabify.LoadPlaylistRequest;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.controls.ImageToggleButton;
 import space.collabify.collabify.models.Playlist;

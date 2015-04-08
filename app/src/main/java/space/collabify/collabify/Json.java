@@ -38,15 +38,15 @@ public class Json {
   }
 
   /**
-   * Get JSONArray from given uri, wraps helper functions together
-   * @param key JSON array key
+   * Get JSONObject from given uri, wraps helper functions together, includes headers
    * @param uri URI of the given JSON resource
-   * @return A JSONArray
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return A JSONObject
    */
-  public static JSONArray getJsonArray(String key, String uri) {
-    String content = getJSONString(uri);
-    JSONObject o = toJSON(content);
-    return toJSONArray(key, o);
+  public static JSONObject getJsonObject(String uri, String[] headerKey, String[] headerValue) {
+    String content = getJSONString(uri, headerKey, headerValue);
+    return toJSON(content);
   }
 
   /**
@@ -60,19 +60,16 @@ public class Json {
   }
 
   /**
-   * Return the JSONArray of a given JSON object and key
-   * @param key JSON array key
-   * @return JSONArray from the given string
+   * Get JSONArray from given uri, wraps helper functions together, includes headers
+   * @param uri URI of the given JSON resource
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return A JSONArray
    */
-  public static JSONArray toJSONArray(String key, JSONObject object) {
-    try {
-      return object.getJSONArray(key);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
+  public static JSONArray getJsonArray(String uri, String[] headerKey, String[] headerValue) {
+    String content = getJSONString(uri, headerKey, headerValue);
+    return toJSONArray(content);
   }
-
 
   /**
    * Return the JSONArray of a given JSON string
@@ -95,8 +92,7 @@ public class Json {
    */
   private static JSONObject toJSON(String content) {
     try {
-      JSONObject json = new JSONObject(content);
-      return json;
+      return new JSONObject(content);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -133,6 +129,7 @@ public class Json {
         httpGet.addHeader(headerKey[i], headerValue[i]);
       }
     }
+
     try {
       HttpResponse response = client.execute(httpGet);
       StatusLine statusLine = response.getStatusLine();
