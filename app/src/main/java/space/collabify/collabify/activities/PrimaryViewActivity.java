@@ -18,18 +18,6 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
     protected TabsPagerAdapter mAdapter;
     protected ActionBar mActionBar;
 
-    @Override
-    public void onPlaylistUpdateRequest() {
-        Playlist currentPlaylist = mCollabifyClient.getEventPlaylist();
-        final int PLAYLIST_POSITION = 1;
-        Fragment currentFragment =  mAdapter.getRegisteredFragment(PLAYLIST_POSITION);
-        if(currentFragment instanceof PlaylistFragment){
-            PlaylistFragment playlistFragment = (PlaylistFragment) currentFragment;
-            playlistFragment.updatePlaylist(currentPlaylist);
-        }else {
-            //can't update if not visible
-        }
-    }
 
     @Override
     public void onTabSelected (ActionBar.Tab tab, android.support.v4.app.FragmentTransaction

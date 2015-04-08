@@ -7,6 +7,7 @@ import space.collabify.collabify.R;
 import space.collabify.collabify.activities.CollabifierActivity;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.PlaylistFragment;
+import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 
 /**
@@ -20,10 +21,6 @@ public class TestFragmentActivity extends CollabifyActivity implements PlaylistF
         setContentView(R.layout.activity_test_fragment);
     }
 
-    @Override
-    public void onPlaylistUpdateRequest() {
-
-    }
 
     public int upvoteSongCallCount = 0;
     public int downvoteSongCallCount = 0;

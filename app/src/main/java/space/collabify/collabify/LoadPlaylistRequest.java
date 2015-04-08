@@ -7,5 +7,4 @@ import android.location.Location;
  * Includes whatever data is needed to request a list of events from the server
  */
 public class LoadPlaylistRequest {
-    public Location userLocation;
 }
