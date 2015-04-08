@@ -141,8 +141,9 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
             //post results
             onRefreshComplete(users);
+            setRefreshing(false);
 
-          userlist = users;
+            userlist = users;
         }
     }
 

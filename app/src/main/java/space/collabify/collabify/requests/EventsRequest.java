@@ -1,18 +1,15 @@
 package space.collabify.collabify.requests;
 
 import android.location.Location;
-import android.os.AsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import space.collabify.collabify.Endpoints;
 import space.collabify.collabify.Json;
 import space.collabify.collabify.models.Event;
-import space.collabify.collabify.models.User;
 
 /**
  * This file was born on March 20, at 19:50

@@ -14,6 +14,7 @@ import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
 import space.collabify.collabify.requests.EventsRequest;
+import space.collabify.collabify.requests.PlaylistRequest;
 import space.collabify.collabify.requests.UsersRequest;
 
 /**
@@ -114,65 +115,12 @@ public class CollabifyClient {
      * Gets the event playlist, the most recent one from the server.
      * @return playlist of songs
      */
-    public Playlist getEventPlaylist(){
-        //TODO: actual server stuff to get the playlist
-        /*
+    public Playlist getEventPlaylist(PlaylistRequest request){
+
         if(mEventPlaylist == null) {
-          playlistUpdating = true;
-
-          ArrayList<Song> tempList = new ArrayList<>();
-
-          // Get json data
-          String eventPlaylist = PLAYLIST.replace(":eventId", String.valueOf(mAppManger.getEvent().getId()));
-          JSONArray jArray = Json.getJsonArray(eventPlaylist);
-          if (jArray != null) {
-            for (int i = 0; i < jArray.length(); i++) {
-              try {
-                JSONObject oneObject = jArray.getJSONObject(i);
-                // Pulling items from the array
-                String title = oneObject.getString("title");
-                String artist = oneObject.getString("artist");
-                String album = oneObject.getString("album");
-                int year = oneObject.getInt("year");
-                String id = oneObject.getString("songId");
-                String albumArtwork = oneObject.getString("artworkUrl");
-                int userId = oneObject.getInt("userId");
-
-                tempList.add(new Song(title, artist, album, year, id, albumArtwork, userId));
-              } catch (Exception e) {
-                tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", 0));
-                tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", 0));
-                mEventPlaylist = null;
-                break;
-              }
-            }
-            mEventPlaylist = new Playlist("Cool new playlist", 0, tempList);
-            playlistUpdating = false;
-          } else {
-            tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", 0));
-            tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", 0));
-            mEventPlaylist = null;
-          }
-
+          mEventPlaylist = request.get(mAppManger.getEvent().getId());
         }
-        return mEventPlaylist;
-        */
 
-        if(mEventPlaylist == null){
-          ArrayList<Song> fakeSongList = new ArrayList<>();
-          fakeSongList.add(new Song("on the sunny side of the street", "sonny stitt, etc.",
-            "sonny side up", 1957, "0", "", 0));
-          fakeSongList.add(new Song("the eternal triangle", "sonny stitt, etc.", "sonny side up",
-            1957, "1", "", mAppManger.getUser().getId()));
-          fakeSongList.add(new Song("after hours", "sonny stitt, etc.", "sonny side up", 1957,
-            "2", "", 0));
-          fakeSongList.add(new Song("i know that you know", "sonny stitt, etc.", "sonny side up",
-            1957, "3", "", 0));
-          fakeSongList.add(new Song("a reaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaly long entry",
-            "random", "sonny side up", 1957, "5", "", 0));
-
-          mEventPlaylist = new Playlist("sick playlist", 0, fakeSongList);
-        }
         return mEventPlaylist;
     }
 

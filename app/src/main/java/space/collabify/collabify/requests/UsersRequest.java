@@ -1,12 +1,9 @@
 package space.collabify.collabify.requests;
 
-import android.location.Location;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import space.collabify.collabify.Endpoints;
 import space.collabify.collabify.Json;
