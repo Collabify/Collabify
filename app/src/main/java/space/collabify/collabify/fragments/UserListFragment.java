@@ -122,7 +122,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
                 case Role.BLACKLISTED:
                   rowIcon.setImageResource(R.drawable.blacklisted_icon);
                   break;
-                default:
+                case Role.COLLABIFIER:
                   rowIcon.setImageResource(R.drawable.collabifier_icon);
                   break;
               }
@@ -158,19 +158,22 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
       final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
 
-      int rolePos;
+      int rolePos = -1;
       switch(u.getRole().getRole()) {
         case Role.PROMOTED:
           rolePos = 0;
           break;
+        case Role.COLLABIFIER:
+          rolePos = 1;
+          break;
         case Role.BLACKLISTED:
           rolePos = 2;
           break;
-        default:
-          rolePos = 1;
-          break;
       }
-      roles[rolePos] += " (Current)";
+
+      if (rolePos != -1) {
+        roles[rolePos] += " (Current)";
+      }
 
       if (!CollabifyClient.getInstance().isUsersUpdating()) {
 
@@ -178,10 +181,13 @@ public class UserListFragment extends SwipeRefreshListFragment {
         builder.setTitle("Change User Role:");
         builder.setItems(roles, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int item) {
-            // Do something with the selection
-            Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
-            u.getRole().setRole(roles[item]);
-            adapter.notifyDataSetChanged();
+            // Do something with the selection if not same as current role
+            String current = u.getRole().getRole() + " (Current)";
+            if (!current.equals(roles[item])) {
+              Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
+              u.getRole().setRole(roles[item]);
+              adapter.notifyDataSetChanged();
+            }
           }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
