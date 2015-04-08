@@ -10,6 +10,7 @@ public class User {
     private String mName;
     private int mId;
     private Location mLocation;
+    private boolean isPremium;
 
     public User(String name, int id) {
       mName = name;
@@ -47,5 +48,13 @@ public class User {
 
     public void setLocation(Location mLocation) {
         this.mLocation = mLocation;
+    }
+
+    public boolean isPremium() {
+      return isPremium;
+    }
+
+    public void setPremium(boolean p) {
+      this.isPremium = p;
     }
 }
