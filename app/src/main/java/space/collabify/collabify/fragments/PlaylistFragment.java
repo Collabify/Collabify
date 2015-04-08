@@ -13,13 +13,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import space.collabify.collabify.LoadPlaylistRequest;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.controls.ImageToggleButton;
 import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
 import space.collabify.collabify.CollabifyClient;
+import space.collabify.collabify.requests.PlaylistRequest;
 
 
 /**
@@ -67,7 +67,8 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      * Starts a background task to get playlist updates
      */
     private void initiateRefresh(){
-        new LoadPlaylistTask().execute();
+      PlaylistRequest request = new PlaylistRequest();
+        new LoadPlaylistTask().execute(request);
     }
 
     /**
@@ -112,7 +113,8 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        new LoadPlaylistTask().execute();
+      PlaylistRequest request = new PlaylistRequest();
+        new LoadPlaylistTask().execute(request);
     }
 
     /**
@@ -190,10 +192,10 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     }
 
 
-    private class LoadPlaylistTask extends AsyncTask<Void, Void, Playlist> {
+    private class LoadPlaylistTask extends AsyncTask<PlaylistRequest, Void, Playlist> {
         @Override
-        protected Playlist doInBackground(Void... params) {
-            return mClient.getEventPlaylist();
+        protected Playlist doInBackground(PlaylistRequest... params) {
+            return mClient.getEventPlaylist(params[0]);
         }
 
         @Override

@@ -11,6 +11,8 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.playback.ConnectionStateCallback;
 
+import org.json.JSONObject;
+
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
 
@@ -45,7 +47,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
 
-        builder.setScopes(new String[]{"user-read-private", "user-library-read", "user-read-private"});
+        builder.setScopes(new String[]{"user-read-private", "user-library-read"});
         AuthenticationRequest request = builder.build();
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
     }
@@ -69,6 +71,13 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
 
             if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
                 //TODO: something with the response.accessToken() but not sure what yet
+
+//                JSONObject abc = Json.getJsonObject(
+//                  "https://api.spotify.com/v1/me",
+//                  new String[] {"Authorization"},
+//                  new String[] {"Bearer " + response.getAccessToken()}
+//                );
+
                 Intent i = new Intent(this, ModeSelectActivity.class);
                 startActivity(i);
             }

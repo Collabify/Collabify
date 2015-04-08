@@ -7,9 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.CollabifyClient;
-import space.collabify.collabify.LoadEventsRequest;
-import space.collabify.collabify.LoadUsersRequest;
+import space.collabify.collabify.requests.UsersRequest;
 import space.collabify.collabify.R;
-import space.collabify.collabify.activities.CollabifierActivity;
-import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.Role;
 import space.collabify.collabify.models.User;
 
@@ -69,7 +63,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
      */
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
-        LoadUsersRequest request = new LoadUsersRequest();
+        UsersRequest request = new UsersRequest();
         new LoadUsersTask().execute(request);
     }
 
@@ -122,7 +116,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
                 case Role.BLACKLISTED:
                   rowIcon.setImageResource(R.drawable.blacklisted_icon);
                   break;
-                default:
+                case Role.COLLABIFIER:
                   rowIcon.setImageResource(R.drawable.collabifier_icon);
                   break;
               }
@@ -135,9 +129,9 @@ public class UserListFragment extends SwipeRefreshListFragment {
     /**
      * A background task to fetch users from our server without slowing ui
      */
-    private class LoadUsersTask extends AsyncTask<LoadUsersRequest, Void, List<User>> {
+    private class LoadUsersTask extends AsyncTask<UsersRequest, Void, List<User>> {
         @Override
-        protected List<User> doInBackground(LoadUsersRequest... params) {
+        protected List<User> doInBackground(UsersRequest... params) {
             return CollabifyClient.getInstance().getUsers(params[0]);
         }
 
@@ -147,8 +141,9 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
             //post results
             onRefreshComplete(users);
+            setRefreshing(false);
 
-          userlist = users;
+            userlist = users;
         }
     }
 
@@ -158,19 +153,22 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
       final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
 
-      int rolePos;
+      int rolePos = -1;
       switch(u.getRole().getRole()) {
         case Role.PROMOTED:
           rolePos = 0;
           break;
+        case Role.COLLABIFIER:
+          rolePos = 1;
+          break;
         case Role.BLACKLISTED:
           rolePos = 2;
           break;
-        default:
-          rolePos = 1;
-          break;
       }
-      roles[rolePos] += " (Current)";
+
+      if (rolePos != -1) {
+        roles[rolePos] += " (Current)";
+      }
 
       if (!CollabifyClient.getInstance().isUsersUpdating()) {
 
@@ -178,10 +176,13 @@ public class UserListFragment extends SwipeRefreshListFragment {
         builder.setTitle("Change User Role:");
         builder.setItems(roles, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int item) {
-            // Do something with the selection
-            Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
-            u.getRole().setRole(roles[item]);
-            adapter.notifyDataSetChanged();
+            // Do something with the selection if not same as current role
+            String current = u.getRole().getRole() + " (Current)";
+            if (!current.equals(roles[item])) {
+              Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
+              u.getRole().setRole(roles[item]);
+              adapter.notifyDataSetChanged();
+            }
           }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
