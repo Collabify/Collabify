@@ -104,16 +104,35 @@ public class Json {
   }
 
   /**
+   * Overloaded version of original getJSONString (Doesn't use headers)
    * Returns the string version of json for a given uri
-   * Lovely code taken from: http://www.vogella.com/tutorials/AndroidJSON/article.html
    *
-   * @param uri URI to get the JSON from
+   * @param uri         URI to get the JSON from
    * @return A string version of the JSON
    * */
   private static String getJSONString(String uri) {
+    return getJSONString(uri, null, null);
+  }
+
+  /**
+   * Returns the string version of json for a given uri
+   * Lovely code taken from: http://www.vogella.com/tutorials/AndroidJSON/article.html
+   *
+   * @param uri         URI to get the JSON from
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return A string version of the JSON
+   * */
+  private static String getJSONString(String uri, String[] headerKey, String[] headerValue) {
     StringBuilder builder = new StringBuilder();
     HttpClient client = new DefaultHttpClient();
     HttpGet httpGet = new HttpGet(uri);
+
+    if (headerKey != null && headerValue != null && headerKey.length == headerValue.length) {
+      for (int i = 0; i < headerKey.length; i++) {
+        httpGet.addHeader(headerKey[i], headerValue[i]);
+      }
+    }
     try {
       HttpResponse response = client.execute(httpGet);
       StatusLine statusLine = response.getStatusLine();
