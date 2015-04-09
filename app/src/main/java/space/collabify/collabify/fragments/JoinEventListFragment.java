@@ -39,7 +39,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    Event tmpEvent = new Event("Waiting for server", 0, "", false, false);
+    Event tmpEvent = new Event("Waiting for server", "9999", "", false);
     List<Event> temp = new ArrayList<>();
     temp.add(tmpEvent);
     EventListAdapter adapter = new EventListAdapter(getActivity().getApplicationContext(), temp);

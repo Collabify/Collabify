@@ -75,7 +75,11 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         String artist = songItem.getArtist();
         artist = artist.substring(0, Math.min(artist.length(), 30));
 
-        String newSongDescription = title + "\n(" + artist + ")";
+        if (!artist.equals("")) {
+          artist = "(" + artist + ")";
+        }
+
+        String newSongDescription = title + "\n" + artist;
         songDescriptionTextView.setText(newSongDescription);
         songIdView.setText(songItem.getId());
 

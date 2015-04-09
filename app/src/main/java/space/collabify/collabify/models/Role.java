@@ -28,21 +28,23 @@ public class Role {
   }
 
   public boolean isDJ() {
-    return role.equals(DJ);
+    return role.equalsIgnoreCase(DJ);
   }
 
   public boolean isCollabifier() {
-    return role.equals(COLLABIFIER);
+    return role.equalsIgnoreCase(COLLABIFIER);
   }
 
   public boolean isPromoted() {
-    return role.equals(PROMOTED);
+    return role.equalsIgnoreCase(PROMOTED);
   }
 
   public boolean isBlacklisted() {
-    return role.equals(BLACKLISTED);
+    return role.equalsIgnoreCase(BLACKLISTED);
   }
 
-  public boolean isNoRole() { return role.equals(NOROLE); }
+  public boolean isNoRole() {
+    return role.equalsIgnoreCase(NOROLE);
+  }
 
 }
