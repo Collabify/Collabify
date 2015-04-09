@@ -27,7 +27,7 @@ public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_DJ_settings:
+            case R.id.action_settings:
                 //do nothing, avoid multiple of same activity
                 return true;
             default:

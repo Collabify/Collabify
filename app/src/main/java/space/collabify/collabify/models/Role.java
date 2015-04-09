@@ -12,6 +12,7 @@ public class Role {
   public static final String COLLABIFIER = "Collabifier";
   public static final String PROMOTED = "Promoted";
   public static final String BLACKLISTED = "Blacklisted";
+  public static final String NOROLE = "NoRole";
 
   private String role;
 
@@ -21,7 +22,7 @@ public class Role {
 
   public String getRole() {
     if (role == null) {
-      role = COLLABIFIER;
+      role = NOROLE;
     }
     return role;
   }
@@ -41,5 +42,7 @@ public class Role {
   public boolean isBlacklisted() {
     return role.equals(BLACKLISTED);
   }
+
+  public boolean isNoRole() { return role.equals(NOROLE); }
 
 }

@@ -4,13 +4,14 @@
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings" />
 
-    <!-- do we have 3 different setting modes? -->
+
+    <!-- do we have 3 different setting modes?
     <item android:id="@+id/action_Collabifier_settings"
         android:title="@string/action_Collabifier_settings" />
 
     <item android:id="@+id/action_DJ_settings"
         android:title="@string/action_DJ_settings" />
-
+    -->
 
     <!-- for developer convenience, may want to remove -->
     <item android:id="@+id/action_logout"
