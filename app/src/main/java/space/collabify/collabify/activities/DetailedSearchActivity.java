@@ -1,11 +1,18 @@
 package space.collabify.collabify.activities;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,7 +23,9 @@ import java.util.ArrayList;
 import space.collabify.collabify.Json;
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.models.Role;
 import space.collabify.collabify.models.Song;
+import space.collabify.collabify.models.User;
 
 // for json data from spotify search
 import org.json.JSONArray;
@@ -32,22 +41,20 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class DetailedSearchActivity extends ListActivity {
 
-    private ArrayList<String> listItems = new ArrayList<>();
-
     private String query;
 
     private List<Song> songs;
 
-    private  ArrayAdapter<String> adapter;
+    private SongDetailsListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_search);
 
-        adapter=new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                listItems);
+        songs = new ArrayList<>();
+
+        adapter = new SongDetailsListAdapter(getApplicationContext(), songs);
         setListAdapter(adapter);
 
         Intent intent = getIntent();
@@ -60,12 +67,49 @@ public class DetailedSearchActivity extends ListActivity {
 
     private void onSpotifySearchComplete(List<Song> songs){
 
+        adapter.clear();
+
         for (Song song : this.songs = songs) {
 
+            adapter.add(song);
+        }
+    }
 
+    /**
+     * Handles the display of events in a row
+     */
+    private class SongDetailsListAdapter extends ArrayAdapter<Song> {
+        private SongDetailsListAdapter(Context context, List<Song> objects) {
+            super(context, R.layout.song_details_row, objects);
+            songs = objects;
         }
 
-        adapter.notifyDataSetChanged();
+        private SongDetailsListAdapter(Context context, Song[] songs) {
+            super(context, R.layout.song_details_row, songs);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View customView = inflater.inflate(R.layout.song_details_row, parent, false);
+
+            Song song = getItem(position);
+            TextView rowName = (TextView) customView.findViewById(R.id.song_row_title);
+            TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
+            ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
+
+            rowName.setText(song.getTitle());
+            rowArtist.setText(song.getArtist());
+
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: have popup for adding song on click
+                }
+            });
+
+            return customView;
+        }
     }
 
     private class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
