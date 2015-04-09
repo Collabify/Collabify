@@ -1,6 +1,9 @@
 package space.collabify.collabify.activities;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +14,11 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.playback.ConnectionStateCallback;
 
+import org.json.JSONObject;
+
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.models.User;
 
 /**
  * This file was born on March 11 at 13:57
@@ -26,6 +32,9 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
     //request code that will be used to verify if the result comes from correct activity
     //can be any integer
     private static final int REQUEST_CODE = 1337;
+
+    private ProgressDialog progress;
+    private Context mainContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
 
-        builder.setScopes(new String[]{"user-read-private", "user-library-read", "user-read-private"});
+        builder.setScopes(new String[]{"user-read-private", "user-library-read", "user-read-email", "streaming"});
         AuthenticationRequest request = builder.build();
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
     }
@@ -63,17 +72,67 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
             if(error != null) {
                 //TODO: not sure yet what may cause this case
                 // and show text or some shit?
-                Toast.makeText(this, "response error occured", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "login error occured", Toast.LENGTH_LONG).show();
+                Log.e("AUTH", error);
                 return;
             }
 
             if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
-                //TODO: something with the response.accessToken() but not sure what yet
-                Intent i = new Intent(this, ModeSelectActivity.class);
-                startActivity(i);
+              //TODO: something with the response.getAccessToken() but not sure what yet
+
+              new LongOperation().execute(response.getAccessToken());
+
+              mainContext = this;
+              progress = ProgressDialog.show(this, "Logging you in",
+                "Crunching the numbers", true);
+
             }
         }
     }
+
+  private class LongOperation extends AsyncTask<String, Void, JSONObject> {
+
+    @Override
+    protected JSONObject doInBackground(String... params) {
+      try {
+        JSONObject me = Json.getJsonObject(
+          "https://api.spotify.com/v1/me",
+          new String[] {"Authorization"},
+          new String[] {"Bearer " + params[0]}
+        );
+        return me;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(JSONObject me) {
+      progress.dismiss();
+
+      try {
+        User u = mAppManager.getUser();
+        u.setName(me.getString("display_name"));
+        u.setPremium(me.getString("product").equals("premium"));
+        u.setId(me.getInt("id"));
+
+        Intent i = new Intent(mainContext, ModeSelectActivity.class);
+        startActivity(i);
+      } catch (Exception e) {
+        e.printStackTrace();
+        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+      }
+
+    }
+
+    @Override
+    protected void onPreExecute() {
+    }
+
+    @Override
+    protected void onProgressUpdate(Void... values) {}
+  }
 
 
     @Override

@@ -1,27 +1,25 @@
 package space.collabify.collabify.fragments;
 
 import android.app.Activity;
-import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.controls.ImageToggleButton;
 import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
 import space.collabify.collabify.CollabifyClient;
+import space.collabify.collabify.requests.PlaylistRequest;
 
 
 /**
@@ -42,9 +40,11 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
     private CollabifyClient mClient = CollabifyClient.getInstance();
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_playlist, container, false);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         mParentActivity = (CollabifyActivity) getActivity();
 
         //will probably just want empty list, but this is useful for debug
@@ -53,7 +53,22 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         User user = mParentActivity.getCurrentUser();
         mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
-        return view;
+
+        //set action for pull down refreshes
+        setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initiateRefresh();
+            }
+        });
+    }
+
+    /**
+     * Starts a background task to get playlist updates
+     */
+    private void initiateRefresh(){
+      PlaylistRequest request = new PlaylistRequest();
+        new LoadPlaylistTask().execute(request);
     }
 
     /**
@@ -61,7 +76,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      *
      * @param playlist the new playlist to be shown
      */
-    public void updatePlaylist(Playlist playlist) {
+    private void updatePlaylist(Playlist playlist) {
         // Remove all items from the ListAdapter, and then replace them with the new items
         PlaylistListAdapter adapter = (PlaylistListAdapter) getListAdapter();
         adapter.clear();
@@ -74,8 +89,6 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      * Parent activity(mListener) must supply the following operations
      */
     public interface OnPlaylistUpdateRequestListener {
-        public void onPlaylistUpdateRequest();
-
         public void upvoteSong(Song song);
 
         public void downvoteSong(Song song);
@@ -86,8 +99,6 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
         public Song getSongFromId(String songId);
     }
-
-    ;
 
     @Override
     public void onAttach(Activity activity) {
@@ -102,7 +113,8 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mListener.onPlaylistUpdateRequest();
+      PlaylistRequest request = new PlaylistRequest();
+        new LoadPlaylistTask().execute(request);
     }
 
     /**
@@ -175,8 +187,22 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
             mListener.deleteSong(song);
 
             //need to redraw the listview?
-            mListener.onPlaylistUpdateRequest();
+            new LoadPlaylistTask().execute();
         }
     }
 
+
+    private class LoadPlaylistTask extends AsyncTask<PlaylistRequest, Void, Playlist> {
+        @Override
+        protected Playlist doInBackground(PlaylistRequest... params) {
+            return mClient.getEventPlaylist(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Playlist playlist) {
+            super.onPostExecute(playlist);
+            updatePlaylist(playlist);
+            setRefreshing(false);
+        }
+    }
 }

@@ -8,7 +8,11 @@
     android:text="@string/create_event_button"
     android:id="@+id/create_event_button"
     android:onClick="toDj"
+    android:textSize="22dp"
+    android:padding="20dp"
     android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"/>
 
@@ -20,7 +24,10 @@
     android:inputType="none"
     android:layout_alignBottom="@+id/event_name"
     android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true"/>
+    android:layout_alignParentEnd="true"
+    android:layout_marginRight="15dp"
+    android:singleLine="true"
+    android:imeOptions="actionDone"/>
 
   <TextView
     android:layout_width="wrap_content"
@@ -66,7 +73,10 @@
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
     android:width="200dp"
-    android:inputType="none"/>
+    android:inputType="none"
+    android:layout_marginRight="15dp"
+    android:singleLine="true"
+    android:imeOptions="actionDone"/>
 
   <CheckBox
     android:layout_width="wrap_content"
