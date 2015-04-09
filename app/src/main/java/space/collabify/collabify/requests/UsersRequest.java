@@ -18,7 +18,7 @@ public class UsersRequest {
   public ArrayList<User> get(String eventId) {
     ArrayList<User> users = new ArrayList<>();
 
-    String eventUsers = Endpoints.USERS.replace(":eventId", eventId);
+    String eventUsers = Endpoints.EVENTUSERS.replace(":eventId", eventId);
     JSONArray jArray = Json.getJsonArray(
       eventUsers,
       new String[] {"userid"},

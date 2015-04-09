@@ -100,6 +100,11 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
           new String[] {"Authorization"},
           new String[] {"Bearer " + params[0]}
         );
+
+        JSONObject myUser = new JSONObject();
+        myUser.put("name", me.getString("display_name"));
+
+        Json.postJSONObject(Endpoints.USERS, myUser, new String[] {"userid"}, new String[] {me.getString("id")});
         return me;
       } catch (Exception e) {
         e.printStackTrace();
