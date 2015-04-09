@@ -103,6 +103,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         return me;
       } catch (Exception e) {
         e.printStackTrace();
+        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
       }
       return null;
     }
@@ -116,6 +117,8 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         u.setName(me.getString("display_name"));
         u.setPremium(me.getString("product").equals("premium"));
         u.setId(me.getInt("id"));
+
+        Toast.makeText(mainContext, "You are " + (u.isPremium() ? "" : "not" ) + " premium", Toast.LENGTH_LONG).show();
 
         Intent i = new Intent(mainContext, ModeSelectActivity.class);
         startActivity(i);
