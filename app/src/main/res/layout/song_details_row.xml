@@ -3,14 +3,6 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/details_row_song_id"
-        android:visibility="invisible"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:enabled="false"/>
-
     <ImageView android:id="@+id/song_details_album_art"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -29,15 +21,6 @@
         android:layout_toLeftOf="@+id/song_row_add"
         android:layout_toStartOf="@+id/song_row_add"
         android:layout_alignBottom="@+id/song_details_album_art" />
-
-    <!--<TextView android:id="@+id/song_row_artist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="some text"
-        android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_alignTop="@+id/song_row_title"
-        android:layout_toRightOf="@+id/song_row_title"
-        android:layout_toEndOf="@+id/song_row_title" /> -->
 
     <ImageButton
         android:layout_width="40dp"

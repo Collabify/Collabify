@@ -68,7 +68,7 @@ public class DetailedSearchActivity extends ListActivity {
         }
     }
 
-    private void setupAddDialog(final String songDescription) {
+    private void setupAddDialog(final String songDescription, final Song song) {
         // prompt to add song
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_song_dialog_title));
@@ -78,6 +78,8 @@ public class DetailedSearchActivity extends ListActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: send song to server
+                        addSong(song);
+                        dialog.cancel();
                     }
                 });
         builder.setNegativeButton(getString(R.string.add_song_dialog_negative_text),
@@ -88,6 +90,13 @@ public class DetailedSearchActivity extends ListActivity {
                     }
                 });
         builder.show();
+    }
+
+    private void addSong(final Song song) {
+
+        // TODO : call async to send data
+
+        onBackPressed();
     }
 
     /**
@@ -109,7 +118,6 @@ public class DetailedSearchActivity extends ListActivity {
             View customView = inflater.inflate(R.layout.song_details_row, parent, false);
 
             final Song song = getItem(position);
-            TextView songId = (TextView) customView.findViewById(R.id.details_row_song_id);
             TextView rowDesc = (TextView) customView.findViewById(R.id.song_row_description);
             ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
             ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
@@ -127,7 +135,7 @@ public class DetailedSearchActivity extends ListActivity {
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setupAddDialog(newSongDescription);
+                    setupAddDialog(newSongDescription, song);
                 }
             });
 
@@ -136,9 +144,6 @@ public class DetailedSearchActivity extends ListActivity {
     }
 
     private class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
-
-        private Exception exception;
-
 
         protected JSONArray doInBackground(String... urls) {
             String[] splitQuery = urls[0].split("\\s+");
@@ -214,6 +219,16 @@ public class DetailedSearchActivity extends ListActivity {
             }
 
             onSpotifySearchComplete(songs);
+        }
+    }
+
+
+    private class addSongToServer extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... uri) {
+
+            return null;
         }
     }
 }
