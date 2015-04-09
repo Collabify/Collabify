@@ -118,6 +118,8 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         u.setPremium(me.getString("product").equals("premium"));
         u.setId(me.getInt("id"));
 
+        Toast.makeText(mainContext, "You are " + (u.isPremium() ? "" : "not" ) + " premium", Toast.LENGTH_LONG).show();
+
         Intent i = new Intent(mainContext, ModeSelectActivity.class);
         startActivity(i);
       } catch (Exception e) {
