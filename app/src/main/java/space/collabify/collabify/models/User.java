@@ -11,6 +11,7 @@ public class User {
     private int mId;
     private Location mLocation;
     private boolean isPremium;
+    private String mAccessToken;
 
     public User(String name, int id) {
       mName = name;
@@ -56,5 +57,13 @@ public class User {
 
     public void setPremium(boolean p) {
       this.isPremium = p;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.mAccessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return mAccessToken;
     }
 }

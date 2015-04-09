@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="label_dj_player">Currently Playing</string>
+    <string name="message_player_init_error">There was an error initializing the player. Sorry! :(</string>
+    <string name="message_player_playback_error">A playback error was encountered.</string>
+    <string name="message_player_connection_error">A connection error was encountered.</string>
+    <string name="message_player_temporary_error">A temporary error has been encountered.</string>
 </resources>
