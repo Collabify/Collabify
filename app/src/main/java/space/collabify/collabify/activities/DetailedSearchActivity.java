@@ -10,31 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import space.collabify.collabify.Json;
 import space.collabify.collabify.R;
-import space.collabify.collabify.base.CollabifyActivity;
-import space.collabify.collabify.models.Role;
+import space.collabify.collabify.managers.AppManager;
 import space.collabify.collabify.models.Song;
-import space.collabify.collabify.models.User;
 
 // for json data from spotify search
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.net.URL;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * This file was born on March 11 at 14:01
@@ -94,12 +83,21 @@ public class DetailedSearchActivity extends ListActivity {
             View customView = inflater.inflate(R.layout.song_details_row, parent, false);
 
             Song song = getItem(position);
+            TextView songId = (TextView) customView.findViewById(R.id.details_row_song_id);
             TextView rowName = (TextView) customView.findViewById(R.id.song_row_title);
-            TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
+            //TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
             ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
 
-            rowName.setText(song.getTitle());
-            rowArtist.setText(song.getArtist());
+            //set up the row elements
+            String title = song.getTitle();
+            title = title.substring(0, Math.min(title.length(), 30));
+            String artist = song.getArtist();
+            artist = artist.substring(0, Math.min(artist.length(), 30));
+
+            String newSongDescription = title + "\n(" + artist + ")";
+
+            rowName.setText(newSongDescription);
+            //rowArtist.setText(song.getArtist());
 
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -152,7 +150,43 @@ public class DetailedSearchActivity extends ListActivity {
 
             List<Song> songs = new ArrayList<>();
 
+            for(int i = 0; i < jsonArray.length(); i++){
 
+                try {
+
+                    JSONObject track = jsonArray.getJSONObject(i);
+
+                    String id = track.getString("id");
+
+                    String title = track.getString("name");
+
+                    JSONArray artists = track.getJSONArray("artists");
+
+                    String artist = "";
+
+                    if(artists != null && artists.length() >= 1){
+
+                        artist = artists.getJSONObject(0).getString("name");
+
+                        for(int j = 1; j < artists.length(); j++){
+
+                            artist += ", " + artists.getJSONObject(j).getString("name");
+                        }
+                    }
+
+                    JSONObject album = track.getJSONObject("album");
+
+                    String albumName = album.getString("name");
+
+                    String artUrl = album.getJSONArray("images").getJSONObject(0).getString("url");
+
+                    songs.add(new Song(title, artist, albumName, 9999, id, artUrl, AppManager.getInstance().getUser().getId()));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
             onSpotifySearchComplete(songs);
         }
