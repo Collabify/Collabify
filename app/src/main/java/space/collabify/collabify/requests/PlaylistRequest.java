@@ -16,12 +16,16 @@ import space.collabify.collabify.models.Song;
  */
 public class PlaylistRequest {
 
-  public Playlist get(int eventId) {
+  public Playlist get(String eventId) {
     ArrayList<Song> tempList = new ArrayList<>();
 
     // Get json data
     String eventPlaylist = Endpoints.PLAYLIST.replace(":eventId", String.valueOf(eventId));
-    JSONArray jArray = Json.getJsonArray(eventPlaylist);
+    JSONArray jArray = Json.getJsonArray(
+      eventPlaylist,
+      new String[] {"userid"},
+      new String[] {"user"}
+    );
     if (jArray != null) {
       for (int i = 0; i < jArray.length(); i++) {
         try {
