@@ -27,7 +27,7 @@ public class CollabifierSettingsActivity extends CollabifyActivity { //BaseSetti
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_Collabifier_settings:
+            case R.id.action_settings:
                 //do nothing, avoid multiple of same activity
                 return true;
             default:

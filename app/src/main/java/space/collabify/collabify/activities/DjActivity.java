@@ -90,6 +90,7 @@ public class DjActivity extends PrimaryViewActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                       mCollabifyClient.resetPlaylist();
+                      mAppManager.getUser().setRole("NoRole");
                       finish();
                     }
                 }

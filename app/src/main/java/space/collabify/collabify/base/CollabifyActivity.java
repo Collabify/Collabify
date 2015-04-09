@@ -24,10 +24,15 @@ import android.view.View;
 public class CollabifyActivity extends ActionBarActivity {
     protected AppManager mAppManager;
     protected CollabifyClient mCollabifyClient;
+    protected User mUser;
+    protected String mRole;
+    //protected CollabifyActivity mParentActivity;
 
     public CollabifyActivity(){
         this.mAppManager = AppManager.getInstance();
         this.mCollabifyClient = mCollabifyClient.getInstance();
+        //mParentActivity = (CollabifyActivity) getActivity();
+        this.mUser = getCurrentUser();
     }
 
     public CollabifyActivity(AppManager mAppManager, CollabifyClient collabifyClient) {
@@ -49,9 +54,36 @@ public class CollabifyActivity extends ActionBarActivity {
         //handle presses on the action bar items
         switch (item.getItemId()){
             case R.id.action_settings:
-                openSettings();
-                return true;
+                //TODO: the role is null before entering a mode. The role is also not being reset
+                // after leaving DJ or Collabifier mode
+                if (mUser.getRole().isNoRole()) {
+                    /** default settings */
+                    openSettings();
+                    return true;
+                }
+                else if (mUser.getRole().isDJ()) {
+                    openDJSettings();
+                    return true;
+                }
+                else if (mUser.getRole().isCollabifier()) {
+                    openCollabifierSettings();
+                    return true;
+                }
+                else if (mUser.getRole().isBlacklisted()) {
+                    //openBlacklistedSettings();
+                    return true;
+                }
+                else if (mUser.getRole().isPromoted()) {
+                    //openPromotedSettings();
+                    return true;
+                }
+                else {
+                    /** default settings */
+                    openSettings();
+                    return true;
+                }
 
+            /*
             //case for Collabifier settings
             case R.id.action_Collabifier_settings:
                 openCollabifierSettings();
@@ -61,6 +93,7 @@ public class CollabifyActivity extends ActionBarActivity {
             case R.id.action_DJ_settings:
                 openDJSettings();
                 return true;
+            */
 
             case R.id.action_logout:
                 mAppManager.spotifyLogout(getApplicationContext());
@@ -81,6 +114,8 @@ public class CollabifyActivity extends ActionBarActivity {
         startActivity(intent);
 
     }
+
+    // @todo have only 1 settings activity, check user mode to display correct settings
     /** Launch Collabifier settings activity */
     private void openCollabifierSettings() {
         //don't want to go to settings if we are already there
@@ -94,8 +129,8 @@ public class CollabifyActivity extends ActionBarActivity {
         //don't want to go to settings if we are already there
         Intent intent = new Intent(getApplicationContext(), DjSettingsActivity.class);
         startActivity(intent);
-
     }
+
 
     /**
      * Gets the current user from the appmanager....
