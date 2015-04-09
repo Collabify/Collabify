@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import space.collabify.collabify.Json;
@@ -85,7 +87,7 @@ public class DetailedSearchActivity extends ListActivity {
             Song song = getItem(position);
             TextView songId = (TextView) customView.findViewById(R.id.details_row_song_id);
             TextView rowName = (TextView) customView.findViewById(R.id.song_row_title);
-            //TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
+            ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
             ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
 
             //set up the row elements
@@ -97,7 +99,6 @@ public class DetailedSearchActivity extends ListActivity {
             String newSongDescription = title + "\n(" + artist + ")";
 
             rowName.setText(newSongDescription);
-            //rowArtist.setText(song.getArtist());
 
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
