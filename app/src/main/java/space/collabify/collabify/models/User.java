@@ -12,6 +12,13 @@ public class User {
     private Location mLocation;
     private boolean isPremium;
 
+    public User(String name, String id, String role) {
+      mName = name;
+      mId = id;
+      mRole = new Role();
+      mRole.setRole(role);
+    }
+
     public User(String name, String id) {
       mName = name;
       mId = id;

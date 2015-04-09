@@ -67,8 +67,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      * Starts a background task to get playlist updates
      */
     private void initiateRefresh(){
+      setRefreshing(true);
       PlaylistRequest request = new PlaylistRequest();
-        new LoadPlaylistTask().execute(request);
+      new LoadPlaylistTask().execute(request);
     }
 
     /**

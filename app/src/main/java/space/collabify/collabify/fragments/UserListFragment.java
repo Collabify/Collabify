@@ -64,6 +64,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
         UsersRequest request = new UsersRequest();
+        setRefreshing(true);
         new LoadUsersTask().execute(request);
     }
 

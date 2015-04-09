@@ -32,7 +32,8 @@ public class UsersRequest {
           // Pulling items from the array
           String name = oneObject.getString("name");
           String userId = oneObject.getString("userId");
-          users.add(new User(name, userId));
+          String role = oneObject.getString("role");
+          users.add(new User(name, userId, role));
         } catch (Exception e) {
           e.printStackTrace();
           users = null;
