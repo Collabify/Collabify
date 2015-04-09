@@ -67,7 +67,7 @@ public class AppManager {
     }
 
     private void newUser() {
-      user = new User("NEW USER", 12345);
+      user = new User("NEW USER", "12345");
       user.setRole("NoRole");
     }
 

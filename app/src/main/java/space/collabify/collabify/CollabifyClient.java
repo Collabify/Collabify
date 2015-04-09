@@ -97,8 +97,8 @@ public class CollabifyClient {
 
       if (users == null) {
         users = new ArrayList<>();
-        users.add(new User("Whoops, something went wrong!", 9999));
-        users.add(new User("Please pull to refresh", 9999));
+        users.add(new User("Whoops, something went wrong!", "9999"));
+        users.add(new User("Please pull to refresh", "9999"));
       } else {
         usersUpdating = false;
       }

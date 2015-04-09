@@ -31,7 +31,7 @@ public class UsersRequest {
           JSONObject oneObject = jArray.getJSONObject(i);
           // Pulling items from the array
           String name = oneObject.getString("name");
-          int userId = oneObject.getInt("userId");
+          String userId = oneObject.getString("userId");
           users.add(new User(name, userId));
         } catch (Exception e) {
           e.printStackTrace();

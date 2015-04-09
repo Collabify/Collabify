@@ -38,7 +38,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        User tmpUser = new User("Waiting for server", 9999);
+        User tmpUser = new User("Waiting for server", "9999");
         List<User> temp = new ArrayList<>();
         temp.add(tmpUser);
         adapter = new UserListAdapter(getActivity().getApplicationContext(), temp);
@@ -76,8 +76,13 @@ public class UserListFragment extends SwipeRefreshListFragment {
         // Remove all items from the ListAdapter, and then replace them with the new items
         UserListAdapter adapter = (UserListAdapter) getListAdapter();
         adapter.clear();
-        for (User user : users) {
+
+        if (users.size() != 0) {
+          for (User user : users) {
             adapter.add(user);
+          }
+        } else {
+          adapter.add(new User("No one is at your event :(", "9999"));
         }
 
         // Stop the refreshing indicator
@@ -108,19 +113,22 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
             rowName.setText(userItem.getName());
 
-            if (userlist.get(0).getId() != 9999) {
-              switch (userlist.get(position).getRole().getRole()) {
-                case Role.PROMOTED:
-                  rowIcon.setImageResource(R.drawable.promoted_user);
-                  break;
-                case Role.BLACKLISTED:
-                  rowIcon.setImageResource(R.drawable.blacklisted_icon);
-                  break;
-                case Role.COLLABIFIER:
-                  rowIcon.setImageResource(R.drawable.collabifier_icon);
-                  break;
-              }
+          if (userlist.size() != 0) {
+            switch (userlist.get(position).getRole().getRole()) {
+              case Role.PROMOTED:
+                rowIcon.setImageResource(R.drawable.promoted_user);
+                break;
+              case Role.BLACKLISTED:
+                rowIcon.setImageResource(R.drawable.blacklisted_icon);
+                break;
+              case Role.COLLABIFIER:
+                rowIcon.setImageResource(R.drawable.collabifier_icon);
+                break;
+              default:
+                break;
             }
+          }
+
 
             return customView;
         }

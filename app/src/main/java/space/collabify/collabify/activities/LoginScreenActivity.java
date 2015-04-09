@@ -116,7 +116,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         User u = mAppManager.getUser();
         u.setName(me.getString("display_name"));
         u.setPremium(me.getString("product").equals("premium"));
-        u.setId(me.getInt("id"));
+        u.setId(me.getString("id"));
 
         Toast.makeText(mainContext, "You are " + (u.isPremium() ? "" : "not" ) + " premium", Toast.LENGTH_LONG).show();
 
