@@ -95,8 +95,6 @@ public class DetailedSearchActivity extends ListActivity {
     private void addSong(final Song song) {
 
         // TODO : call async to send data
-
-        onBackPressed();
     }
 
     /**
