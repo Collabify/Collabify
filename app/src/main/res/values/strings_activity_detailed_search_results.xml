@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_song_dialog_title">Add song to playlist?</string>
+    <string name="add_song_dialog_positive_text">OK</string>
+    <string name="add_song_dialog_negative_text">Cancel</string>
+</resources>

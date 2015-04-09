@@ -107,9 +107,15 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
           new String[] {"Authorization"},
           new String[] {"Bearer " + params[0]}
         );
+
+        JSONObject myUser = new JSONObject();
+        myUser.put("name", me.getString("display_name"));
+
+        Json.postJSONObject(Endpoints.USERS, myUser, new String[] {"userid"}, new String[] {me.getString("id")});
         return me;
       } catch (Exception e) {
         e.printStackTrace();
+        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
       }
       return null;
     }
@@ -122,7 +128,9 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         User u = mAppManager.getUser();
         u.setName(me.getString("display_name"));
         u.setPremium(me.getString("product").equals("premium"));
-        u.setId(me.getInt("id"));
+        u.setId(me.getString("id"));
+
+        Toast.makeText(mainContext, "You are " + (u.isPremium() ? "" : "not" ) + " premium", Toast.LENGTH_LONG).show();
 
         Intent i = new Intent(mainContext, ModeSelectActivity.class);
         startActivity(i);

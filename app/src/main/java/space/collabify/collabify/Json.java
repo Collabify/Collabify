@@ -8,6 +8,9 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
@@ -26,6 +29,10 @@ import space.collabify.collabify.models.Playlist;
  * Created by andrew on 4/1/15.
  */
 public class Json {
+
+  /***********************************************************************************************/
+  /* GET */
+  /***********************************************************************************************/
 
   /**
    * Get JSONObject from given uri, wraps helper functions together
@@ -76,7 +83,7 @@ public class Json {
    * @param content JSON string
    * @return JSONArray from the given string
    */
-  public static JSONArray toJSONArray(String content) {
+  private static JSONArray toJSONArray(String content) {
     try {
       return new JSONArray(content);
     } catch (Exception e) {
@@ -151,6 +158,208 @@ public class Json {
       e.printStackTrace();
     }
     return builder.toString();
+  }
+
+  /***********************************************************************************************/
+  /* POST */
+  /***********************************************************************************************/
+
+  /**
+   * Wrapper for postContent, posting a JSONObject, no extra headers
+   * @param uri URI to send JSON to
+   * @param j   JSONObject to send
+   * @return    String response of post
+   */
+  public static String postJSONObject(String uri, JSONObject j) {
+    return postContent(uri, j.toString(), null, null);
+  }
+
+  /**
+   * Wrapper for postContent, posting a JSONObject, with extra headers
+   * @param uri         URI to send JSON to
+   * @param j           JSONObject to send
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return            String response of post
+   */
+  public static String postJSONObject(String uri, JSONObject j, String[] headerKey, String[] headerValue) {
+    return postContent(uri, j.toString(), headerKey, headerValue);
+  }
+
+  /**
+   * Wrapper for postContent, posting a JSONArray, no extra headers
+   * @param uri URI to send JSON to
+   * @param j   JSONArray to send
+   * @return    String response of post
+   */
+  public static String postJSONArray(String uri, JSONArray j) {
+    return postContent(uri, j.toString(), null, null);
+  }
+
+  /**
+   * Wrapper for postContent, posting a JSONArray, with extra headers
+   * @param uri         URI to send JSON to
+   * @param j           JSONArray to send
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return            String response of post
+   */
+  public static String postJSONArray(String uri, JSONArray j, String[] headerKey, String[] headerValue) {
+    return postContent(uri, j.toString(), headerKey, headerValue);
+  }
+
+  /**
+   * Post a JSON object to a server, uses code from http://hmkcode.com/android-send-json-data-to-server/
+   *
+   * @param uri       URI to send JSON to
+   * @param content   String to post
+   * @return
+   */
+  private static String postContent(String uri, String content, String[] headerKey, String[] headerValue) {
+    InputStream inputStream;
+    String result = "";
+    try {
+      HttpClient httpclient = new DefaultHttpClient();
+      HttpPost httpPost = new HttpPost(uri);
+
+      StringEntity se = new StringEntity(content);
+      httpPost.setEntity(se);
+
+      httpPost.setHeader("Accept", "application/json");
+      httpPost.setHeader("Content-type", "application/json");
+
+      if (headerKey != null && headerValue != null && headerKey.length == headerValue.length) {
+        for (int i = 0; i < headerKey.length; i++) {
+          httpPost.addHeader(headerKey[i], headerValue[i]);
+        }
+      }
+
+      HttpResponse httpResponse = httpclient.execute(httpPost);
+      inputStream = httpResponse.getEntity().getContent();
+
+      if(inputStream != null)
+        result = convertInputStreamToString(inputStream);
+      else
+        result = "Did not work!";
+
+    } catch (Exception e) {
+      Log.d("InputStream", e.getLocalizedMessage());
+    }
+
+    return result;
+  }
+
+  /***********************************************************************************************/
+  /* PUT */
+  /***********************************************************************************************/
+
+  /**
+   * Wrapper for putContent, putting a JSONObject, no extra headers
+   * @param uri URI to send JSON to
+   * @param j   JSONObject to send
+   * @return    String response of post
+   */
+  public static String putJSONObject(String uri, JSONObject j) {
+    return putContent(uri, j.toString(), null, null);
+  }
+
+  /**
+   * Wrapper for putContent, putting a JSONObject, with extra headers
+   * @param uri         URI to send JSON to
+   * @param j           JSONObject to send
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return            String response of post
+   */
+  public static String putJSONObject(String uri, JSONObject j, String[] headerKey, String[] headerValue) {
+    return putContent(uri, j.toString(), headerKey, headerValue);
+  }
+
+  /**
+   *Wrapper for putContent, putting a JSONArray, no extra headers
+   * @param uri URI to send JSON to
+   * @param j   JSONArray to send
+   * @return    String response of post
+   */
+  public static String putJSONArray(String uri, JSONArray j) {
+    return putContent(uri, j.toString(), null, null);
+  }
+
+  /**
+   * Wrapper for putContent, putting a JSONArray, with extra headers
+   * @param uri         URI to send JSON to
+   * @param j           JSONArray to send
+   * @param headerKey   Array of header keys to send
+   * @param headerValue Array of header values to send
+   * @return            String response of post
+   */
+  public static String putJSONArray(String uri, JSONArray j, String[] headerKey, String[] headerValue) {
+    return putContent(uri, j.toString(), headerKey, headerValue);
+  }
+
+  /**
+   * Put a JSON object to a server, modified from code at:
+   * http://hmkcode.com/android-send-json-data-to-server/
+   *
+   * @param uri       URI to send JSON to
+   * @param content   String to put
+   * @return
+   */
+  private static String putContent(String uri, String content, String[] headerKey, String[] headerValue) {
+    InputStream inputStream;
+    String result = "";
+    try {
+      HttpClient httpclient = new DefaultHttpClient();
+      HttpPut httpPut = new HttpPut(uri);
+
+      StringEntity se = new StringEntity(content);
+      httpPut.setEntity(se);
+
+      httpPut.setHeader("Accept", "application/json");
+      httpPut.setHeader("Content-type", "application/json");
+
+      if (headerKey != null && headerValue != null && headerKey.length == headerValue.length) {
+        for (int i = 0; i < headerKey.length; i++) {
+          httpPut.addHeader(headerKey[i], headerValue[i]);
+        }
+      }
+
+      HttpResponse httpResponse = httpclient.execute(httpPut);
+      inputStream = httpResponse.getEntity().getContent();
+
+      if(inputStream != null)
+        result = convertInputStreamToString(inputStream);
+      else
+        result = "Did not work!";
+
+    } catch (Exception e) {
+      Log.d("InputStream", e.getLocalizedMessage());
+    }
+
+    return result;
+  }
+
+  /***********************************************************************************************/
+  /* MISC */
+  /***********************************************************************************************/
+
+  /**
+   * Method to convert an inputStream to a string. Found at:
+   * from http://hmkcode.com/android-send-json-data-to-server/
+   *
+   * @param inputStream inputStream to convert
+   * @return A string representation
+   * @throws IOException
+   */
+  private static String convertInputStreamToString(InputStream inputStream) throws IOException{
+    BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+    String line = "";
+    String result = "";
+    while((line = bufferedReader.readLine()) != null)
+      result += line;
+
+    inputStream.close();
+    return result;
   }
 
 }

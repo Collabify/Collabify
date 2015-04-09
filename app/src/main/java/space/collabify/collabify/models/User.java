@@ -8,12 +8,19 @@ import android.location.Location;
 public class User {
     private Role mRole;
     private String mName;
-    private int mId;
+    private String mId;
     private Location mLocation;
     private boolean isPremium;
     private String mAccessToken;
 
-    public User(String name, int id) {
+    public User(String name, String id, String role) {
+      mName = name;
+      mId = id;
+      mRole = new Role();
+      mRole.setRole(role);
+    }
+
+    public User(String name, String id) {
       mName = name;
       mId = id;
       mRole = new Role();
@@ -35,11 +42,11 @@ public class User {
         this.mName = mName;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(int mId) {
+    public void setId(String mId) {
         this.mId = mId;
     }
 
