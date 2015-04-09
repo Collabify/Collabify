@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.models.User;
 
 public class SettingsActivity extends CollabifyActivity {
 
@@ -33,4 +34,5 @@ public class SettingsActivity extends CollabifyActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

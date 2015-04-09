@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <string name="label_settings">Settings Activity</string>
+  <string name="NoRole_show_username">Show Username?</string>
+  <string name="NoRole_about_button">About</string>
+  <string name="NoRole_log_out_button">Log Out</string>
+
+
 </resources>
