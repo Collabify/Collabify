@@ -17,17 +17,18 @@
         android:src="@drawable/test_album_art"
         android:layout_margin="5dp"/>
 
-    <TextView android:id="@+id/song_row_title"
+    <TextView android:id="@+id/song_row_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="3"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
 
-        android:textSize="@dimen/abc_text_size_large_material"
         android:layout_alignTop="@+id/song_details_album_art"
         android:layout_toRightOf="@+id/song_details_album_art"
-        android:layout_toEndOf="@+id/song_details_album_art" />
+        android:layout_toLeftOf="@+id/song_row_add"
+        android:layout_toStartOf="@+id/song_row_add"
+        android:layout_alignBottom="@+id/song_details_album_art" />
 
     <!--<TextView android:id="@+id/song_row_artist"
         android:layout_width="wrap_content"
