@@ -2,6 +2,7 @@ package space.collabify.collabify.base;
 
 import space.collabify.collabify.*;
 import space.collabify.collabify.activities.CollabifierSettingsActivity;
+import space.collabify.collabify.activities.DetailedSearchActivity;
 import space.collabify.collabify.activities.DjSettingsActivity;
 import space.collabify.collabify.activities.LoginScreenActivity;
 import space.collabify.collabify.activities.SettingsActivity;
@@ -9,10 +10,13 @@ import space.collabify.collabify.managers.AppManager;
 import space.collabify.collabify.models.User;
 
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 /**
  * This file was born on March 11 at 13:44
@@ -35,6 +39,7 @@ public class CollabifyActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_collabify_actions, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 

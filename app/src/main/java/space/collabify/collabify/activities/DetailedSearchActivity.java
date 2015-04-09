@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import space.collabify.collabify.Json;
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.models.Song;
 
 // for json data from spotify search
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.net.URL;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -30,9 +32,13 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class DetailedSearchActivity extends ListActivity {
 
-    ArrayList<String> listItems = new ArrayList<>();
+    private ArrayList<String> listItems = new ArrayList<>();
 
-    ArrayAdapter<String> adapter;
+    private String query;
+
+    private List<Song> songs;
+
+    private  ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -47,52 +53,67 @@ public class DetailedSearchActivity extends ListActivity {
         Intent intent = getIntent();
         String query = intent.getStringExtra("query");
 
+        this.query = query;
+
         new CallSpotifySearch().execute(query);
+    }
+
+    private void onSpotifySearchComplete(List<Song> songs){
+
+        for (Song song : this.songs = songs) {
+
+
+        }
 
         adapter.notifyDataSetChanged();
     }
 
+    private class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
+
+        private Exception exception;
+
+
+        protected JSONArray doInBackground(String... urls) {
+            String[] splitQuery = urls[0].split("\\s+");
+
+            String searchQuery = "https://api.spotify.com/v1/search?q=";
+
+            if(splitQuery.length >= 1){
+
+                searchQuery += splitQuery[0];
+            }
+
+            for(int i = 1; i < splitQuery.length; i++){
+
+                searchQuery += "+" + splitQuery[i];
+            }
+
+            searchQuery += "&type=track";
+
+            JSONObject jsonObject = Json.getJsonObject(searchQuery);
+
+            JSONArray items = null;
+
+            try {
+                items = jsonObject.getJSONObject("tracks").getJSONArray("items");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return items;
+        }
+
+        protected void onPostExecute(JSONArray jsonArray) {
+
+            List<Song> songs = new ArrayList<>();
+
+
+
+            onSpotifySearchComplete(songs);
+        }
+    }
 }
 
 
-class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
 
-    private Exception exception;
-
-    protected JSONArray doInBackground(String... urls) {
-        String[] splitQuery = urls[0].split("\\s+");
-
-        String searchQuery = "https://api.spotify.com/v1/search?q=";
-
-        if(splitQuery.length >= 1){
-
-            searchQuery += splitQuery[0];
-        }
-
-        for(int i = 1; i < splitQuery.length; i++){
-
-            searchQuery += "+" + splitQuery[i];
-        }
-
-        searchQuery += "&type=track";
-
-        JSONObject jsonObject = Json.getJsonObject(searchQuery);
-
-        JSONArray items = null;
-
-        try {
-            items = jsonObject.getJSONObject("tracks").getJSONArray("items");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return items;
-    }
-
-    protected void onPostExecute(JSONArray jsonArray) {
-        // TODO: check this.exception
-        // TODO: do something with the feed
-    }
-
-}

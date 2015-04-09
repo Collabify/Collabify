@@ -75,46 +75,7 @@ public class DjActivity extends PrimaryViewActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
 
-        getMenuInflater().inflate(R.menu.song_search, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean queryTextFocused){
-                if(!queryTextFocused){
-                    searchItem.collapseActionView();
-                    searchView.setQuery("", false);
-                }
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
-            @Override
-            public boolean onQueryTextSubmit(String query){
-
-                Intent intent = new Intent(DjActivity.this, DetailedSearchActivity.class);
-
-                intent.putExtra("query", query);
-
-                startActivity(intent);
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query){
-                return true;
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public void onBackPressed() {
