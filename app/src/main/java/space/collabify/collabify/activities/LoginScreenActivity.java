@@ -103,6 +103,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         return me;
       } catch (Exception e) {
         e.printStackTrace();
+        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
       }
       return null;
     }
