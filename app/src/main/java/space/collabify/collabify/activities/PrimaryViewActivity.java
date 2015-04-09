@@ -46,13 +46,7 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
             @Override
             public boolean onQueryTextSubmit(String query){
 
-                Intent intent = new Intent(PrimaryViewActivity.this, DetailedSearchActivity.class);
-
-                intent.putExtra("query", query);
-
-                startActivity(intent);
-
-                return true;
+                return handleQuery(query);
             }
 
             @Override
@@ -62,6 +56,22 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
         });
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * starts detailed search activity
+     *
+     * @param query
+     */
+    public boolean handleQuery(String query) {
+
+        Intent intent = new Intent(PrimaryViewActivity.this, DetailedSearchActivity.class);
+
+        intent.putExtra("query", query);
+
+        startActivity(intent);
+
+        return true;
     }
 
     @Override

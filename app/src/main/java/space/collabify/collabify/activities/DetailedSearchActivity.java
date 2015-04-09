@@ -1,25 +1,14 @@
 package space.collabify.collabify.activities;
 
-import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.support.v4.app.FragmentTransaction;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 import space.collabify.collabify.Json;
 import space.collabify.collabify.R;
+import space.collabify.collabify.fragments.SearchDetailsFragment;
 import space.collabify.collabify.managers.AppManager;
 import space.collabify.collabify.models.Song;
 
@@ -29,16 +18,141 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.List;
 
+
+
+public class DetailedSearchActivity extends PrimaryViewActivity {
+
+    private static final String TAG = DetailedSearchActivity.class.getSimpleName();
+
+    private SearchDetailsFragment mSearchDetailsFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detailed_search);
+
+        if(savedInstanceState == null){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            mSearchDetailsFragment = new SearchDetailsFragment();
+            transaction.replace(R.id.song_details_list_frame, mSearchDetailsFragment, TAG);
+            transaction.commit();
+        }else {
+            // TODO: get search details fragment reference from savedInstanceState?
+        }
+    }
+
+    @Override
+    public boolean handleQuery(String query) {
+
+        mSearchDetailsFragment.getListAdapter();
+
+        return true;
+    }
+
+    private void onSpotifySearchComplete(List<Song> songs){
+
+        //adapter.clear();
+
+        for (Song song : songs) {
+
+            //adapter.add(song);
+        }
+    }
+
+
+    private class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
+
+        protected JSONArray doInBackground(String... urls) {
+            String[] splitQuery = urls[0].split("\\s+");
+
+            String searchQuery = "https://api.spotify.com/v1/search?q=";
+
+            if(splitQuery.length >= 1){
+
+                searchQuery += splitQuery[0];
+            }
+
+            for(int i = 1; i < splitQuery.length; i++){
+
+                searchQuery += "+" + splitQuery[i];
+            }
+
+            searchQuery += "&type=track";
+
+            JSONObject jsonObject = Json.getJsonObject(searchQuery);
+
+            JSONArray items = null;
+
+            try {
+                items = jsonObject.getJSONObject("tracks").getJSONArray("items");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return items;
+        }
+
+        protected void onPostExecute(JSONArray jsonArray) {
+
+            List<Song> songs = new ArrayList<>();
+
+            for(int i = 0; i < jsonArray.length(); i++){
+
+                try {
+
+                    JSONObject track = jsonArray.getJSONObject(i);
+
+                    String id = track.getString("id");
+
+                    String title = track.getString("name");
+
+                    JSONArray artists = track.getJSONArray("artists");
+
+                    String artist = "";
+
+                    if(artists != null && artists.length() >= 1){
+
+                        artist = artists.getJSONObject(0).getString("name");
+
+                        for(int j = 1; j < artists.length(); j++){
+
+                            artist += ", " + artists.getJSONObject(j).getString("name");
+                        }
+                    }
+
+                    JSONObject album = track.getJSONObject("album");
+
+                    String albumName = album.getString("name");
+
+                    String artUrl = album.getJSONArray("images").getJSONObject(0).getString("url");
+
+                    songs.add(new Song(title, artist, albumName, 9999, id, artUrl, AppManager.getInstance().getUser().getId()));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            onSpotifySearchComplete(songs);
+        }
+    }
+}
+
+
 /**
  * This file was born on March 11 at 14:01
  */
-public class DetailedSearchActivity extends ListActivity {
+/*public class DetailedSearchActivity extends ListActivity {
 
     private String query;
 
     private List<Song> songs;
 
-    private SongDetailsListAdapter adapter;
+    private SearchDetailsListAdapter adapter;
+
+    private SearchDetailsFragment mSearchDetailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -47,7 +161,7 @@ public class DetailedSearchActivity extends ListActivity {
 
         songs = new ArrayList<>();
 
-        adapter = new SongDetailsListAdapter(getApplicationContext(), songs);
+        adapter = new SearchDetailsListAdapter(getApplicationContext(), songs);
         setListAdapter(adapter);
 
         Intent intent = getIntent();
@@ -97,9 +211,9 @@ public class DetailedSearchActivity extends ListActivity {
         // TODO : call async to send data
     }
 
-    /**
+    *//**
      * Handles the display of events in a row
-     */
+     *//*
     private class SongDetailsListAdapter extends ArrayAdapter<Song> {
         private SongDetailsListAdapter(Context context, List<Song> objects) {
             super(context, R.layout.song_details_row, objects);
@@ -229,7 +343,7 @@ public class DetailedSearchActivity extends ListActivity {
             return null;
         }
     }
-}
+}*/
 
 
 
