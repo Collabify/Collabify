@@ -34,7 +34,6 @@ public class CreateEventActivity extends CollabifyActivity {
       String password = mPassword.getText().toString();
       boolean passwordProtected = mPasswordProtected.isChecked();
       boolean allowFeedback = mAllowFeedback.isChecked();
-      boolean restrictNearby = mRestrictNearby.isChecked();
 
       if (password.equals("") && passwordProtected) {
         mPassword.setError("Please enter a password");
@@ -49,9 +48,8 @@ public class CreateEventActivity extends CollabifyActivity {
         mPasswordProtected.setChecked(false);
         mPassword.setText("");
         mAllowFeedback.setChecked(false);
-        mRestrictNearby.setChecked(false);
 
-        mAppManager.createEvent(new Event(name, 999, password, allowFeedback, restrictNearby));
+        mAppManager.createEvent(new Event(name, "amcolash", password, allowFeedback));
         Intent intent = new Intent(this, DjActivity.class);
         startActivity(intent);
       }

@@ -16,12 +16,17 @@ import space.collabify.collabify.models.Song;
  */
 public class PlaylistRequest {
 
-  public Playlist get(int eventId) {
+  public Playlist get(String eventId) {
     ArrayList<Song> tempList = new ArrayList<>();
 
     // Get json data
     String eventPlaylist = Endpoints.PLAYLIST.replace(":eventId", String.valueOf(eventId));
-    JSONArray jArray = Json.getJsonArray(eventPlaylist);
+    JSONArray jArray = Json.getJsonArray(
+      eventPlaylist,
+      new String[] {"userid"},
+      new String[] {"user"}
+    );
+
     if (jArray != null) {
       for (int i = 0; i < jArray.length(); i++) {
         try {
@@ -33,18 +38,15 @@ public class PlaylistRequest {
           int year = oneObject.getInt("year");
           String id = oneObject.getString("songId");
           String albumArtwork = oneObject.getString("artworkUrl");
-          int userId = oneObject.getInt("userId");
+          String userId = oneObject.getString("userId");
 
           tempList.add(new Song(title, artist, album, year, id, albumArtwork, userId));
         } catch (Exception e) {
-          tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", 0));
-          tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", 0));
+          tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", ""));
+          tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", ""));
           break;
         }
       }
-    } else {
-      tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", 0));
-      tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", 0));
     }
 
     return new Playlist("Cool new playlist", 0, tempList);

@@ -15,11 +15,15 @@ import space.collabify.collabify.models.User;
  */
 public class UsersRequest {
 
-  public ArrayList<User> get(int eventId) {
+  public ArrayList<User> get(String eventId) {
     ArrayList<User> users = new ArrayList<>();
 
-    String eventUsers = Endpoints.USERS.replace(":eventId", String.valueOf(eventId));
-    JSONArray jArray = Json.getJsonArray(eventUsers);
+    String eventUsers = Endpoints.USERS.replace(":eventId", eventId);
+    JSONArray jArray = Json.getJsonArray(
+      eventUsers,
+      new String[] {"userid"},
+      new String[] {"amcolash"}
+    );
 
     if (jArray != null) {
       for (int i = 0; i < jArray.length(); i++) {
@@ -27,8 +31,9 @@ public class UsersRequest {
           JSONObject oneObject = jArray.getJSONObject(i);
           // Pulling items from the array
           String name = oneObject.getString("name");
-          int userId = oneObject.getInt("userId");
-          users.add(new User(name, userId));
+          String userId = oneObject.getString("userId");
+          String role = oneObject.getString("role");
+          users.add(new User(name, userId, role));
         } catch (Exception e) {
           e.printStackTrace();
           users = null;

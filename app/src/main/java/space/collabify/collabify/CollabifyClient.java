@@ -55,8 +55,8 @@ public class CollabifyClient {
 
       if (events == null) {
         events = new ArrayList<>();
-        events.add(new Event("Whoops, something went wrong!", 9999, "", false, false));
-        events.add(new Event("Please pull to refresh", 9999, "", false, false));
+        events.add(new Event("Whoops, something went wrong!", "9999", "", false));
+        events.add(new Event("Please pull to refresh", "9999", "", false));
       } else {
         eventUpdating = false;
       }
@@ -97,8 +97,8 @@ public class CollabifyClient {
 
       if (users == null) {
         users = new ArrayList<>();
-        users.add(new User("Whoops, something went wrong!", 9999));
-        users.add(new User("Please pull to refresh", 9999));
+        users.add(new User("Whoops, something went wrong!", "9999"));
+        users.add(new User("Please pull to refresh", "9999"));
       } else {
         usersUpdating = false;
       }
