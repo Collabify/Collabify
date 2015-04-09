@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.CollabifyActivity;
@@ -38,11 +37,21 @@ public class CreateEventActivity extends CollabifyActivity {
       boolean restrictNearby = mRestrictNearby.isChecked();
 
       if (password.equals("") && passwordProtected) {
-        Toast.makeText(CreateEventActivity.this, "Please enter a password", Toast.LENGTH_LONG).show();
+        mPassword.setError("Please enter a password");
       } else if (name.equals("")) {
-        Toast.makeText(CreateEventActivity.this, "Please enter an event name", Toast.LENGTH_LONG).show();
+        mName.setError("Please enter an event name");
       } else {
-        mAppManager.createEvent(new Event(name, 0, password, allowFeedback, restrictNearby));
+        mPassword.setError(null);
+        mName.setError(null);
+
+        mName.setText("");
+        mPassword.setText("");
+        mPasswordProtected.setChecked(false);
+        mPassword.setText("");
+        mAllowFeedback.setChecked(false);
+        mRestrictNearby.setChecked(false);
+
+        mAppManager.createEvent(new Event(name, 999, password, allowFeedback, restrictNearby));
         Intent intent = new Intent(this, DjActivity.class);
         startActivity(intent);
       }
