@@ -113,7 +113,8 @@
         android:layout_below="@+id/DJ_settings_EndEvent_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
-    <!-- android:onClick="toDj"/> -->
+    <!-- android:onClick="toAbout" -->
+
 
     <Button
         android:layout_width="wrap_content"
@@ -122,8 +123,8 @@
         android:id="@+id/DJ_settings_log_out_button"
         android:layout_below="@+id/DJ_settings_about_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
-    <!-- android:onClick="toDj"/> -->
+        android:layout_marginTop="10dp"
+        android:onClick="toLogOut" />
 
 
 </RelativeLayout>
