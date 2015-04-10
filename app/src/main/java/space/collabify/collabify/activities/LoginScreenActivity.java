@@ -16,8 +16,10 @@ import com.spotify.sdk.android.playback.ConnectionStateCallback;
 
 import org.json.JSONObject;
 
+import kaaes.spotify.webapi.android.SpotifyApi;
 import space.collabify.collabify.*;
 import space.collabify.collabify.base.CollabifyActivity;
+import space.collabify.collabify.managers.AppManager;
 import space.collabify.collabify.models.User;
 
 /**
@@ -79,6 +81,11 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
 
             if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
               //TODO: something with the response.getAccessToken() but not sure what yet
+                AppManager.getInstance().getUser().setAccessToken(response.getAccessToken());
+                SpotifyApi mSpotifyApi = new SpotifyApi();
+                mSpotifyApi.setAccessToken(response.getAccessToken());
+                AppManager.getInstance().setSpotifyApi(mSpotifyApi);
+
 
               new LongOperation().execute(response.getAccessToken());
 
@@ -100,6 +107,11 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
           new String[] {"Authorization"},
           new String[] {"Bearer " + params[0]}
         );
+
+        JSONObject myUser = new JSONObject();
+        myUser.put("name", me.getString("display_name"));
+
+        Json.postJSONObject(Endpoints.USERS, myUser, new String[] {"userid"}, new String[] {me.getString("id")});
         return me;
       } catch (Exception e) {
         e.printStackTrace();

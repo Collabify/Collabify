@@ -3,4 +3,5 @@
     <string name="join_event_dialog_title">Join Event?</string>
     <string name="join_event_dialog_positive_text">OK</string>
     <string name="join_event_dialog_negative_text">Cancel</string>
+    <string name="join_event_lock_icon">join_event_lock_icon</string>
 </resources>
