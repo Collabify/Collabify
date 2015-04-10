@@ -45,7 +45,7 @@
         android:text="@string/NoRole_log_out_button"
         android:id="@+id/log_out_button"
         android:layout_below="@+id/about_button"
-        android:layout_centerHorizontal="true"/>
-    <!-- android:onClick="toDj"/> -->
+        android:layout_centerHorizontal="true"
+        android:onClick="toLogOut" />
 
 </RelativeLayout>
