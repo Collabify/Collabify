@@ -42,4 +42,12 @@ public class CollabifierSettingsActivity extends CollabifyActivity { //BaseSetti
         startActivity(intent);
     }
 
+    public void toLogOut(View view) {
+        mAppManager.getUser().setRole("NoRole");
+        mAppManager.spotifyLogout(getApplicationContext());
+        //return to login activity
+        Intent intent = new Intent(this, LoginScreenActivity.class);
+        startActivity(intent);
+    }
+
 }

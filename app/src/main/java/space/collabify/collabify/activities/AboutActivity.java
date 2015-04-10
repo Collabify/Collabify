@@ -1,8 +1,11 @@
 package space.collabify.collabify.activities;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import space.collabify.collabify.R;
+import space.collabify.collabify.base.BaseSettingsActivity;
 import space.collabify.collabify.base.CollabifyActivity;
 
 /**

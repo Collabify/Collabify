@@ -1,8 +1,10 @@
 package space.collabify.collabify.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.BaseSettingsActivity;
@@ -33,6 +35,14 @@ public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivi
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void toLogOut(View view) {
+        mAppManager.getUser().setRole("NoRole");
+        mAppManager.spotifyLogout(getApplicationContext());
+        //return to login activity
+        Intent intent = new Intent(this, LoginScreenActivity.class);
+        startActivity(intent);
     }
 
 }
