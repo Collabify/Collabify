@@ -1,8 +1,10 @@
 package space.collabify.collabify.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.base.BaseSettingsActivity;
@@ -33,6 +35,11 @@ public class CollabifierSettingsActivity extends CollabifyActivity { //BaseSetti
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void toAbout(View view) {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
 
 }
