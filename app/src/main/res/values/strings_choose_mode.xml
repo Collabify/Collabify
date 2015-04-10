@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="label_mode_select">Collabify Choose Mode</string>
+    <string name="collabifer_mode_button">Collabifier</string>
+    <string name="dj_mode_button">DJ Mode</string>
 </resources>
