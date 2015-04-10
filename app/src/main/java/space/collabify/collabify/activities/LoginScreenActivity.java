@@ -111,7 +111,13 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         JSONObject myUser = new JSONObject();
         myUser.put("name", me.getString("display_name"));
 
-        Json.postJSONObject(Endpoints.USERS, myUser, new String[] {"userid"}, new String[] {me.getString("id")});
+        Json.postJSONObject(
+          Endpoints.USERS,
+          myUser,
+          new String[] {"userid"},
+          new String[] {me.getString("id")}
+        );
+
         return me;
       } catch (Exception e) {
         e.printStackTrace();
@@ -129,8 +135,6 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         u.setName(me.getString("display_name"));
         u.setPremium(me.getString("product").equals("premium"));
         u.setId(me.getString("id"));
-
-        Toast.makeText(mainContext, "You are " + (u.isPremium() ? "" : "not" ) + " premium", Toast.LENGTH_LONG).show();
 
         Intent i = new Intent(mainContext, ModeSelectActivity.class);
         startActivity(i);
