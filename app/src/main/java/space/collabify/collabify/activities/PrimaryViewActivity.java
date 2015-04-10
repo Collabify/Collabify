@@ -1,5 +1,6 @@
 package space.collabify.collabify.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import space.collabify.collabify.R;
 import space.collabify.collabify.TabsPagerAdapter;
@@ -45,6 +47,12 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query){
+
+                SearchView mySearchView = (SearchView) findViewById(R.id.action_search);
+
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                imm.hideSoftInputFromWindow(mySearchView.getWindowToken(), 0);
 
                 return handleQuery(query);
             }

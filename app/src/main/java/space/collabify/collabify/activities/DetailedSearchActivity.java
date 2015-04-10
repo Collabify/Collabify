@@ -1,5 +1,7 @@
 package space.collabify.collabify.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,11 +11,13 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
+import space.collabify.collabify.Endpoints;
 import space.collabify.collabify.Json;
 import space.collabify.collabify.R;
 import space.collabify.collabify.fragments.SearchDetailsFragment;
 import space.collabify.collabify.managers.AppManager;
 import space.collabify.collabify.models.Song;
+import space.collabify.collabify.requests.PlaylistRequest;
 
 // for json data from spotify search
 import org.json.JSONArray;
@@ -39,6 +43,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         if(savedInstanceState == null){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mSearchDetailsFragment = new SearchDetailsFragment();
+            mSearchDetailsFragment.setmParentActivity(this);
             transaction.replace(R.id.song_details_list_frame, mSearchDetailsFragment, TAG);
             transaction.commit();
         }else {
@@ -61,23 +66,44 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
     @Override
     public boolean handleQuery(String query) {
 
-        //mSearchDetailsFragment.getListAdapter();
-
         new CallSpotifySearch().execute(query);
 
         return true;
     }
 
-    private void onSpotifySearchComplete(List<Song> songs){
+    private void onSpotifySearchComplete(final List<Song> songs) {
 
-        //mSearchDetailsFragment.getListAdapter();
+        mSearchDetailsFragment.populateSongList(songs);
+    }
 
-        //adapter.clear();
+    public void setupAddDialog(final String songDescription, final Song song) {
+        // prompt to add song
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.add_song_dialog_title));
+        builder.setMessage(songDescription);
+        builder.setPositiveButton(getString(R.string.add_song_dialog_positive_text),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: send song to server
+                        addSong(song);
+                        dialog.cancel();
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.add_song_dialog_negative_text),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
 
-        /*for (Song song : songs) {
+    private void addSong(final Song song){
+        // TODO make server call
 
-            //adapter.add(song);
-        }*/
+        new PostSongToServer().execute(song);
     }
 
 
@@ -157,6 +183,42 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
             }
 
             onSpotifySearchComplete(songs);
+        }
+    }
+
+    private class PostSongToServer extends AsyncTask<Song, Void, Void> {
+
+        protected Void doInBackground(Song... songs) {
+
+            Song song = songs[0];
+
+            String url = Endpoints.PLAYLIST.replaceAll(":eventID", mAppManager.getEvent().getId());
+
+            String[] headerKey = new String[]{"userid"};
+
+            String[] headerValue = new String[]{getCurrentUser().getId()};
+
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put("title", song.getTitle())
+                          .put("artist", song.getArtist())
+                          .put("album", song.getAlbum())
+                          .put("year", 99999)
+                          .put("artworkUrl", song.getArtwork());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String response = Json.postJSONObject(url, jsonObject, headerKey, headerValue);
+
+            mCollabifyClient.getEventPlaylist(new PlaylistRequest()).addSong(song);
+
+            return null;
+        }
+
+        protected void onPostExecute(Void v) {
+
         }
     }
 }

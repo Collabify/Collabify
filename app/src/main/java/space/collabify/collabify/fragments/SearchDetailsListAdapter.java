@@ -52,10 +52,12 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //setupAddDialog(newSongDescription, song);
+                mSearchDetailsFragment.getmParentActivity().setupAddDialog(newSongDescription, song);
             }
         });
 
         return customView;
     }
+
+
 }

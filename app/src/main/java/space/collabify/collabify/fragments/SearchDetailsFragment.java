@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.collabify.collabify.CollabifyClient;
+import space.collabify.collabify.activities.DetailedSearchActivity;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.models.Song;
 import space.collabify.collabify.models.User;
@@ -22,10 +23,13 @@ import space.collabify.collabify.models.User;
 
 public class SearchDetailsFragment extends ListFragment {
 
-    protected CollabifyActivity mParentActivity;
+    protected DetailedSearchActivity mParentActivity;
     protected SearchDetailsListAdapter mAdapter;
 
+    private List<Song> songs;
+
     private CollabifyClient mClient = CollabifyClient.getInstance();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,15 +47,31 @@ public class SearchDetailsFragment extends ListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mParentActivity = (CollabifyActivity) getActivity();
+        mParentActivity = (DetailedSearchActivity)getActivity();
 
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
-        temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "no artwork", ""));
         User user = mParentActivity.getCurrentUser();
         mAdapter = new SearchDetailsListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
     }
 
 
+    public void populateSongList(final List<Song> songs){
+
+        mAdapter.clear();
+
+        for(Song song : songs) {
+            mAdapter.add(song);
+        }
+    }
+
+
+    public void setmParentActivity(DetailedSearchActivity mParentActivity){
+        this.mParentActivity = mParentActivity;
+    }
+
+    public DetailedSearchActivity getmParentActivity(){
+        return this.mParentActivity;
+    }
 }
