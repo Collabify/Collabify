@@ -112,8 +112,8 @@
         android:id="@+id/DJ_settings_about_button"
         android:layout_below="@+id/DJ_settings_EndEvent_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
-    <!-- android:onClick="toAbout" -->
+        android:layout_marginTop="10dp"
+        android:onClick="toAbout" />
 
 
     <Button

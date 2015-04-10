@@ -36,8 +36,8 @@
         android:id="@+id/about_button"
         android:layout_below="@+id/collabifier_line"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp" />
-    <!-- android:onClick="toDj"/> -->
+        android:layout_marginTop="23dp"
+        android:onClick="toAbout"/>
 
     <Button
         android:layout_width="wrap_content"
