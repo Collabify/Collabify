@@ -39,6 +39,10 @@
             android:label="DjSettingsActivity" />
 
         <activity
+            android:name=".activities.AboutActivity"
+            android:label="AboutActivity" />
+
+        <activity
             android:name=".activities.SettingsActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"

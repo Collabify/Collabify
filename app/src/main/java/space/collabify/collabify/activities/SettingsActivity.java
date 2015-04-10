@@ -37,6 +37,11 @@ public class SettingsActivity extends CollabifyActivity {
         }
     }
 
+    public void toAbout(View view) {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
     public void toLogOut(View view) {
         mAppManager.getUser().setRole("NoRole");
         mAppManager.spotifyLogout(getApplicationContext());
