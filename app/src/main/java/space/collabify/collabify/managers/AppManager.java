@@ -6,6 +6,7 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 
 import java.util.ArrayList;
 
+import kaaes.spotify.webapi.android.SpotifyApi;
 import space.collabify.collabify.models.Event;
 import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.User;
@@ -17,6 +18,7 @@ import space.collabify.collabify.CollabifyClient;
 public class AppManager {
     private static AppManager instance;
     private static CollabifyClient mClient;
+    private static SpotifyApi mSpotifyApi;
 
     private User user;
     private Event event;
@@ -52,6 +54,14 @@ public class AppManager {
       return event;
     }
 
+    public void setSpotifyApi(SpotifyApi spotifyApi) {
+        this.mSpotifyApi = spotifyApi;
+    }
+
+    public SpotifyApi getSpotifyApi() {
+        return mSpotifyApi;
+    }
+
     /** Logs the to user out of spotify */
     public void spotifyLogout(Context context){
         AuthenticationClient.logout(context);
@@ -67,7 +77,7 @@ public class AppManager {
     }
 
     private void newUser() {
-      user = new User("NEW USER", 12345);
+      user = new User("NEW USER", "12345");
       user.setRole("NoRole");
     }
 

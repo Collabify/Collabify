@@ -5,6 +5,7 @@ package space.collabify.collabify;
  */
 public class Endpoints {
   public static String EVENTS = "http://collabify.space:" + 1337 + "/events/";
-  public static String USERS = "http://collabify.space:" + 1337 + "/events/:eventId/users/";
+  public static String EVENTUSERS = "http://collabify.space:" + 1337 + "/events/:eventId/users/";
   public static String PLAYLIST = "http://collabify.space:" + 1337 + "/events/:eventId/playlist/";
+  public static String USERS = "http://collabify.space:" + 1337 + "/users";
 }

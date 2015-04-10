@@ -11,7 +11,7 @@ public class Song {
     private String mAlbum;
     private int mYear;
     private String mId;
-    private int mUserId;
+    private String mUserId;
 
 
     private boolean mIsUpvoted;
@@ -20,7 +20,7 @@ public class Song {
     // TODO: Probably want to cache artwork somehow
     private String mArtwork;
 
-    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, int mUserId) {
+    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, String mUserId) {
         this.mTitle = mTitle;
         this.mArtist = mArtist;
         this.mAlbum = mAlbum;
@@ -33,14 +33,14 @@ public class Song {
     }
 
     public boolean wasAddedByUser() {
-      return ((Integer) AppManager.getInstance().getUser().getId()).equals(mUserId);
+      return (AppManager.getInstance().getUser().getId()).equals(mUserId);
     }
 
-    public int getUserId() {
+    public String getUserId() {
       return mUserId;
     }
 
-    public void setUserId(int mUserId) {
+    public void setUserId(String mUserId) {
       this.mUserId = mUserId;
     }
 

@@ -1,13 +1,18 @@
 package space.collabify.collabify.activities;
 
-import android.support.v4.app.Fragment;
+import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
+import space.collabify.collabify.R;
 import space.collabify.collabify.TabsPagerAdapter;
 import space.collabify.collabify.base.CollabifyActivity;
 import space.collabify.collabify.fragments.PlaylistFragment;
-import space.collabify.collabify.models.Playlist;
 import space.collabify.collabify.models.Song;
 
 /**
@@ -18,6 +23,46 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
     protected TabsPagerAdapter mAdapter;
     protected ActionBar mActionBar;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+
+        getMenuInflater().inflate(R.menu.menu_song_search, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean queryTextFocused){
+                if(!queryTextFocused){
+                    searchItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query){
+
+                Intent intent = new Intent(PrimaryViewActivity.this, DetailedSearchActivity.class);
+
+                intent.putExtra("query", query);
+
+                startActivity(intent);
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query){
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public void onTabSelected (ActionBar.Tab tab, android.support.v4.app.FragmentTransaction

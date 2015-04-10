@@ -21,9 +21,10 @@ public class EventsRequest {
   public ArrayList<Event> get() {
     ArrayList<Event> events = new ArrayList<>();
 
-    JSONArray jArray = Json.getJsonArray(Endpoints.EVENTS,
-      new String[] {"Location"},
-      new String[] {"testing!"}
+    JSONArray jArray = Json.getJsonArray(
+      Endpoints.EVENTS,
+      new String[] {"userid", "latitude", "longitude"},
+      new String[] {"user", "10", "10"}
     );
 
     if (jArray != null) {
@@ -32,7 +33,7 @@ public class EventsRequest {
           JSONObject oneObject = jArray.getJSONObject(i);
           // Pulling items from the array
           String name = oneObject.getString("name");
-          int id = oneObject.getInt("eventId");
+          String id = oneObject.getString("eventId");
           JSONObject settings = oneObject.getJSONObject("settings");
 
           String password;
@@ -42,9 +43,8 @@ public class EventsRequest {
             password = settings.getString("password");
           }
           Boolean allowVoting = settings.getBoolean("allowVoting");
-          Boolean filterLocation = settings.getBoolean("locationRestricted");
 
-          events.add(new Event(name, id, password, allowVoting, filterLocation));
+          events.add(new Event(name, id, password, allowVoting));
         } catch (Exception e) {
           events = null;
           break;

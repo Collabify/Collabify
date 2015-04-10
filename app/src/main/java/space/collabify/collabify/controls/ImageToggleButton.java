@@ -15,6 +15,9 @@ import space.collabify.collabify.R;
 public class ImageToggleButton extends ToggleButton {
     private Drawable mCheckedSrc;
     private Drawable mUncheckedSrc;
+    private Drawable mDisabledSrc;
+
+    private boolean isEnabled;
 
     public ImageToggleButton(Context context) {
         super(context);
@@ -39,20 +42,42 @@ public class ImageToggleButton extends ToggleButton {
         try {
             mCheckedSrc = array.getDrawable(R.styleable.ImageToggleButton_checkedSrc);
             mUncheckedSrc = array.getDrawable(R.styleable.ImageToggleButton_uncheckedSrc);
-        }finally{
+            mDisabledSrc = array.getDrawable(R.styleable.ImageToggleButton_disabledSrc);
+        } finally{
             array.recycle();
         }
         //set unchecked as default background
         setBackgroundDrawable(mUncheckedSrc);
+        // default enabled
+        isEnabled = true;
+    }
+
+    public void disable() {
+        isEnabled = false;
+        setBackgroundDrawable(mDisabledSrc);
+    }
+
+    public void enable() {
+        isEnabled = true;
+
+        if (isChecked()) {
+            setBackgroundDrawable(mCheckedSrc);
+        }
+        else {
+            setBackgroundDrawable(mUncheckedSrc);
+        }
     }
 
     @Override
     public void setChecked(boolean checked) {
-        super.setChecked(checked);
-        if(checked){
-            setBackgroundDrawable(mCheckedSrc);
-        }else {
-            setBackgroundDrawable(mUncheckedSrc);
+
+        if (isEnabled) {
+            super.setChecked(checked);
+            if(checked){
+                setBackgroundDrawable(mCheckedSrc);
+            }else {
+                setBackgroundDrawable(mUncheckedSrc);
+            }
         }
     }
 

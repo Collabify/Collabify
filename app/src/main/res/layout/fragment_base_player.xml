@@ -1,26 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="Collabifier Player"
-    android:id="@+id/textView"
-    android:layout_gravity="center_horizontal"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/player_song_album"
+        android:layout_marginTop="75dp"
+        android:src="@drawable/ic_album_grey600_48dp"
+        android:background="#ff444444" />
 
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="DJ Only!"
-    android:id="@+id/player_dj"
-    android:layout_below="@+id/textView"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/player_song_title"
+        android:layout_below="@+id/player_song_album" />
+
+    <space.collabify.collabify.controls.ImageToggleButton
+        android:id="@+id/player_play_pause"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:textOn=""
+        android:textOff=""
+        app:checkedSrc="@drawable/ic_pause_circle_outline_white_48dp"
+        app:uncheckedSrc="@drawable/ic_play_circle_outline_white_48dp"
+        app:disabledSrc="@drawable/ic_play_circle_outline_grey600_48dp"
+        android:layout_marginBottom="38dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <ImageButton
+        android:id="@+id/player_skip_next"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        android:textOn=""
+        android:textOff=""
+        android:src="@drawable/ic_skip_next_grey600_48dp"
+        android:background="@null"
+        android:layout_centerVertical="true"
+        android:layout_alignBottom="@+id/player_play_pause"
+        android:layout_alignRight="@+id/player_song_album"
+        android:layout_alignEnd="@+id/player_song_album" />
 
 </RelativeLayout>

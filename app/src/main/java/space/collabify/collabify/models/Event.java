@@ -8,19 +8,17 @@ import java.util.List;
  */
 public class Event {
     private String mName;
-    private boolean mPrivateEvent;
     private boolean mAllowVoting;
     private String mPassword;
-    private int mId;
+    private String mId;
     private List<User> mUserList;
 
     //just for server manager getEvents stub
-    public Event(String name, int id, String password, boolean allowVoting, boolean privateEvent){
+    public Event(String name, String id, String password, boolean allowVoting) {
         this.mName = name;
         this.mId = id;
         this.mPassword = password;
         this.mAllowVoting = allowVoting;
-        this.mPrivateEvent = privateEvent;
         this.mUserList = new ArrayList<>();
     }
 
@@ -30,14 +28,6 @@ public class Event {
 
     public void setName(String nName) {
         this.mName = nName;
-    }
-
-    public boolean isPrivateEvent() {
-        return mPrivateEvent;
-    }
-
-    public void setPrivateEvent(boolean mPrivateEvent) {
-        this.mPrivateEvent = mPrivateEvent;
     }
 
     public boolean isProtectedEvent() {
@@ -52,11 +42,11 @@ public class Event {
         mPassword = password;
     }
 
-    public int getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(int mId) {
+    public void setId(String mId) {
         this.mId = mId;
     }
 
