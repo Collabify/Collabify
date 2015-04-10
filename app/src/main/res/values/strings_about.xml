@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="about">About Collabify</string>
+    <string name="about_text">Collabify is an application for Android that makes it easier for user
+        to collaboratively decide on what music to listen to on Spotify</string>
+    <string name="about_dev_list">Developers: David Gardner, David Hartman, Brandon Hill,
+    Sydney Johnson, Ricardo Lopez, Andrew McOlash, Erik Olson.</string>
+
+
+</resources>
