@@ -49,7 +49,7 @@ public class CreateEventActivity extends CollabifyActivity {
         mPassword.setText("");
         mAllowFeedback.setChecked(false);
 
-        mAppManager.createEvent(new Event(name, mAppManager.getUser().getId(), password, allowFeedback));
+        mAppManager.createEvent(new Event(name, "amcolash", password, allowFeedback));
         Intent intent = new Intent(this, DjActivity.class);
         startActivity(intent);
       }
