@@ -1,8 +1,11 @@
 package space.collabify.collabify.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,8 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
     private SearchDetailsFragment mSearchDetailsFragment;
 
+    String query;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,24 +44,40 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         }else {
             // TODO: get search details fragment reference from savedInstanceState?
         }
+
+        Intent intent = getIntent();
+        String query = intent.getStringExtra("query");
+
+        this.query = query;
+
+        handleQuery(query);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean handleQuery(String query) {
 
-        mSearchDetailsFragment.getListAdapter();
+        //mSearchDetailsFragment.getListAdapter();
+
+        new CallSpotifySearch().execute(query);
 
         return true;
     }
 
     private void onSpotifySearchComplete(List<Song> songs){
 
+        //mSearchDetailsFragment.getListAdapter();
+
         //adapter.clear();
 
-        for (Song song : songs) {
+        /*for (Song song : songs) {
 
             //adapter.add(song);
-        }
+        }*/
     }
 
 

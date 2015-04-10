@@ -47,7 +47,7 @@ public class SearchDetailsFragment extends ListFragment {
 
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
-        temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "no artwork", 0));
+        temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "no artwork", ""));
         User user = mParentActivity.getCurrentUser();
         mAdapter = new SearchDetailsListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
