@@ -3,5 +3,6 @@
     <declare-styleable name="ImageToggleButton">
         <attr name="checkedSrc" format="reference" />
         <attr name="uncheckedSrc" format="reference" />
+        <attr name="disabledSrc" format="reference" />
     </declare-styleable>
 </resources>
