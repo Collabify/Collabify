@@ -47,6 +47,7 @@ public class CollabifierSettingsActivity extends CollabifyActivity { //BaseSetti
         //return to login activity
         Intent intent = new Intent(this, LoginScreenActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }
