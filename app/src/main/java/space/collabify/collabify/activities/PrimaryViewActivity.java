@@ -163,5 +163,6 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
             mCollabifyClient.deleteSong(mAppManager.getUser(), params[0]);
             return null;
         }
+
     }
 }

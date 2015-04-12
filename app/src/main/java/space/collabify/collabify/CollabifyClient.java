@@ -74,7 +74,9 @@ public class CollabifyClient {
      * @param user Current user
      */
     public void joinEvent(Event event, User user){
-      //TODO: implementation
+      //seems like the actual server communication for joining events is
+      //taken care of
+      mJoinedEvent = event;
     }
 
   /**
@@ -136,6 +138,7 @@ public class CollabifyClient {
         }
         song.upvote();
         //TODO: server stuff
+        //need a vote endpoint?
     }
 
     /**
@@ -163,7 +166,6 @@ public class CollabifyClient {
         );
 
         //TODO: check response?
-
     }
 
     /**
@@ -178,6 +180,7 @@ public class CollabifyClient {
         }
         song.downvote();
         //TODO: server stuff
+        //need a vote endpoint?
     }
 
     /**
