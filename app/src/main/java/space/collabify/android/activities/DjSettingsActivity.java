@@ -47,6 +47,7 @@ public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivi
         //return to login activity
         Intent intent = new Intent(this, LoginScreenActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }
