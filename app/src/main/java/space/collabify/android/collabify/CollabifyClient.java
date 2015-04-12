@@ -11,6 +11,8 @@ import java.util.concurrent.Executors;
 
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
+import space.collabify.android.Endpoints;
+import space.collabify.android.Json;
 import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.collabify.api.CollabifyService;
 import space.collabify.android.managers.AppManager;
@@ -86,7 +88,9 @@ public class CollabifyClient {
      * @param user Current user
      */
     public void joinEvent(Event event, User user){
-      //TODO: implementation
+      //seems like the actual server communication for joining events is
+      //taken care of
+      mJoinedEvent = event;
     }
 
   /**
@@ -148,6 +152,7 @@ public class CollabifyClient {
         }
         song.upvote();
         //TODO: server stuff
+        //need a vote endpoint?
     }
 
     /**
@@ -161,10 +166,20 @@ public class CollabifyClient {
             return;
         }
 
-        //TODO: actual server stuff
+        //may not actually be necessary since the playlist will be deleted on the server, and
+        // the new playlist will eventually be received.. but might update the ui faster
         if(user.getRole().isDJ() || song.wasAddedByUser()){
             mEventPlaylist.removeSong(song);
         }
+
+        String uri = Endpoints.SONG.replace(Endpoints.VAR_EVENTID, mJoinedEvent.getId());
+        uri = uri.replace(Endpoints.VAR_SONGID, song.getId());
+        String response = Json.delete(uri,
+                new String[]{"userid"},
+                new String[]{mAppManger.getUser().getId()}
+        );
+
+        //TODO: check response?
     }
 
     /**
@@ -179,6 +194,7 @@ public class CollabifyClient {
         }
         song.downvote();
         //TODO: server stuff
+        //need a vote endpoint?
     }
 
     /**

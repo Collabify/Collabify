@@ -201,14 +201,20 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     private class LoadPlaylistTask extends AsyncTask<PlaylistRequest, Void, Playlist> {
         @Override
         protected Playlist doInBackground(PlaylistRequest... params) {
-            return mClient.getEventPlaylist(params[0]);
+            if(params != null && params.length > 0){
+                return mClient.getEventPlaylist(params[0]);
+            }else {
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(Playlist playlist) {
             super.onPostExecute(playlist);
-            updatePlaylist(playlist);
-            setRefreshing(false);
+            if(playlist != null){
+                updatePlaylist(playlist);
+                setRefreshing(false);
+            }
         }
     }
 }
