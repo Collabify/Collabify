@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
-import com.spotify.sdk.android.playback.ConnectionStateCallback;
+import com.spotify.sdk.android.player.ConnectionStateCallback;
 
 import org.json.JSONObject;
 
@@ -80,19 +80,17 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
             }
 
             if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
-              //TODO: something with the response.getAccessToken() but not sure what yet
+                //TODO: something with the response.getAccessToken() but not sure what yet
                 AppManager.getInstance().getUser().setAccessToken(response.getAccessToken());
                 SpotifyApi mSpotifyApi = new SpotifyApi();
                 mSpotifyApi.setAccessToken(response.getAccessToken());
                 AppManager.getInstance().setSpotifyApi(mSpotifyApi);
 
 
-              new LongOperation().execute(response.getAccessToken());
+                new LongOperation().execute(response.getAccessToken());
 
-              mainContext = this;
-              progress = ProgressDialog.show(this, "Logging you in",
-                "Crunching the numbers", true);
-
+                mainContext = this;
+                progress = ProgressDialog.show(this, "Logging you in",  "Crunching the numbers", true);
             }
         }
     }

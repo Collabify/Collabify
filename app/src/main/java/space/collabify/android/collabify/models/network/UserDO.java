@@ -3,6 +3,8 @@ package space.collabify.android.collabify.models.network;
 import space.collabify.android.collabify.models.domain.UserSettings;
 
 /**
+ * Definition of the Event object returned from the Collabify API defined in CollabifyService.java
+ *
  * Created by ricardolopez on 4/10/15.
  */
 public class UserDO {

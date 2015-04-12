@@ -1,4 +1,4 @@
-package space.collabify.android.collabify;
+package space.collabify.android.collabify.api;
 
 import java.util.List;
 
@@ -7,9 +7,13 @@ import retrofit.ResponseCallback;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
+import space.collabify.android.collabify.models.domain.Event;
+import space.collabify.android.collabify.models.network.EventDO;
+import space.collabify.android.collabify.models.network.EventRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Playlist;
@@ -22,6 +26,10 @@ import space.collabify.android.collabify.models.domain.User;
  * Created by ricardolopez on 4/10/15.
  */
 public interface CollabifyService {
+
+    public static final String USER_HEADER = "userid";
+    public static final String LAT_HEADER = "latitude";
+    public static final String LONG_HEADER = "longitude";
 
     public static final String USER_PATHVAL = "userId";
     public static final String USERS_URL = "users/";
@@ -44,9 +52,9 @@ public interface CollabifyService {
      *--------------------------------------------------------------------------------------------*/
 
     /**
-     * Get a user from the server
+     * Get user info from the server
      *
-     * @param userId
+     * @param userId The user's spotify id
      * @return
      */
     @GET(USER_URL)
@@ -63,22 +71,23 @@ public interface CollabifyService {
 
     /**
      * Add a user to the server
-     * TODO: might need to add a header with userId
      *
+     * @param currentUserId
+     * @param user
      * @return
      */
     @POST(USERS_URL)
-    public User addUser(@Body UserDO user);
+    public User addUser(@Header(USER_HEADER) String currentUserId, @Body UserDO user);
 
     /**
      * Add a user to the server
-     * TODO: might need to add a header with userId
      *
+     * @param currentUserId
      * @param callback
      * @return
      */
     @POST(USERS_URL)
-    public void addUser(@Body UserDO user, Callback<User> callback);
+    public void addUser(@Header(USER_HEADER) String currentUserId, @Body UserDO user, Callback<User> callback);
 
     /**
      * Update the user's showName
@@ -126,79 +135,87 @@ public interface CollabifyService {
     /**
      * Get an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @return
      */
     @GET(PLAYLIST_URL)
-    public Playlist getEventPlaylist(@Path(EVENT_PATHVAL) String eventId);
+    public Playlist getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Get an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param callback
      */
     @GET(PLAYLIST_URL)
-    public void getEventPlaylist(@Path(EVENT_PATHVAL) String eventId, Callback<Playlist> callback);
+    public void getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<Playlist> callback);
 
     /**
      * Add a song to an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param song
      * @return
      */
     @POST(PLAYLIST_URL)
-    public Playlist addSong(@Path(EVENT_PATHVAL) String eventId, @Body Song song);
+    public Playlist addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body Song song);
 
     /**
      * Add a song to an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param song
      * @param callback
      */
     @POST(PLAYLIST_URL)
-    public void addSong(@Path(EVENT_PATHVAL) String eventId, @Body Song song, Callback<Playlist> callback);
+    public void addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body Song song, Callback<Playlist> callback);
 
     /**
      * Reorder an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param reorderedPlaylist
      * @return
      */
     @PUT(PLAYLIST_URL)
-    public Playlist reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Body Playlist reorderedPlaylist);
+    public Playlist reorderPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body Playlist reorderedPlaylist);
 
     /**
      * Reorder an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param reorderedPlaylist
      * @param callback
      */
     @PUT(PLAYLIST_URL)
-    public void reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Body Playlist reorderedPlaylist, Callback<Playlist> callback);
+    public void reorderPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body Playlist reorderedPlaylist, Callback<Playlist> callback);
 
     /**
      * Remove a song from an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param songId
      */
     @DELETE(SONG_URL)
-    public void removeSong(@Path(EVENT_PATHVAL) String eventId, @Path(SONG_PATHVAL) String songId);
+    public void removeSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Path(SONG_PATHVAL) String songId);
 
     /**
      * Remove a song from an event's playlist
      *
+     * @param currentUserId
      * @param eventId
      * @param songId
      * @param callback
      */
     @DELETE(SONG_URL)
-    public void removeSong(@Path(EVENT_PATHVAL) String eventId, @Path(SONG_PATHVAL) String songId, ResponseCallback callback);
+    public void removeSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Path(SONG_PATHVAL) String songId, ResponseCallback callback);
 
     /*--------------------------------------------------------------------------------------------*
      * Event ------------------------------------------------------------------------------ Event *
@@ -207,57 +224,103 @@ public interface CollabifyService {
     /**
      * Get information on an event
      *
+     * @param currentUserId
      * @param eventId
      * @return
      */
     @GET(EVENT_URL)
-    public EventSettings getEventInfo(@Path(EVENT_PATHVAL) String eventId);
+    public EventSettings getEventInfo(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Get information on an event
      *
+     * @param currentUserId
      * @param eventId
-     * @param eventInfo
+     * @param callback
      */
     @GET(EVENT_URL)
-    public void getEventInfo(@Path(EVENT_PATHVAL) String eventId, Callback<EventSettings> eventInfo);
+    public void getEventInfo(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<EventSettings> callback);
+
+    /**
+     * Get nearby events
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    @GET(EVENTS_URL)
+    public List<EventDO> getEvents(@Header(LAT_HEADER) String latitude, @Header(LONG_HEADER) String longitude);
+
+    /**
+     * Get nearby events
+     *
+     * @param latitude
+     * @param longitude
+     * @param callback
+     */
+    @GET(EVENTS_URL)
+    public void getEvents(@Header(LAT_HEADER) String latitude, @Header(LONG_HEADER) String longitude, Callback<List<EventDO>> callback);
+
+    /**
+     * Create a new event
+     *
+     * @param currentUserId
+     * @param event
+     * @return
+     */
+    @POST(EVENTS_URL)
+    public Event createEvent(@Header(USER_HEADER) String currentUserId, @Body EventRequestDO event);
+
+    /**
+     * Create a new event
+     *
+     * @param currentUserId
+     * @param event
+     * @param callback
+     */
+    @POST(EVENTS_URL)
+    public void createEvent(@Header(USER_HEADER) String currentUserId, @Body EventRequestDO event, Callback<Event> callback);
 
     /**
      * Update an events info
      *
+     * @param currentUserId
      * @param eventId
      * @param eventInfo
      * @return
      */
     @PUT(EVENT_URL)
-    public EventSettings updateEvent(@Path(EVENT_PATHVAL) String eventId, @Body EventSettings eventInfo);
+    public EventSettings updateEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body EventSettings eventInfo);
 
     /**
      * Update an events info
      *
+     * @param currentUserId
      * @param eventId
      * @param eventInfo
      * @param callback
      */
     @PUT(EVENT_URL)
-    public void updateEvent(@Path(EVENT_PATHVAL) String eventId, @Body EventSettings eventInfo, Callback<EventSettings> callback);
+    public void updateEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body EventSettings eventInfo, Callback<EventSettings> callback);
 
     /**
      * Delete an event
      *
+     * @param currentUserId
      * @param eventId
      */
     @DELETE(EVENT_URL)
-    public void deleteEvent(@Path(EVENT_PATHVAL) String eventId);
+    public void deleteEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Delete an event
      *
+     * @param currentUserId
      * @param eventId
      * @param callback
      */
     @DELETE(EVENT_URL)
-    public void deleteEvent(@Path(EVENT_PATHVAL) String eventId, ResponseCallback callback);
+    public void deleteEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, ResponseCallback callback);
 
 
     /*--------------------------------------------------------------------------------------------*
@@ -267,38 +330,42 @@ public interface CollabifyService {
     /**
      * Get a list of users that are currently attending an event
      *
+     * @param currentUserId
      * @param eventId
      * @return
      */
     @GET(EVENT_USERS_URL)
-    public List<UserDO> getEventUsers(@Path(EVENT_PATHVAL) String eventId);
+    public List<UserDO> getEventUsers(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Get a list of users that are currently attending an event
      *
+     * @param currentUserId
      * @param eventId
      * @param callback
      */
     @GET(EVENT_USERS_URL)
-    public void getEventUsers(@Path(EVENT_PATHVAL) String eventId, Callback<List<UserDO>> callback);
+    public void getEventUsers(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<List<UserDO>> callback);
 
     /**
      * Join an event
      *
+     * @param currentUserId
      * @param eventId
      * @return
      */
     @POST(EVENT_USERS_URL)
-    public UserDO joinEvent(@Path(EVENT_PATHVAL) String eventId);
+    public UserDO joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Join an event
      *
+     * @param currentUserId
      * @param eventId
      * @param callback
      */
     @POST(EVENT_USERS_URL)
-    public void joinEvent(@Path(EVENT_PATHVAL) String eventId, Callback<UserDO> callback);
+    public void joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<UserDO> callback);
 
     /**
      * Leave an event
@@ -322,22 +389,24 @@ public interface CollabifyService {
     /**
      * Change a user's role in an event
      *
+     * @param currentUserId
      * @param eventId
      * @param userId
      * @param role
      * @return
      */
     @PUT(EVENT_USER_ROLE_URL)
-    public String changeUserRole(@Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body String role);
+    public String changeUserRole(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body String role);
 
     /**
      * Change a user's role in an event
      *
+     * @param currentUserId
      * @param eventId
      * @param userId
      * @param role
      * @param callback
      */
     @PUT(EVENT_USER_ROLE_URL)
-    public void changeUserRole(@Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body String role, Callback<String> callback);
+    public void changeUserRole(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body String role, Callback<String> callback);
 }

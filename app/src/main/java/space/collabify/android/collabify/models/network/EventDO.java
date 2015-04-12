@@ -1,16 +1,17 @@
-package space.collabify.android.collabify.models.domain;
+package space.collabify.android.collabify.models.network;
 
-import java.util.List;
+import space.collabify.android.collabify.models.domain.EventSettings;
+import space.collabify.android.collabify.models.domain.Location;
 
 /**
- * Created by ricardolopez on 4/10/15.
+ * Definition of the Event object returned from the Collabify API defined in CollabifyService.java
+ *
+ * Created by ricardolopez on 4/11/15.
  */
-public class Event {
+public class EventDO {
     private String name;
     private String eventId;
-    private List<String> userIds;
     private Location location;
-    private Playlist playlist;
     private EventSettings settings;
 
     public String getName() {
@@ -29,28 +30,12 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public List<String> getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(List<String> userIds) {
-        this.userIds = userIds;
-    }
-
     public Location getLocation() {
         return location;
     }
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public Playlist getPlaylist() {
-        return playlist;
-    }
-
-    public void setPlaylist(Playlist playlist) {
-        this.playlist = playlist;
     }
 
     public EventSettings getSettings() {

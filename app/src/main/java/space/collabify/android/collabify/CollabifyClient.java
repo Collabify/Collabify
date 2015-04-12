@@ -2,9 +2,17 @@ package space.collabify.android.collabify;
 
 import android.util.Log;
 
+import com.squareup.okhttp.OkHttpClient;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
+import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.api.CollabifyService;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Playlist;
@@ -18,8 +26,10 @@ import space.collabify.android.requests.UsersRequest;
  * Created by ricardolopez on 3/22/15.
  */
 public class CollabifyClient {
-  private static final String TAG = CollabifyClient.class.getSimpleName();
-  private static CollabifyClient instance;
+    private static final String TAG = CollabifyClient.class.getSimpleName();
+    private static CollabifyClient instance;
+
+    private CollabifyApi mCollabifyApi;
 
     private Event mJoinedEvent;
     private Playlist mEventPlaylist;
@@ -31,7 +41,7 @@ public class CollabifyClient {
     private AppManager mAppManger = AppManager.getInstance();
 
     private CollabifyClient() {
-
+        this.mCollabifyApi = new CollabifyApi();
     }
 
     public static CollabifyClient getInstance() {
@@ -40,6 +50,11 @@ public class CollabifyClient {
         }
         return instance;
     }
+
+    public CollabifyApi getCollabifyApi() {
+        return mCollabifyApi;
+    }
+
 
     /**
      * Queries the server for events
