@@ -33,7 +33,7 @@
         android:layout_alignBottom="@+id/playlist_collabifier_album_art"
         android:layout_margin="3dp"/>
 
-    <space.collabify.collabify.controls.ImageToggleButton
+    <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_upvote_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -47,7 +47,7 @@
         android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
         android:layout_marginTop="12dp"/>
 
-    <space.collabify.collabify.controls.ImageToggleButton
+    <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_downvote_button"
         android:layout_width="30dp"
         android:layout_height="30dp"

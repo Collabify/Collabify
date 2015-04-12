@@ -24,7 +24,7 @@
         android:id="@+id/player_song_title"
         android:layout_below="@+id/player_song_album" />
 
-    <space.collabify.collabify.controls.ImageToggleButton
+    <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/player_play_pause"
         android:layout_width="100dp"
         android:layout_height="100dp"
