@@ -14,6 +14,7 @@ import retrofit.client.OkClient;
 import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.collabify.api.CollabifyService;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Event;
@@ -172,14 +173,13 @@ public class CollabifyClient {
             mEventPlaylist.removeSong(song);
         }
 
-        String uri = Endpoints.SONG.replace(Endpoints.VAR_EVENTID, mJoinedEvent.getId());
-        uri = uri.replace(Endpoints.VAR_SONGID, song.getId());
-        String response = Json.delete(uri,
-                new String[]{"userid"},
-                new String[]{mAppManger.getUser().getId()}
-        );
+        try {
+            mCollabifyApi.removeSong(mJoinedEvent.getId(), song.getId());
+        } catch (CollabifyApiException e) {
+            Log.d(TAG, "Exception when trying to delete song from playlist");
+            e.printStackTrace();
+        }
 
-        //TODO: check response?
     }
 
     /**

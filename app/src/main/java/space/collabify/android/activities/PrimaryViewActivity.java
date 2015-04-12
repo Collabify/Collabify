@@ -120,7 +120,7 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
 
     @Override
     public void deleteSong(Song song) {
-        new DeleteSongTask().execute(song);
+        mCollabifyClient.deleteSong(mAppManager.getUser(), song);
     }
 
     @Override
@@ -128,6 +128,9 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
         new VoteTask().execute(new VoteRequest(song, VoteRequest.VoteType.CLEAR_VOTE));
     }
 
+    /**
+     * TODO: remove once vote endpoints are in collabifyClient
+     */
     private class VoteTask extends AsyncTask<VoteRequest, Void, Void> {
 
         @Override
@@ -154,15 +157,5 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
 
             return null;
         }
-    }
-
-    private class DeleteSongTask extends AsyncTask<Song, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Song... params) {
-            mCollabifyClient.deleteSong(mAppManager.getUser(), params[0]);
-            return null;
-        }
-
     }
 }
