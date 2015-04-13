@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import space.collabify.android.Endpoints;
@@ -45,6 +46,7 @@ public class CollabifyClient {
 
     private CollabifyClient() {
         this.mCollabifyApi = new CollabifyApi();
+        mCollabifyApi.setCurrentUserId(mAppManger.getUser().getId());
     }
 
     public static CollabifyClient getInstance() {
@@ -141,12 +143,15 @@ public class CollabifyClient {
         return mEventPlaylist;
     }
 
+    public void getEventPlaylist(Callback<space.collabify.android.collabify.models.domain.Playlist> callback) throws CollabifyApiException {
+        mCollabifyApi.getEventPlaylist(mJoinedEvent.getId(), callback);
+    }
+
     /**
      * Upvotes a song. removes effect of a previous downvote if one
-     * @param user the user that is upvoting the song
      * @param song the song to be upvoted
      */
-    public void upvoteSong(User user, Song song){
+    public void upvoteSong(Song song){
         if(song == null) {
             Log.w(TAG, "Tried to upvote null song");
             return;
@@ -158,14 +163,14 @@ public class CollabifyClient {
 
     /**
      * Removes a song added by the user, or if the user is the dj.
-     * @param user user requesting the delete
      * @param song the song to be deleted
      */
-    public void deleteSong(User user, Song song) {
+    public void deleteSong(Song song) {
         if(song == null){
             Log.w(TAG, "Tried to delete null song");
             return;
         }
+        User user = mAppManger.getUser();
 
         //may not actually be necessary since the playlist will be deleted on the server, and
         // the new playlist will eventually be received.. but might update the ui faster
@@ -184,10 +189,9 @@ public class CollabifyClient {
 
     /**
      * Downvote a song in the playlist.
-     * @param user the user downvoting
      * @param song the song to be downvoted
      */
-    public void downvoteSong(User user, Song song) {
+    public void downvoteSong(Song song) {
         if(song == null){
             Log.w(TAG, "Tried to downvote null song");
             return;
@@ -199,10 +203,9 @@ public class CollabifyClient {
 
     /**
      * Sets the users vote back to neutral (not upvote or downvote).
-     * @param user user to clear the vote from
      * @param song song to clear the vote on
      */
-    public void clearSongVote(User user, Song song){
+    public void clearSongVote(Song song){
         if(song == null) {
             Log.w(TAG, "Tried to clear null song vote");
             return;
