@@ -1,7 +1,9 @@
 package space.collabify.android.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import space.collabify.android.*;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.User;
 
@@ -134,7 +137,26 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         u.setPremium(me.getString("product").equals("premium"));
         u.setId(me.getString("id"));
 
-        Intent i = new Intent(mainContext, ModeSelectActivity.class);
+        mAppManager.getCollabifyClient().getCollabifyApi().setCurrentUserId(me.getString("id"));
+
+        Intent i;
+        // If premium, choose mode. Else, just choose join event
+        if (mAppManager.getUser().isPremium()) {
+          i = new Intent(mainContext, ModeSelectActivity.class);
+        } else {
+          AlertDialog alertDialog = new AlertDialog.Builder(mainContext).create();
+          alertDialog.setTitle("No Spotify Premium");
+          alertDialog.setMessage("We are sorry, but you will need Spotify Premium in order to access the DJ Mode.");
+          alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+              }
+            });
+          alertDialog.show();
+
+          i = new Intent(mainContext, JoinEventActivity.class);
+        }
         startActivity(i);
       } catch (Exception e) {
         e.printStackTrace();

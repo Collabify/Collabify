@@ -7,6 +7,7 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import java.util.ArrayList;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.User;
 import space.collabify.android.collabify.CollabifyClient;
@@ -24,7 +25,10 @@ public class AppManager {
 
     private AppManager(){
       //private because singleton
-      newUser();
+    }
+
+    public CollabifyClient getCollabifyClient() {
+      return  mClient;
     }
 
     /**
@@ -76,7 +80,7 @@ public class AppManager {
     }
 
     private void newUser() {
-      user = new User("NEW USER", "12345");
+      user = new User("99999", "99999");
       user.setRole("NoRole");
     }
 
@@ -86,9 +90,6 @@ public class AppManager {
    */
     public void createEvent(Event e) {
       // Add DJ to Event
-      ArrayList<User> userlist = new ArrayList<>();
-      userlist.add(getUser());
-      e.setmUserList(userlist);
 
       event = e;
       mClient.createEvent(event, user);
@@ -100,7 +101,6 @@ public class AppManager {
    */
     public void joinEvent(Event e) {
       event = e;
-      event.getmUserList().add(getUser());
       mClient.joinEvent(event, user);
     }
 }

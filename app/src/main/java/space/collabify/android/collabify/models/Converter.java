@@ -3,6 +3,7 @@ package space.collabify.android.collabify.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import space.collabify.android.models.Event;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
 
@@ -27,5 +28,11 @@ public class Converter {
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
                 song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId());
         return appSong;
+    }
+
+    public static Event getAppEvent(space.collabify.android.collabify.models.domain.Event event) {
+      Event appEvent = new Event(event.getName(), event.getEventId(),
+        event.getSettings().getPassword(), event.getSettings().isAllowVoting());
+      return appEvent;
     }
 }

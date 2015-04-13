@@ -28,7 +28,7 @@ public class CollabifyApi {
     private static final String COLLABIFY_ENDPOINT = "http://collabify.space:" + PORT;
 
     private CollabifyService mCollabifyService;
-    private String mCurrentUserId;
+    private static String mCurrentUserId;
 
     public CollabifyApi() {
         Executor executor = Executors.newSingleThreadExecutor();
@@ -41,8 +41,8 @@ public class CollabifyApi {
         mCollabifyService = restAdapter.create(CollabifyService.class);
     }
 
-    public void setCurrentUserId(String currentUserId) {
-        this.mCurrentUserId = currentUserId;
+    public static void setCurrentUserId(String currentUserId) {
+        mCurrentUserId = currentUserId;
     }
 
 

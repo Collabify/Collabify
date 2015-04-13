@@ -11,12 +11,16 @@ import java.util.concurrent.Executors;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import retrofit.client.OkClient;
+import retrofit.client.Response;
 import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.collabify.api.CollabifyService;
+import space.collabify.android.collabify.models.Converter;
+import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Playlist;
@@ -46,7 +50,6 @@ public class CollabifyClient {
 
     private CollabifyClient() {
         this.mCollabifyApi = new CollabifyApi();
-        mCollabifyApi.setCurrentUserId(mAppManger.getUser().getId());
     }
 
     public static CollabifyClient getInstance() {
@@ -93,7 +96,25 @@ public class CollabifyClient {
     public void joinEvent(Event event, User user){
       //seems like the actual server communication for joining events is
       //taken care of
-      mJoinedEvent = event;
+
+      try {
+        Callback c = new Callback<space.collabify.android.collabify.models.domain.Event> () {
+          @Override
+          public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
+            Log.d(TAG, "Successfully joined");
+            mJoinedEvent = Converter.getAppEvent(event);
+          }
+
+          @Override
+          public void failure(RetrofitError error) {
+            Log.d(TAG, "Failed to join event:\n" + error.toString());
+          }
+        };
+
+        getCollabifyApi().joinEvent(user.getId(), event.getId(), c);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
 
   /**
@@ -103,6 +124,7 @@ public class CollabifyClient {
    */
     public void createEvent(Event event, User user) {
       // TODO: implementation
+      joinEvent(event, user);
     }
 
     /**

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,13 +133,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setRefreshing(true);
-        try {
-            mClient.getEventPlaylist(new LoadPlaylistCallback());
-        } catch (CollabifyApiException e) {
-            setRefreshing(false);
-            e.printStackTrace();
-        }
+        initiateRefresh();
     }
 
     /**
