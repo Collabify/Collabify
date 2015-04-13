@@ -142,13 +142,8 @@ public class CollabifyClient {
         return mEventPlaylist;
     }
 
-    public void getEventPlaylist(Callback<space.collabify.android.collabify.models.domain.Playlist> callback){
-        try {
-            mCollabifyApi.getEventPlaylist(mJoinedEvent.getId(), callback);
-        } catch (CollabifyApiException e) {
-            Log.d(TAG, "Unable to get event playlist:\n" + e.toString());
-            e.printStackTrace();
-        }
+    public void getEventPlaylist(Callback<space.collabify.android.collabify.models.domain.Playlist> callback) throws CollabifyApiException {
+        mCollabifyApi.getEventPlaylist(mJoinedEvent.getId(), callback);
     }
 
     /**

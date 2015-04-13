@@ -18,6 +18,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.collabify.models.Converter;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.models.Playlist;
@@ -74,7 +75,12 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      */
     private void initiateRefresh() {
         setRefreshing(true);
-        mClient.getEventPlaylist(new LoadPlaylistCallback());
+        try {
+            mClient.getEventPlaylist(new LoadPlaylistCallback());
+        } catch (CollabifyApiException e) {
+            setRefreshing(false);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -126,7 +132,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mClient.getEventPlaylist(new LoadPlaylistCallback());
+        setRefreshing(true);
+        try {
+            mClient.getEventPlaylist(new LoadPlaylistCallback());
+        } catch (CollabifyApiException e) {
+            setRefreshing(false);
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -199,7 +211,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
             mClient.deleteSong(song);
 
             //update the playlist after deleting song
-            mClient.getEventPlaylist(new LoadPlaylistCallback());
+            try {
+                setRefreshing(true);
+                mClient.getEventPlaylist(new LoadPlaylistCallback());
+            } catch (CollabifyApiException e){
+                setRefreshing(false);
+                e.printStackTrace();
+            }
         }
     }
 
@@ -207,11 +225,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     private class LoadPlaylistCallback implements Callback<space.collabify.android.collabify.models.domain.Playlist> {
         @Override
         public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+            setRefreshing(false);
             updatePlaylist(playlist);
         }
 
         @Override
         public void failure(RetrofitError error) {
+            setRefreshing(false);
             //don't do anything, keep existing playlist?
             Log.d(TAG, "Failed to load playlist:\n" + error.getMessage());
         }
