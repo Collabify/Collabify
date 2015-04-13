@@ -93,24 +93,13 @@ public class CollabifyClient {
      * @param event Event to join
      * @param user Current user
      */
-    public void joinEvent(Event event, User user){
+    public void joinEvent(Event event, User user, Callback c){
       //seems like the actual server communication for joining events is
       //taken care of
 
+      mJoinedEvent = event;
+
       try {
-        Callback c = new Callback<space.collabify.android.collabify.models.domain.Event> () {
-          @Override
-          public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
-            Log.d(TAG, "Successfully joined");
-            mJoinedEvent = Converter.getAppEvent(event);
-          }
-
-          @Override
-          public void failure(RetrofitError error) {
-            Log.d(TAG, "Failed to join event:\n" + error.toString());
-          }
-        };
-
         getCollabifyApi().joinEvent(user.getId(), event.getId(), c);
       } catch (Exception e) {
         e.printStackTrace();
@@ -122,9 +111,9 @@ public class CollabifyClient {
    * @param event Event to create
    * @param user Current user
    */
-    public void createEvent(Event event, User user) {
+    public void createEvent(Event event, User user, Callback c) {
       // TODO: implementation
-      joinEvent(event, user);
+      joinEvent(event, user, c);
     }
 
     /**
@@ -166,7 +155,9 @@ public class CollabifyClient {
     }
 
     public void getEventPlaylist(Callback<space.collabify.android.collabify.models.domain.Playlist> callback) throws CollabifyApiException {
+      if (mJoinedEvent != null) {
         mCollabifyApi.getEventPlaylist(mJoinedEvent.getId(), callback);
+      }
     }
 
     /**

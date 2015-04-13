@@ -1,6 +1,7 @@
 package space.collabify.android.activities;
 
 
+import android.content.Context;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.location.Location;
@@ -15,6 +16,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.fragments.JoinEventListFragment;
@@ -85,22 +89,35 @@ public class JoinEventActivity extends CollabifyActivity implements
                 .build();
     }
 
-    public void toCollabifier(Event event) {
-        //TODO: work out exact communication with servermanager
-        mAppManager.getUser().setRole(Role.COLLABIFIER);
-        mAppManager.joinEvent(event);
-        Intent intent = new Intent(this, CollabifierActivity.class);
-        startActivity(intent);
-    }
 
     public void toCollabifier(Event event, String password){
         //TODO may have to change how password is handled/displayed
         if(event.getPassword().equalsIgnoreCase(password)){
             mAppManager.getUser().setRole(Role.COLLABIFIER);
-            mAppManager.joinEvent(event);
-            Intent intent = new Intent(this, CollabifierActivity.class);
-            startActivity(intent);
-        }else {
+
+          mAppManager.joinEvent(event,
+            new Callback<space.collabify.android.collabify.models.domain.Event> () {
+              @Override
+              public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
+                Log.d(TAG, "Successfully joined");
+                Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
+                startActivity(intent);
+              }
+
+              @Override
+              public void failure(RetrofitError error) {
+                Log.e(TAG, "Failed to join event:\n" + error.toString());
+
+                runOnUiThread(new Runnable() {
+                  public void run() {
+                    Toast.makeText(JoinEventActivity.this, "Error joining Event. Please try again!", Toast.LENGTH_LONG).show();
+                  }
+                });
+              }
+            }
+          );
+
+        } else {
             //bad password, don't do anything
             Toast.makeText(JoinEventActivity.this, "Bad Password!", Toast.LENGTH_LONG).show();
         }

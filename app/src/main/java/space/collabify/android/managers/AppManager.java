@@ -3,6 +3,9 @@ package space.collabify.android.managers;
 import android.content.Context;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.squareup.okhttp.Call;
+
+import retrofit.Callback;
 
 import java.util.ArrayList;
 
@@ -88,19 +91,19 @@ public class AppManager {
    * Create a local copy of the event
    * @param e Event to create
    */
-    public void createEvent(Event e) {
+    public void createEvent(Event e, Callback c) {
       // Add DJ to Event
 
       event = e;
-      mClient.createEvent(event, user);
+      mClient.createEvent(event, user, c);
     }
 
   /**
    * Join event and set local data
    * @param e Event to join
    */
-    public void joinEvent(Event e) {
+    public void joinEvent(Event e, Callback c) {
       event = e;
-      mClient.joinEvent(event, user);
+      mClient.joinEvent(event, user, c);
     }
 }
