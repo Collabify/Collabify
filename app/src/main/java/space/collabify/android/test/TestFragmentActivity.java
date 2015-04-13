@@ -25,26 +25,6 @@ public class TestFragmentActivity extends CollabifyActivity implements PlaylistF
     public int clearSongVoteCallCount = 0;
 
     @Override
-    public void upvoteSong(Song song) {
-        upvoteSongCallCount++;
-    }
-
-    @Override
-    public void downvoteSong(Song song) {
-        downvoteSongCallCount++;
-    }
-
-    @Override
-    public void deleteSong(Song song) {
-        deleteSongCallCount++;
-    }
-
-    @Override
-    public void clearSongVote(Song song) {
-        clearSongVoteCallCount++;
-    }
-
-    @Override
     public Song getSongFromId(String songId) {
         if (songId.equalsIgnoreCase("1")) {
             return new Song("on the sunny side of the street", "sonny stitt, etc.",

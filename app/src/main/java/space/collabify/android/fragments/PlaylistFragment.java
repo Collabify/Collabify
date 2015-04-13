@@ -13,7 +13,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.models.Converter;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
@@ -39,6 +44,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     protected PlaylistListAdapter mAdapter;
 
     private CollabifyClient mClient = CollabifyClient.getInstance();
+    private CollabifyApi mCollabifyApi = new CollabifyApi();
 
 
     @Override
@@ -66,10 +72,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     /**
      * Starts a background task to get playlist updates
      */
-    private void initiateRefresh(){
-      setRefreshing(true);
-      PlaylistRequest request = new PlaylistRequest();
-      new LoadPlaylistTask().execute(request);
+    private void initiateRefresh() {
+        setRefreshing(true);
+        mClient.getEventPlaylist(new LoadPlaylistCallback());
     }
 
     /**
@@ -82,27 +87,29 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         PlaylistListAdapter adapter = (PlaylistListAdapter) getListAdapter();
         adapter.clear();
 
-      if (playlist.getmList().size() != 0) {
-        for (Song song : playlist.getmList()) {
-          adapter.add(song);
+        List<Song> songs = playlist.getmList();
+        if (songs.size() != 0) {
+            for (Song song : songs) {
+                adapter.add(song);
+            }
+        } else {
+            adapter.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
         }
-      } else {
-        adapter.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
-      }
     }
+
+    /**
+     * wraps updatePlaylist for server models
+     * @param playlist
+     */
+    private void updatePlaylist(space.collabify.android.collabify.models.domain.Playlist playlist){
+        updatePlaylist(Converter.getAppPlaylist(playlist));
+    }
+
 
     /**
      * Parent activity(mListener) must supply the following operations
      */
     public interface OnPlaylistUpdateRequestListener {
-        public void upvoteSong(Song song);
-
-        public void downvoteSong(Song song);
-
-        public void deleteSong(Song song);
-
-        public void clearSongVote(Song song);
-
         public Song getSongFromId(String songId);
     }
 
@@ -119,8 +126,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     @Override
     public void onResume() {
         super.onResume();
-      PlaylistRequest request = new PlaylistRequest();
-        new LoadPlaylistTask().execute(request);
+        mClient.getEventPlaylist(new LoadPlaylistCallback());
     }
 
     /**
@@ -149,9 +155,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
             if (isChecked) {
                 downvoteButton.setChecked(false);
-                mListener.upvoteSong(song);
+                mClient.upvoteSong(song);
             } else if (!downvoteButton.isChecked()) {
-                mListener.clearSongVote(song);
+                mClient.clearSongVote(song);
             }
         }
     }
@@ -173,9 +179,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 //TODO: warning, causes onDownvoteClick to be called, resulting in
                 //two calls to the server when only one may be necessary...
                 upvoteButton.setChecked(false);
-                mListener.downvoteSong(song);
+                mClient.downvoteSong(song);
             } else if (!upvoteButton.isChecked()) {
-                mListener.clearSongVote(song);
+                mClient.clearSongVote(song);
             }
         }
     }
@@ -190,31 +196,24 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 return;
             }
 
-            mListener.deleteSong(song);
+            mClient.deleteSong(song);
 
-            //need to redraw the listview?
-            new LoadPlaylistTask().execute();
+            //update the playlist after deleting song
+            mClient.getEventPlaylist(new LoadPlaylistCallback());
         }
     }
 
 
-    private class LoadPlaylistTask extends AsyncTask<PlaylistRequest, Void, Playlist> {
+    private class LoadPlaylistCallback implements Callback<space.collabify.android.collabify.models.domain.Playlist> {
         @Override
-        protected Playlist doInBackground(PlaylistRequest... params) {
-            if(params != null && params.length > 0){
-                return mClient.getEventPlaylist(params[0]);
-            }else {
-                return null;
-            }
+        public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+            updatePlaylist(playlist);
         }
 
         @Override
-        protected void onPostExecute(Playlist playlist) {
-            super.onPostExecute(playlist);
-            if(playlist != null){
-                updatePlaylist(playlist);
-                setRefreshing(false);
-            }
+        public void failure(RetrofitError error) {
+            //don't do anything, keep existing playlist?
+            Log.d(TAG, "Failed to load playlist:\n" + error.getMessage());
         }
     }
 }
