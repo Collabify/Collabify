@@ -225,15 +225,25 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     private class LoadPlaylistCallback implements Callback<space.collabify.android.collabify.models.domain.Playlist> {
         @Override
         public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
-            setRefreshing(false);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setRefreshing(false);
+                }
+            });
             updatePlaylist(playlist);
         }
 
         @Override
         public void failure(RetrofitError error) {
-            setRefreshing(false);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setRefreshing(false);
+                }
+            });
             //don't do anything, keep existing playlist?
-            Log.d(TAG, "Failed to load playlist:\n" + error.getMessage());
+            Log.d(TAG, "Failed to load playlist:\n" + error.toString());
         }
     }
 }

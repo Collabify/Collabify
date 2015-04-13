@@ -46,6 +46,7 @@ public class CollabifyClient {
 
     private CollabifyClient() {
         this.mCollabifyApi = new CollabifyApi();
+        mCollabifyApi.setCurrentUserId(mAppManger.getUser().getId());
     }
 
     public static CollabifyClient getInstance() {
