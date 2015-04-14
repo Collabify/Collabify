@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import retrofit.Callback;
@@ -30,6 +31,9 @@ public class CreateEventActivity extends CollabifyActivity {
         SHOW_SETTINGS = true;
         SHOW_LEAVE = false;
         SHOW_LOGOUT = true;
+
+        EditText mName = (EditText) findViewById(R.id.event_field);
+        mName.setText("Test123");
     }
 
     public void toDj(View view) {

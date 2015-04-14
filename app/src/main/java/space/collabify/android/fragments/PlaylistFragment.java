@@ -238,7 +238,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 }
             });
             //don't do anything, keep existing playlist?
-            Log.d(TAG, "Failed to load playlist:\n" + error.toString());
+            Log.e(TAG, "Failed to load playlist:\n" + error.toString());
         }
     }
 }
