@@ -47,6 +47,10 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         setContentView(R.layout.activity_login);
         getWindow().setBackgroundDrawableResource(R.drawable.background);
 
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = false;
+
         //don't want any user or event information to persist after a user logs out
         mAppManager.clearData();
     }

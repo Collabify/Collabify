@@ -39,6 +39,10 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_search);
 
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = true;
+        SHOW_LOGOUT = true;
+
         if(savedInstanceState == null){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mSearchDetailsFragment = new SearchDetailsFragment();

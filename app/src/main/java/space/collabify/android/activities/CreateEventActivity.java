@@ -26,6 +26,10 @@ public class CreateEventActivity extends CollabifyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = true;
     }
 
     public void toDj(View view) {

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +36,10 @@ public class CollabifierActivity extends PrimaryViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collabifier);
+
+      SHOW_SETTINGS = true;
+      SHOW_LEAVE = true;
+      SHOW_LOGOUT = true;
 
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.collabifierPager);
@@ -78,7 +83,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
                     .setTabListener(this));
         }
 
-      BroadcastReceiver broadcast_reciever = new BroadcastReceiver() {
+      BroadcastReceiver broadcast_receiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context arg0, Intent intent) {
@@ -88,7 +93,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
           }
         }
       };
-      registerReceiver(broadcast_reciever, new IntentFilter("leave_event"));
+      registerReceiver(broadcast_receiver, new IntentFilter("leave_event"));
 
     }
 

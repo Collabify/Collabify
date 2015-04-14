@@ -51,6 +51,10 @@ public class JoinEventActivity extends CollabifyActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_event);
 
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = true;
+
         if(savedInstanceState == null){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mJoinEventListFragment = new JoinEventListFragment();

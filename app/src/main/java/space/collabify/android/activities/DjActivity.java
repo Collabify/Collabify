@@ -24,6 +24,10 @@ public class DjActivity extends PrimaryViewActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dj);
 
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = true;
+        SHOW_LOGOUT = true;
+
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.djPager);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
