@@ -10,7 +10,9 @@ import retrofit.Callback;
 import java.util.ArrayList;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import retrofit.ResponseCallback;
 import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.User;
 import space.collabify.android.collabify.CollabifyClient;
@@ -106,4 +108,15 @@ public class AppManager {
       event = e;
       mClient.joinEvent(event, user, c);
     }
+
+  /**
+   * Leave an event as a non-DJ
+   */
+  public void leaveEvent(ResponseCallback c) {
+    try {
+      mClient.getCollabifyApi().leaveEvent(event.getId().toString(), c);
+    } catch (CollabifyApiException e) {
+      e.printStackTrace();
+    }
+  }
 }

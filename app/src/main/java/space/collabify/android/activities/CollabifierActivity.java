@@ -5,11 +5,16 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.*;
+import space.collabify.android.collabify.models.domain.User;
 
 /**
  * This file was born on March 11 at 14:02
@@ -17,6 +22,8 @@ import space.collabify.android.*;
 
 public class CollabifierActivity extends PrimaryViewActivity {
     // Tab titles
+    private static final String TAG = JoinEventActivity.class.getSimpleName();
+
     private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj};
 
@@ -79,14 +86,31 @@ public class CollabifierActivity extends PrimaryViewActivity {
 
         // exit if OK button pressed
         builder.setPositiveButton(getString(R.string.ok_button),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                      mCollabifyClient.resetPlaylist();
-                      mAppManager.getUser().setRole("NoRole");
-                      finish();
-                    }
+          new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              mAppManager.leaveEvent(
+                new ResponseCallback() {
+                  @Override
+                  public void success(Response response) {
+                    mCollabifyClient.resetPlaylist();
+                    mAppManager.getUser().setRole("NoRole");
+                    finish();
+                  }
+
+                  @Override
+                  public void failure(RetrofitError error) {
+                    Log.e(TAG, "Failed to leave event:\n" + error.toString());
+
+                    // TODO: Should this be handled the same event if server not ok?
+                    mCollabifyClient.resetPlaylist();
+                    mAppManager.getUser().setRole("NoRole");
+                    finish();
+                  }
                 }
+              );
+            }
+          }
         );
 
         // close dialog on Cancel button pressed
