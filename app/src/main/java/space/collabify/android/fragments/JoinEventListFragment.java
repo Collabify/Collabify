@@ -90,7 +90,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           //go on to event
-          ((JoinEventActivity) getActivity()).toCollabifier(event);
+          ((JoinEventActivity) getActivity()).toCollabifier(event, "");
         }
       });
     builder.setNegativeButton(getString(R.string.join_event_dialog_negative_text),

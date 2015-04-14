@@ -17,6 +17,10 @@ public class ModeSelectActivity extends CollabifyActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_mode);
+
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = true;
     }
 
     public void toCreateEvent(View view) {

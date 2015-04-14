@@ -11,12 +11,16 @@ import java.util.concurrent.Executors;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import retrofit.client.OkClient;
+import retrofit.client.Response;
 import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.collabify.api.CollabifyService;
+import space.collabify.android.collabify.models.Converter;
+import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Playlist;
@@ -46,7 +50,6 @@ public class CollabifyClient {
 
     private CollabifyClient() {
         this.mCollabifyApi = new CollabifyApi();
-        mCollabifyApi.setCurrentUserId(mAppManger.getUser().getId());
     }
 
     public static CollabifyClient getInstance() {
@@ -89,20 +92,31 @@ public class CollabifyClient {
      * Register a user to an event (server-side)
      * @param event Event to join
      * @param user Current user
+     * @param c Callback
      */
-    public void joinEvent(Event event, User user){
-      //seems like the actual server communication for joining events is
-      //taken care of
+    public void joinEvent(Event event, User user, Callback c){
       mJoinedEvent = event;
+
+      try {
+        getCollabifyApi().joinEvent(user.getId(), event.getId(), c);
+      } catch (CollabifyApiException e) {
+        e.printStackTrace();
+      }
     }
 
   /**
    * Create a new event (server-side)
    * @param event Event to create
-   * @param user Current user
+   * @param c Callback
    */
-    public void createEvent(Event event, User user) {
-      // TODO: implementation
+    public void createEvent(Event event, Callback c) {
+      mJoinedEvent = event;
+
+      try {
+        getCollabifyApi().createEvent(Converter.makeEvent(event), c);
+      } catch (CollabifyApiException e) {
+        e.printStackTrace();
+      }
     }
 
     /**
@@ -144,7 +158,9 @@ public class CollabifyClient {
     }
 
     public void getEventPlaylist(Callback<space.collabify.android.collabify.models.domain.Playlist> callback) throws CollabifyApiException {
+      if (mJoinedEvent != null) {
         mCollabifyApi.getEventPlaylist(mJoinedEvent.getId(), callback);
+      }
     }
 
     /**

@@ -15,25 +15,10 @@ public class SettingsActivity extends CollabifyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                //do nothing, avoid multiple of same activity
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        SHOW_SETTINGS = false;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = false;
     }
 
     public void toAbout(View view) {

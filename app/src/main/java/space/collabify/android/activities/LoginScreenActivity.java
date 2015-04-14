@@ -1,7 +1,9 @@
 package space.collabify.android.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import space.collabify.android.*;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.User;
 
@@ -43,6 +46,10 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setBackgroundDrawableResource(R.drawable.background);
+
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = false;
 
         //don't want any user or event information to persist after a user logs out
         mAppManager.clearData();
@@ -134,8 +141,27 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         u.setPremium(me.getString("product").equals("premium"));
         u.setId(me.getString("id"));
 
-        Intent i = new Intent(mainContext, ModeSelectActivity.class);
-        startActivity(i);
+        mAppManager.getCollabifyClient().getCollabifyApi().setCurrentUserId(me.getString("id"));
+
+        // If premium, choose mode. Else, just choose join event
+        if (mAppManager.getUser().isPremium()) {
+          Intent i = new Intent(mainContext, ModeSelectActivity.class);
+          startActivity(i);
+        } else {
+          AlertDialog alertDialog = new AlertDialog.Builder(mainContext).create();
+          alertDialog.setTitle("No Spotify Premium");
+          alertDialog.setMessage("Note: A Spotify Premium account is required to access the full features of this app.");
+          alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent i = new Intent(mainContext, JoinEventActivity.class);
+                startActivity(i);
+              }
+            });
+          alertDialog.show();
+        }
+
       } catch (Exception e) {
         e.printStackTrace();
         Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();

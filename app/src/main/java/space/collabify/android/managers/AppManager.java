@@ -3,10 +3,16 @@ package space.collabify.android.managers;
 import android.content.Context;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
+import com.squareup.okhttp.Call;
+
+import retrofit.Callback;
 
 import java.util.ArrayList;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import retrofit.ResponseCallback;
+import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.User;
 import space.collabify.android.collabify.CollabifyClient;
@@ -24,7 +30,10 @@ public class AppManager {
 
     private AppManager(){
       //private because singleton
-      newUser();
+    }
+
+    public CollabifyClient getCollabifyClient() {
+      return  mClient;
     }
 
     /**
@@ -76,7 +85,7 @@ public class AppManager {
     }
 
     private void newUser() {
-      user = new User("NEW USER", "12345");
+      user = new User("99999", "99999");
       user.setRole("NoRole");
     }
 
@@ -84,23 +93,30 @@ public class AppManager {
    * Create a local copy of the event
    * @param e Event to create
    */
-    public void createEvent(Event e) {
+    public void createEvent(Event e, Callback c) {
       // Add DJ to Event
-      ArrayList<User> userlist = new ArrayList<>();
-      userlist.add(getUser());
-      e.setmUserList(userlist);
 
       event = e;
-      mClient.createEvent(event, user);
+      mClient.createEvent(event, c);
     }
 
   /**
    * Join event and set local data
    * @param e Event to join
    */
-    public void joinEvent(Event e) {
+    public void joinEvent(Event e, Callback c) {
       event = e;
-      event.getmUserList().add(getUser());
-      mClient.joinEvent(event, user);
+      mClient.joinEvent(event, user, c);
     }
+
+  /**
+   * Leave an event as a non-DJ
+   */
+  public void leaveEvent(ResponseCallback c) {
+    try {
+      mClient.getCollabifyApi().leaveEvent(event.getId().toString(), c);
+    } catch (CollabifyApiException e) {
+      e.printStackTrace();
+    }
+  }
 }

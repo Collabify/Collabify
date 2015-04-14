@@ -14,6 +14,10 @@ public class AboutActivity extends CollabifyActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        SHOW_SETTINGS = false;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = false;
     }
 
 

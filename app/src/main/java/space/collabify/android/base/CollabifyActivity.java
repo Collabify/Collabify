@@ -1,6 +1,7 @@
 package space.collabify.android.base;
 
 import space.collabify.android.*;
+import space.collabify.android.activities.CollabifierActivity;
 import space.collabify.android.activities.CollabifierSettingsActivity;
 import space.collabify.android.activities.DjSettingsActivity;
 import space.collabify.android.activities.LoginScreenActivity;
@@ -23,6 +24,10 @@ public class CollabifyActivity extends ActionBarActivity {
     protected CollabifyClient mCollabifyClient;
     protected User mUser;
     protected String mRole;
+
+    protected boolean SHOW_SETTINGS = false;
+    protected boolean SHOW_LEAVE = false;
+    protected boolean SHOW_LOGOUT = false;
     //protected CollabifyActivity mParentActivity;
 
     public CollabifyActivity(){
@@ -30,6 +35,8 @@ public class CollabifyActivity extends ActionBarActivity {
         this.mCollabifyClient = mCollabifyClient.getInstance();
         //mParentActivity = (CollabifyActivity) getActivity();
         this.mUser = getCurrentUser();
+
+        invalidateOptionsMenu();
     }
 
     public CollabifyActivity(AppManager mAppManager, CollabifyClient collabifyClient) {
@@ -41,6 +48,10 @@ public class CollabifyActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_collabify_actions, menu);
+
+        menu.findItem(R.id.action_settings).setVisible(SHOW_SETTINGS);
+        menu.findItem(R.id.action_leave).setVisible(SHOW_LEAVE);
+        menu.findItem(R.id.action_logout).setVisible(SHOW_LOGOUT);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -98,6 +109,11 @@ public class CollabifyActivity extends ActionBarActivity {
                 Intent intent = new Intent(this, LoginScreenActivity.class);
                 startActivity(intent);
                 return true;
+
+          case R.id.action_leave:
+            Intent leave = new Intent("leave_event");
+            sendBroadcast(leave);
+            return true;
 
             default:
                 return super.onOptionsItemSelected(item);

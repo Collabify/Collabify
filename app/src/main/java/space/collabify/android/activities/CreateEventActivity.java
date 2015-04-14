@@ -2,10 +2,16 @@ package space.collabify.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.CheckBox;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.models.Event;
@@ -15,10 +21,19 @@ import space.collabify.android.models.Role;
  * This file was born on March 11 at 14:00
  */
 public class CreateEventActivity extends CollabifyActivity {
+  private static final String TAG = JoinEventActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        SHOW_SETTINGS = true;
+        SHOW_LEAVE = false;
+        SHOW_LOGOUT = true;
+
+        EditText mName = (EditText) findViewById(R.id.event_field);
+        mName.setText("Test123");
     }
 
     public void toDj(View view) {
@@ -49,9 +64,28 @@ public class CreateEventActivity extends CollabifyActivity {
         mPassword.setText("");
         mAllowFeedback.setChecked(false);
 
-        mAppManager.createEvent(new Event(name, "amcolash", password, allowFeedback));
-        Intent intent = new Intent(this, DjActivity.class);
-        startActivity(intent);
+        mAppManager.createEvent(new Event(name, mAppManager.getUser().getId(), password, allowFeedback),
+          new Callback<space.collabify.android.collabify.models.domain.Event>() {
+            @Override
+            public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
+              Log.d(TAG, "Successfully created");
+              Intent intent = new Intent(CreateEventActivity.this, DjActivity.class);
+              startActivity(intent);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+              Log.e(TAG, "Failed to create event:\n" + error.toString());
+
+              runOnUiThread(new Runnable() {
+                public void run() {
+                  Toast.makeText(CreateEventActivity.this, "Error creating Event. Please try again!", Toast.LENGTH_LONG).show();
+                }
+              });
+            }
+          }
+        );
+
       }
     }
 }

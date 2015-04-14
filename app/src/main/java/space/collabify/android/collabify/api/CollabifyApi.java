@@ -28,7 +28,7 @@ public class CollabifyApi {
     private static final String COLLABIFY_ENDPOINT = "http://collabify.space:" + PORT;
 
     private CollabifyService mCollabifyService;
-    private String mCurrentUserId;
+    private static String mCurrentUserId;
 
     public CollabifyApi() {
         Executor executor = Executors.newSingleThreadExecutor();
@@ -41,8 +41,8 @@ public class CollabifyApi {
         mCollabifyService = restAdapter.create(CollabifyService.class);
     }
 
-    public void setCurrentUserId(String currentUserId) {
-        this.mCurrentUserId = currentUserId;
+    public static void setCurrentUserId(String currentUserId) {
+        mCurrentUserId = currentUserId;
     }
 
 
@@ -472,7 +472,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public UserDO joinEvent(String eventId) throws CollabifyApiException {
+    public User joinEvent(String eventId) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -487,7 +487,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void joinEvent(String currentUserId, String eventId, Callback<UserDO> callback) throws CollabifyApiException {
+    public void joinEvent(String currentUserId, String eventId, Callback<User> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
