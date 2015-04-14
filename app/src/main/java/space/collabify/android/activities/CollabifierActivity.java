@@ -1,7 +1,11 @@
 package space.collabify.android.activities;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -74,56 +78,72 @@ public class CollabifierActivity extends PrimaryViewActivity {
                     .setTabListener(this));
         }
 
+      BroadcastReceiver broadcast_reciever = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+          String action = intent.getAction();
+          if (action.equals("leave_event")) {
+            leaveEvent();
+          }
+        }
+      };
+      registerReceiver(broadcast_reciever, new IntentFilter("leave_event"));
+
     }
 
 
     @Override
     public void onBackPressed () {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // construct the dialog
-        builder.setTitle(R.string.title_exit_event);
-        builder.setMessage(R.string.label_exit_event);
+      leaveEvent();
+    }
 
-        // exit if OK button pressed
-        builder.setPositiveButton(getString(R.string.ok_button),
-          new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              mAppManager.leaveEvent(
-                new ResponseCallback() {
-                  @Override
-                  public void success(Response response) {
-                    mCollabifyClient.resetPlaylist();
-                    mAppManager.getUser().setRole("NoRole");
-                    finish();
-                  }
+    public void leaveEvent() {
+      final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      // construct the dialog
+      builder.setTitle(R.string.title_exit_event);
+      builder.setMessage(R.string.label_exit_event);
 
-                  @Override
-                  public void failure(RetrofitError error) {
-                    Log.e(TAG, "Failed to leave event:\n" + error.toString());
-
-                    // TODO: Should this be handled the same event if server not ok?
-                    mCollabifyClient.resetPlaylist();
-                    mAppManager.getUser().setRole("NoRole");
-                    finish();
-                  }
+      // exit if OK button pressed
+      builder.setPositiveButton(getString(R.string.ok_button),
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            mAppManager.leaveEvent(
+              new ResponseCallback() {
+                @Override
+                public void success(Response response) {
+                  mCollabifyClient.resetPlaylist();
+                  mAppManager.getUser().setRole("NoRole");
+                  finish();
                 }
-              );
-            }
+
+                @Override
+                public void failure(RetrofitError error) {
+                  Log.e(TAG, "Failed to leave event:\n" + error.toString());
+
+                  // TODO: Should this be handled the same event if server not ok?
+                  mCollabifyClient.resetPlaylist();
+                  mAppManager.getUser().setRole("NoRole");
+                  finish();
+                }
+              }
+            );
           }
-        );
+        }
+      );
 
-        // close dialog on Cancel button pressed
-        builder.setNegativeButton(getString(R.string.cancel_button),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }
-        );
+      // close dialog on Cancel button pressed
+      builder.setNegativeButton(getString(R.string.cancel_button),
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            dialog.cancel();
+          }
+        }
+      );
 
-        builder.show();
+      builder.show();
     }
 
 }

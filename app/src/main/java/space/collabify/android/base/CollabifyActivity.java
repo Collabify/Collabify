@@ -1,6 +1,7 @@
 package space.collabify.android.base;
 
 import space.collabify.android.*;
+import space.collabify.android.activities.CollabifierActivity;
 import space.collabify.android.activities.CollabifierSettingsActivity;
 import space.collabify.android.activities.DjSettingsActivity;
 import space.collabify.android.activities.LoginScreenActivity;
@@ -98,6 +99,11 @@ public class CollabifyActivity extends ActionBarActivity {
                 Intent intent = new Intent(this, LoginScreenActivity.class);
                 startActivity(intent);
                 return true;
+
+          case R.id.action_leave:
+            Intent leave = new Intent("leave_event");
+            sendBroadcast(leave);
+            return true;
 
             default:
                 return super.onOptionsItemSelected(item);
