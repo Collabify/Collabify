@@ -101,7 +101,7 @@ public class CollabifyClient {
 
       try {
         getCollabifyApi().joinEvent(user.getId(), event.getId(), c);
-      } catch (Exception e) {
+      } catch (CollabifyApiException e) {
         e.printStackTrace();
       }
     }

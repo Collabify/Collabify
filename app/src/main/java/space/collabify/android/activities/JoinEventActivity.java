@@ -21,9 +21,11 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.fragments.JoinEventListFragment;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Role;
+import space.collabify.android.models.User;
 
 /**
  * This file was born on March 11 at 14:00
@@ -96,12 +98,15 @@ public class JoinEventActivity extends CollabifyActivity implements
             mAppManager.getUser().setRole(Role.COLLABIFIER);
 
           mAppManager.joinEvent(event,
-            new Callback<space.collabify.android.collabify.models.domain.Event> () {
+            new Callback<space.collabify.android.collabify.models.domain.User> () {
               @Override
-              public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
-                Log.d(TAG, "Successfully joined");
-                Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
-                startActivity(intent);
+              public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
+                User current = mAppManager.getUser();
+                if (current.getId().equals(user.getUserId())) {
+                  Log.d(TAG, "Successfully joined");
+                  Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
+                  startActivity(intent);
+                }
               }
 
               @Override

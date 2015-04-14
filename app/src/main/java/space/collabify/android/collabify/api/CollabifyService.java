@@ -32,7 +32,7 @@ public interface CollabifyService {
     public static final String LONG_HEADER = "longitude";
 
     public static final String USER_PATHVAL = "userId";
-    public static final String USERS_URL = "users/";
+    public static final String USERS_URL = "/users/";
     public static final String USER_URL = USERS_URL + "{" + USER_PATHVAL + "}/";
 
     public static final String EVENT_PATHVAL = "eventId";
@@ -42,7 +42,7 @@ public interface CollabifyService {
     public static final String EVENT_USER_URL = EVENT_USERS_URL + "{" + USER_PATHVAL + "}";
     public static final String EVENT_USER_ROLE_URL = EVENT_USER_URL + "role/";
 
-    public static final String PLAYLIST_URL = EVENT_URL + "playlist/";
+    public static final String PLAYLIST_URL = EVENT_URL + "/playlist/";
     public static final String SONG_PATHVAL = "songId";
     public static final String SONG_URL = PLAYLIST_URL + "{" + SONG_PATHVAL + "}/";
 
@@ -355,7 +355,7 @@ public interface CollabifyService {
      * @return
      */
     @POST(EVENT_USERS_URL)
-    public UserDO joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
+    public User joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Join an event
@@ -365,7 +365,7 @@ public interface CollabifyService {
      * @param callback
      */
     @POST(EVENT_USERS_URL)
-    public void joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<UserDO> callback);
+    public void joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<User> callback);
 
     /**
      * Leave an event
