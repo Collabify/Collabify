@@ -10,6 +10,27 @@
     <!-- placeholder for event list fragment, not sure why it has to be done like this -->
     <FrameLayout android:id="@+id/event_list_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/button3">
+
+    </FrameLayout>
+
+  <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/label_create_event"
+    android:id="@+id/button3"
+    android:layout_gravity="left|top"
+    android:layout_margin="7dp"
+    android:onClick="toCreateEvent"
+    android:nestedScrollingEnabled="true"/>
+
+  <View android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:id="@+id/collabifier_line"
+        android:layout_above="@+id/event_list_frame"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

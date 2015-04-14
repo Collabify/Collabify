@@ -1,13 +1,16 @@
 package space.collabify.android.activities;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -130,6 +133,24 @@ public class JoinEventActivity extends CollabifyActivity implements
             //bad password, don't do anything
             Toast.makeText(JoinEventActivity.this, "Bad Password!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void toCreateEvent(View v) {
+      if (mAppManager.getUser().isPremium()) {
+        Intent intent = new Intent(this, CreateEventActivity.class);
+        startActivity(intent);
+      } else {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("No Spotify Premium");
+        alertDialog.setMessage("We are sorry, but you need Spotify Premium to access the DJ Mode.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+          new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+              dialog.dismiss();
+            }
+          });
+        alertDialog.show();
+      }
     }
 
 

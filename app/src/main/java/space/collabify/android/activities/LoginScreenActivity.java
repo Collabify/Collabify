@@ -136,6 +136,8 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
       progress.dismiss();
 
       try {
+        finish();
+
         User u = mAppManager.getUser();
         u.setName(me.getString("display_name"));
         u.setPremium(me.getString("product").equals("premium"));
@@ -143,24 +145,8 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
 
         mAppManager.getCollabifyClient().getCollabifyApi().setCurrentUserId(me.getString("id"));
 
-        // If premium, choose mode. Else, just choose join event
-        if (mAppManager.getUser().isPremium()) {
-          Intent i = new Intent(mainContext, ModeSelectActivity.class);
-          startActivity(i);
-        } else {
-          AlertDialog alertDialog = new AlertDialog.Builder(mainContext).create();
-          alertDialog.setTitle("No Spotify Premium");
-          alertDialog.setMessage("Note: A Spotify Premium account is required to access the full features of this app.");
-          alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-            new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Intent i = new Intent(mainContext, JoinEventActivity.class);
-                startActivity(i);
-              }
-            });
-          alertDialog.show();
-        }
+        Intent i = new Intent(mainContext, JoinEventActivity.class);
+        startActivity(i);
 
       } catch (Exception e) {
         e.printStackTrace();

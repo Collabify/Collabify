@@ -51,20 +51,17 @@
 
         <!-- Mode Activities-->
         <activity
-            android:name="space.collabify.android.activities.ModeSelectActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_mode_select" />
-
-        <activity
             android:name="space.collabify.android.activities.CreateEventActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_create_event" >
+        </activity>
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="space.collabify.android.activities.ModeSelectActivity" />
+        <activity
+          android:name="space.collabify.android.activities.JoinEventActivity"
+          android:screenOrientation="portrait"
+          android:configChanges="keyboardHidden|orientation|screenSize"
+          android:label="@string/label_join_event" >
         </activity>
 
         <!-- Tab Activites-->
@@ -79,18 +76,6 @@
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_dj" />
-
-        <activity
-            android:name="space.collabify.android.activities.JoinEventActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_join_event" >
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="space.collabify.android.activities.ModeSelectActivity" />
-        </activity>
-
 
         <!-- make for sending search string in an intent -->
         <activity android:name="space.collabify.android.activities.DetailedSearchActivity"
