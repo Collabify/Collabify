@@ -92,11 +92,9 @@ public class CollabifyClient {
      * Register a user to an event (server-side)
      * @param event Event to join
      * @param user Current user
+     * @param c Callback
      */
     public void joinEvent(Event event, User user, Callback c){
-      //seems like the actual server communication for joining events is
-      //taken care of
-
       mJoinedEvent = event;
 
       try {
@@ -109,11 +107,16 @@ public class CollabifyClient {
   /**
    * Create a new event (server-side)
    * @param event Event to create
-   * @param user Current user
+   * @param c Callback
    */
-    public void createEvent(Event event, User user, Callback c) {
-      // TODO: implementation
-      joinEvent(event, user, c);
+    public void createEvent(Event event, Callback c) {
+      mJoinedEvent = event;
+
+      try {
+        getCollabifyApi().createEvent(Converter.makeEvent(event), c);
+      } catch (CollabifyApiException e) {
+        e.printStackTrace();
+      }
     }
 
     /**

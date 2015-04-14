@@ -3,6 +3,10 @@ package space.collabify.android.collabify.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import space.collabify.android.collabify.models.domain.EventSettings;
+import space.collabify.android.collabify.models.domain.Location;
+import space.collabify.android.collabify.models.network.EventDO;
+import space.collabify.android.collabify.models.network.EventRequestDO;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
@@ -34,5 +38,22 @@ public class Converter {
       Event appEvent = new Event(event.getName(), event.getEventId(),
         event.getSettings().getPassword(), event.getSettings().isAllowVoting());
       return appEvent;
+    }
+
+    public static EventRequestDO makeEvent(Event event) {
+      EventRequestDO eventNew = new EventRequestDO();
+      eventNew.setName(event.getName());
+
+      EventSettings eventSettings = new EventSettings();
+      eventSettings.setPassword(event.getPassword());
+      eventSettings.setAllowVoting(event.isAllowVoting());
+      eventNew.setSettings(eventSettings);
+
+      Location eventLocation = new Location();
+      eventLocation.setLatitude(296);
+      eventLocation.setLongitude(-248);
+      eventNew.setLocation(eventLocation);
+
+      return eventNew;
     }
 }

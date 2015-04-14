@@ -97,7 +97,7 @@ public class AppManager {
       // Add DJ to Event
 
       event = e;
-      mClient.createEvent(event, user, c);
+      mClient.createEvent(event, c);
     }
 
   /**

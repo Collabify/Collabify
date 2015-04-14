@@ -56,7 +56,7 @@ public class CreateEventActivity extends CollabifyActivity {
         mPassword.setText("");
         mAllowFeedback.setChecked(false);
 
-        mAppManager.createEvent(new Event(name, "amcolash", password, allowFeedback),
+        mAppManager.createEvent(new Event(name, mAppManager.getUser().getId(), password, allowFeedback),
           new Callback<space.collabify.android.collabify.models.domain.Event>() {
             @Override
             public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
