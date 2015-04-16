@@ -31,11 +31,12 @@
         android:src="@drawable/ic_plus"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:layout_alignBottom="@+id/song_details_album_art"
+        android:background="#00ffffff"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_margin="5dp"
-        android:background="#00ffffff"/>
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"/>
 
 </RelativeLayout>
