@@ -14,11 +14,13 @@ import retrofit.http.Path;
 import space.collabify.android.collabify.models.domain.Event;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.collabify.models.domain.User;
+import space.collabify.android.collabify.models.network.UserRequestDO;
 
 /**
  * Holds all the Collabify endpoints and uses Retrofit to return objects
@@ -77,7 +79,7 @@ public interface CollabifyService {
      * @return
      */
     @POST(USERS_URL)
-    public User addUser(@Header(USER_HEADER) String currentUserId, @Body UserDO user);
+    public User addUser(@Header(USER_HEADER) String currentUserId, @Body UserRequestDO user);
 
     /**
      * Add a user to the server
@@ -87,7 +89,7 @@ public interface CollabifyService {
      * @return
      */
     @POST(USERS_URL)
-    public void addUser(@Header(USER_HEADER) String currentUserId, @Body UserDO user, Callback<User> callback);
+    public void addUser(@Header(USER_HEADER) String currentUserId, @Body UserRequestDO user, Callback<User> callback);
 
     /**
      * Update the user's showName
@@ -161,7 +163,7 @@ public interface CollabifyService {
      * @return
      */
     @POST(PLAYLIST_URL)
-    public Playlist addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body Song song);
+    public Playlist addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song);
 
     /**
      * Add a song to an event's playlist
@@ -172,7 +174,7 @@ public interface CollabifyService {
      * @param callback
      */
     @POST(PLAYLIST_URL)
-    public void addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body Song song, Callback<Playlist> callback);
+    public void addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song, Callback<Playlist> callback);
 
     /**
      * Reorder an event's playlist

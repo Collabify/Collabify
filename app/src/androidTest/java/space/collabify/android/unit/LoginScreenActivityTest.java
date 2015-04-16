@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import space.collabify.android.R;
 import space.collabify.android.activities.LoginScreenActivity;
 import space.collabify.android.activities.ModeSelectActivity;
-import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.AppManager2;
 
 /**
  * This file was born on March 20, at 14:08
@@ -19,7 +19,7 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
 
     private ImageButton mLoginButton;
     private LoginScreenActivity mActivity;
-    private AppManager mAppManager;
+    private AppManager2 mAppManager;
 
     public LoginScreenActivityTest(){
         super(LoginScreenActivity.class);
@@ -33,7 +33,7 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = getActivity();
-        mAppManager = AppManager.getInstance();
+        mAppManager = AppManager2.getInstance();
         mLoginButton = (ImageButton) mActivity.findViewById(R.id.loginButton);
     }
 
@@ -44,7 +44,7 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
      */
     public void testBackDoesntGoToModeSelect() {
         //first log user out of spotify
-         mAppManager.spotifyLogout(getInstrumentation().getTargetContext());
+        mAppManager.logout(getInstrumentation().getTargetContext(), null);
 
         Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(ModeSelectActivity.class.getName(), null, false);
 

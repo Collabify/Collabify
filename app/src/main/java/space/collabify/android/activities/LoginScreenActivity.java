@@ -19,10 +19,14 @@ import com.spotify.sdk.android.player.ConnectionStateCallback;
 import org.json.JSONObject;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.*;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.AppManager2;
 import space.collabify.android.models.User;
 
 /**
@@ -51,8 +55,6 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         SHOW_LEAVE = false;
         SHOW_LOGOUT = false;
 
-        //don't want any user or event information to persist after a user logs out
-        mAppManager.clearData();
     }
 
     public void loginWithSpotify(View view) {
@@ -87,81 +89,89 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
             }
 
             if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
-                //TODO: something with the response.getAccessToken() but not sure what yet
-                AppManager.getInstance().getUser().setAccessToken(response.getAccessToken());
-                SpotifyApi mSpotifyApi = new SpotifyApi();
-                mSpotifyApi.setAccessToken(response.getAccessToken());
-                AppManager.getInstance().setSpotifyApi(mSpotifyApi);
-
-
-                new LongOperation().execute(response.getAccessToken());
-
                 mainContext = this;
                 progress = ProgressDialog.show(this, "Logging you in",  "Crunching the numbers", true);
+
+                // handle all post login stuff in the app manager
+                AppManager2.getInstance().login(response.getAccessToken(), new ResponseCallback() {
+                    @Override
+                    public void success(Response response) {
+                        progress.dismiss();
+                        finish();
+                        Intent i = new Intent(mainContext, JoinEventActivity.class);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        progress.dismiss();
+                        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         }
     }
 
-  private class LongOperation extends AsyncTask<String, Void, JSONObject> {
-
-    @Override
-    protected JSONObject doInBackground(String... params) {
-      try {
-        JSONObject me = Json.getJsonObject(
-          "https://api.spotify.com/v1/me",
-          new String[] {"Authorization"},
-          new String[] {"Bearer " + params[0]}
-        );
-
-        JSONObject myUser = new JSONObject();
-        myUser.put("name", me.getString("display_name"));
-
-        Json.postJSONObject(
-          Endpoints.USERS,
-          myUser,
-          new String[] {"userid"},
-          new String[] {me.getString("id")}
-        );
-
-        return me;
-      } catch (Exception e) {
-        e.printStackTrace();
-        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
-      }
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(JSONObject me) {
-      progress.dismiss();
-
-      try {
-        finish();
-
-        User u = mAppManager.getUser();
-        u.setName(me.getString("display_name"));
-        u.setPremium(me.getString("product").equals("premium"));
-        u.setId(me.getString("id"));
-
-        mAppManager.getCollabifyClient().getCollabifyApi().setCurrentUserId(me.getString("id"));
-
-        Intent i = new Intent(mainContext, JoinEventActivity.class);
-        startActivity(i);
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
-      }
-
-    }
-
-    @Override
-    protected void onPreExecute() {
-    }
-
-    @Override
-    protected void onProgressUpdate(Void... values) {}
-  }
+//  private class LongOperation extends AsyncTask<String, Void, JSONObject> {
+//
+//    @Override
+//    protected JSONObject doInBackground(String... params) {
+//      try {
+//        JSONObject me = Json.getJsonObject(
+//          "https://api.spotify.com/v1/me",
+//          new String[] {"Authorization"},
+//          new String[] {"Bearer " + params[0]}
+//        );
+//
+//        JSONObject myUser = new JSONObject();
+//        myUser.put("name", me.getString("display_name"));
+//
+//        Json.postJSONObject(
+//          Endpoints.USERS,
+//          myUser,
+//          new String[] {"userid"},
+//          new String[] {me.getString("id")}
+//        );
+//
+//        return me;
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+//      }
+//      return null;
+//    }
+//
+//    @Override
+//    protected void onPostExecute(JSONObject me) {
+//      progress.dismiss();
+//
+//      try {
+//        finish();
+//
+//        User u = mAppManager.getUser();
+//        u.setName(me.getString("display_name"));
+//        u.setPremium(me.getString("product").equals("premium"));
+//        u.setId(me.getString("id"));
+//
+//        mAppManager.getCollabifyClient().getCollabifyApi().setCurrentUserId(me.getString("id"));
+//
+//        Intent i = new Intent(mainContext, JoinEventActivity.class);
+//        startActivity(i);
+//
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+//      }
+//
+//    }
+//
+//    @Override
+//    protected void onPreExecute() {
+//    }
+//
+//    @Override
+//    protected void onProgressUpdate(Void... values) {}
+//  }
 
 
     @Override

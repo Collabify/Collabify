@@ -26,6 +26,7 @@ import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.fragments.JoinEventListFragment;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Role;
 import space.collabify.android.models.User;
@@ -104,30 +105,39 @@ public class JoinEventActivity extends CollabifyActivity implements
         if(event.getPassword().equalsIgnoreCase(password)){
             mAppManager.getUser().setRole(Role.COLLABIFIER);
 
-          mAppManager.joinEvent(event,
-            new Callback<space.collabify.android.collabify.models.domain.User> () {
-              @Override
-              public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
-                User current = mAppManager.getUser();
-                if (current.getId().equals(user.getUserId())) {
-                  Log.d(TAG, "Successfully joined");
-                  Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
-                  startActivity(intent);
+            mAppManager.joinEvent(event.getId(), new CollabifyCallback<space.collabify.android.collabify.models.domain.User>() {
+                @Override
+                public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
+                    User current = mAppManager.getUser();
+                    if (current.getId().equals(user.getUserId())) {
+                        Log.d(TAG, "Successfully joined");
+                        Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
+                        startActivity(intent);
+                    }
                 }
-              }
 
-              @Override
-              public void failure(RetrofitError error) {
-                Log.e(TAG, "Failed to join event:\n" + error.toString());
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e(TAG, "Failed to join event:\n" + error.toString());
 
-                runOnUiThread(new Runnable() {
-                  public void run() {
-                    Toast.makeText(JoinEventActivity.this, "Error joining Event. Please try again!", Toast.LENGTH_LONG).show();
-                  }
-                });
-              }
-            }
-          );
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(JoinEventActivity.this, "Error joining Event. Please try again!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void exception(Exception e) {
+                    Log.e(TAG, "Failed to join event:\n" + e.getClass().getSimpleName());
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(JoinEventActivity.this, "Error joining Event. Please try again!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
 
         } else {
             //bad password, don't do anything
@@ -136,21 +146,21 @@ public class JoinEventActivity extends CollabifyActivity implements
     }
 
     public void toCreateEvent(View v) {
-      if (mAppManager.getUser().isPremium()) {
-        Intent intent = new Intent(this, CreateEventActivity.class);
-        startActivity(intent);
-      } else {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("No Spotify Premium");
-        alertDialog.setMessage("We are sorry, but you need Spotify Premium to access the DJ Mode.");
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-          new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-              dialog.dismiss();
-            }
-          });
-        alertDialog.show();
-      }
+        if (mAppManager.getUser().isPremium()) {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            startActivity(intent);
+        } else {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("No Spotify Premium");
+            alertDialog.setMessage("We are sorry, but you need Spotify Premium to access the DJ Mode.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
     }
 
 

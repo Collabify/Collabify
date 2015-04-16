@@ -19,11 +19,14 @@ import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
 import kaaes.spotify.webapi.android.SpotifyService;
-import space.collabify.android.collabify.CollabifyClient;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.R;
 
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.AppManager2;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
 import space.collabify.android.requests.PlaylistRequest;
@@ -34,11 +37,11 @@ import space.collabify.android.requests.PlaylistRequest;
 public class BasePlayerFragment extends Fragment implements ConnectionStateCallback, PlayerNotificationCallback, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
+    private AppManager2 mAppManager;
+
     private Player mPlayer;
 
     private Playlist mPlaylist;
-
-    private SpotifyService mAPI;
 
     private boolean isDJ;
     private boolean currSongDidStart = false;
@@ -53,6 +56,7 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         isDJ = AppManager.getInstance().getUser().getRole().isDJ();
+        mAppManager = AppManager2.getInstance();
         if (isDJ) {
             setUpPlayer();
         }
@@ -84,12 +88,28 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     private void setUpPlayer() {
-        new UpdatePlaylistTask().execute();
+        mAppManager.loadEventPlaylist(new CollabifyCallback<Playlist>() {
+            @Override
+            public void exception(Exception e) {
+
+            }
+
+            @Override
+            public void success(Playlist playlist, Response response) {
+                mPlaylist = playlist;
+                updateSong();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
+
         String clientID = getResources().getString(R.string.client_id);
         Config mPlayerConfig = new Config(getActivity().getApplicationContext(),
                 AppManager.getInstance().getUser().getAccessToken(),
                 clientID);
-        mAPI = AppManager.getInstance().getSpotifyApi().getApi();
         mPlayer = Spotify.getPlayer(mPlayerConfig, this, new Player.InitializationObserver() {
 
             @Override
@@ -180,21 +200,6 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
         else {
             //pause song
             mPlayer.pause();
-        }
-    }
-
-
-    private class UpdatePlaylistTask extends AsyncTask<Void, Integer, Playlist> {
-
-        @Override
-        protected void onPostExecute(Playlist playlist) {
-            mPlaylist = playlist;
-            updateSong();
-        }
-
-        @Override
-        protected Playlist doInBackground(Void... params) {
-            return CollabifyClient.getInstance().getEventPlaylist(new PlaylistRequest());
         }
     }
 }

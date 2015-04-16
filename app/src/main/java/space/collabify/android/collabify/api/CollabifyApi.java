@@ -5,6 +5,7 @@ import com.squareup.okhttp.OkHttpClient;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import retrofit.Callback;
 import retrofit.ResponseCallback;
@@ -18,7 +19,9 @@ import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.collabify.models.domain.User;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
+import space.collabify.android.collabify.models.network.UserRequestDO;
 
 /**
  * Created by ricardolopez on 4/12/15.
@@ -27,8 +30,8 @@ public class CollabifyApi {
     private static final int PORT = 1337;
     private static final String COLLABIFY_ENDPOINT = "http://collabify.space:" + PORT;
 
-    private CollabifyService mCollabifyService;
-    private static String mCurrentUserId;
+    private final CollabifyService mCollabifyService;
+    private String mCurrentUserId;
 
     public CollabifyApi() {
         Executor executor = Executors.newSingleThreadExecutor();
@@ -41,8 +44,12 @@ public class CollabifyApi {
         mCollabifyService = restAdapter.create(CollabifyService.class);
     }
 
-    public static void setCurrentUserId(String currentUserId) {
+    public void setCurrentUserId(String currentUserId) {
         mCurrentUserId = currentUserId;
+    }
+
+    public void clearCurrentUserId() {
+        mCurrentUserId = null;
     }
 
 
@@ -78,7 +85,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public User addUser(UserDO user) throws CollabifyApiException {
+    public User addUser(UserRequestDO user) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -93,7 +100,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public void addUser(UserDO user, Callback<User> callback) throws CollabifyApiException {
+    public void addUser(UserRequestDO user, Callback<User> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -196,7 +203,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public Playlist addSong(String eventId, Song song) throws CollabifyApiException {
+    public Playlist addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -211,7 +218,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void addSong(String eventId, Song song, Callback<Playlist> callback) throws CollabifyApiException {
+    public void addSong(String eventId, SongRequestDO song, Callback<Playlist> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -487,7 +494,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void joinEvent(String currentUserId, String eventId, Callback<User> callback) throws CollabifyApiException {
+    public void joinEvent(String eventId, Callback<User> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -557,6 +564,4 @@ public class CollabifyApi {
 
         mCollabifyService.changeUserRole(mCurrentUserId, eventId, userId, role, callback);
     }
-
-
 }

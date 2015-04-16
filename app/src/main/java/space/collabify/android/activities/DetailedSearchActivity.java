@@ -10,11 +10,15 @@ import android.view.Menu;
 
 import java.util.ArrayList;
 
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.R;
+import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
 import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Song;
 import space.collabify.android.requests.PlaylistRequest;
 
@@ -103,10 +107,9 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         builder.show();
     }
 
-    private void addSong(final Song song){
+    private void addSong(Song song){
         // TODO make server call
-
-        new PostSongToServer().execute(song);
+        mAppManager.addSong(song, null);
     }
 
 
@@ -186,42 +189,6 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
             }
 
             onSpotifySearchComplete(songs);
-        }
-    }
-
-    private class PostSongToServer extends AsyncTask<Song, Void, Void> {
-
-        protected Void doInBackground(Song... songs) {
-
-            Song song = songs[0];
-
-            String url = Endpoints.PLAYLIST.replaceAll(":eventID", mAppManager.getEvent().getId());
-
-            String[] headerKey = new String[]{"userid"};
-
-            String[] headerValue = new String[]{getCurrentUser().getId()};
-
-            JSONObject jsonObject = new JSONObject();
-
-            try {
-                jsonObject.put("title", song.getTitle())
-                          .put("artist", song.getArtist())
-                          .put("album", song.getAlbum())
-                          .put("year", 99999)
-                          .put("artworkUrl", song.getArtwork());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            String response = Json.postJSONObject(url, jsonObject, headerKey, headerValue);
-
-            mCollabifyClient.getEventPlaylist(new PlaylistRequest()).addSong(song);
-
-            return null;
-        }
-
-        protected void onPostExecute(Void v) {
-
         }
     }
 }

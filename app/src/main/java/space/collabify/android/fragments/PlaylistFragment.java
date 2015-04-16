@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.base.CollabifyActivity;
@@ -22,10 +23,13 @@ import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.collabify.models.Converter;
 import space.collabify.android.controls.ImageToggleButton;
+import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.AppManager2;
+import space.collabify.android.managers.CollabifyCallback;
+import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
-import space.collabify.android.collabify.CollabifyClient;
 import space.collabify.android.requests.PlaylistRequest;
 
 
@@ -45,9 +49,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     protected CollabifyActivity mParentActivity;
     protected PlaylistListAdapter mAdapter;
 
-    private CollabifyClient mClient = CollabifyClient.getInstance();
-    private CollabifyApi mCollabifyApi = new CollabifyApi();
+    private AppManager2 mAppManager;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAppManager = AppManager2.getInstance();
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -75,13 +83,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      * Starts a background task to get playlist updates
      */
     private void initiateRefresh() {
-        setRefreshing(true);
-        try {
-            mClient.getEventPlaylist(new LoadPlaylistCallback());
-        } catch (CollabifyApiException e) {
-            setRefreshing(false);
-            e.printStackTrace();
-        }
+        callLoadPlaylist();
     }
 
     /**
@@ -103,15 +105,6 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
             adapter.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
         }
     }
-
-    /**
-     * wraps updatePlaylist for server models
-     * @param playlist
-     */
-    private void updatePlaylist(space.collabify.android.collabify.models.domain.Playlist playlist){
-        updatePlaylist(Converter.getAppPlaylist(playlist));
-    }
-
 
     /**
      * Parent activity(mListener) must supply the following operations
@@ -148,7 +141,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     }
 
     public void onUpvoteClick(CompoundButton view, boolean isChecked) {
-        if (!mClient.isPlaylistUpdating()) {
+        if (!mAppManager.isPlaylistUpdating()) {
             //upvote_icon, or unupvote the song in the row
             ViewGroup rowLayout = (ViewGroup) view.getParent();
             ImageToggleButton downvoteButton = (ImageToggleButton) rowLayout.getChildAt(DOWNVOTE_POS);
@@ -162,15 +155,15 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
             if (isChecked) {
                 downvoteButton.setChecked(false);
-                mClient.upvoteSong(song);
+                mAppManager.upvoteSong(song, null);
             } else if (!downvoteButton.isChecked()) {
-                mClient.clearSongVote(song);
+                mAppManager.clearSongVote(song, null);
             }
         }
     }
 
     public void onDownvoteClick(CompoundButton view, boolean isChecked) {
-        if (!mClient.isPlaylistUpdating()) {
+        if (!mAppManager.isPlaylistUpdating()) {
             //upvote_icon, or unupvote the song in the row
             ViewGroup rowLayout = (ViewGroup) view.getParent();
             ImageToggleButton upvoteButton = (ImageToggleButton) rowLayout.getChildAt(UPVOTE_POS);
@@ -186,15 +179,15 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 //TODO: warning, causes onDownvoteClick to be called, resulting in
                 //two calls to the server when only one may be necessary...
                 upvoteButton.setChecked(false);
-                mClient.downvoteSong(song);
+                mAppManager.downvoteSong(song, null);
             } else if (!upvoteButton.isChecked()) {
-                mClient.clearSongVote(song);
+                mAppManager.clearSongVote(song, null);
             }
         }
     }
 
     public void onDeleteClick(View view) {
-        if (!mClient.isPlaylistUpdating()) {
+        if (!mAppManager.isPlaylistUpdating()) {
             ViewGroup rowViewGroup = (ViewGroup) view.getParent();
             Song song = getSongFromLayout(rowViewGroup);
 
@@ -203,23 +196,37 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 return;
             }
 
-            mClient.deleteSong(song);
-
-            //update the playlist after deleting song
-            try {
-                setRefreshing(true);
-                mClient.getEventPlaylist(new LoadPlaylistCallback());
-            } catch (CollabifyApiException e){
-                setRefreshing(false);
-                e.printStackTrace();
-            }
+            callRemoveSong(song);
         }
     }
 
+    private void callRemoveSong(Song song) {
+        mAppManager.removeSong(song, new CollabifyResponseCallback() {
+            @Override
+            public void success(Response response) {
+                callLoadPlaylist();
+            }
 
-    private class LoadPlaylistCallback implements Callback<space.collabify.android.collabify.models.domain.Playlist> {
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "Failed to remove the song:\n" + retrofitError.getMessage());
+            }
+
+            @Override
+            public void exception(Exception e) {
+
+            }
+        });
+    }
+
+    private void callLoadPlaylist() {
+        setRefreshing(true);
+        mAppManager.loadEventPlaylist(new LoadPlaylistCallback());
+    }
+
+    private class LoadPlaylistCallback implements CollabifyCallback<Playlist> {
         @Override
-        public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+        public void success(Playlist playlist, Response response) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -230,7 +237,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         }
 
         @Override
-        public void failure(RetrofitError error) {
+        public void failure(RetrofitError retrofitError) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -238,7 +245,17 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 }
             });
             //don't do anything, keep existing playlist?
-            Log.e(TAG, "Failed to load playlist:\n" + error.toString());
+            Log.e(TAG, "Failed to load playlist:\n" + retrofitError.getMessage());
+        }
+
+        @Override
+        public void exception(Exception e) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setRefreshing(false);
+                }
+            });
         }
     }
 }
