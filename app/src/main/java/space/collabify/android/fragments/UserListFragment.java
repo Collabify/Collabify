@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -161,6 +162,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
       final User u = userlist.get(position);
 
       final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
+      final Integer[] icons = {R.drawable.promoted_user, R.drawable.collabifier_icon, R.drawable.blacklisted_icon};
 
       int rolePos = -1;
       switch(u.getRole().getRole()) {
@@ -179,24 +181,23 @@ public class UserListFragment extends SwipeRefreshListFragment {
         roles[rolePos] += " (Current)";
       }
 
-      if (!CollabifyClient.getInstance().isUsersUpdating()) {
+      if (CollabifyClient.getInstance().isUsersUpdating()) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        builder.setTitle("Change User Role:");
-        builder.setItems(roles, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int item) {
-            // Do something with the selection if not same as current role
-            String current = u.getRole().getRole() + " (Current)";
-            if (!current.equals(roles[item])) {
-              Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
-              u.getRole().setRole(roles[item]);
-              adapter.notifyDataSetChanged();
+        ListAdapter ladapter = new ArrayAdapterWithIcon(getActivity(), roles, icons);
+
+        new AlertDialog.Builder(getActivity()).setTitle("Change User Role")
+          .setAdapter(ladapter, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item ) {
+              // Do something with the selection if not same as current role
+              String current = u.getRole().getRole() + " (Current)";
+              if (!current.equals(roles[item])) {
+                Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
+                u.getRole().setRole(roles[item]);
+                adapter.notifyDataSetChanged();
+              }
             }
-          }
-        });
-        builder.setNegativeButton(android.R.string.cancel, null);
-        AlertDialog alert = builder.create();
-        alert.show();
+          }).setNegativeButton(android.R.string.cancel, null).show();
+
       }
     }
 }

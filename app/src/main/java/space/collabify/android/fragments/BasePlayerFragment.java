@@ -107,7 +107,7 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
 
     private void updateSong() {
 
-        if (mSongTitle != null) {
+        if (mSongTitle != null && mCurrentSong != null) {
             if (mPlaylist != null) {
                 mCurrentSong = mPlaylist.getCurrent();
                 mSongTitle.setText(mCurrentSong.getTitle());
