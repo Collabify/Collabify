@@ -6,8 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.managers.CollabifyResponseCallback;
 
 public class SettingsActivity extends CollabifyActivity {
 
@@ -27,11 +30,26 @@ public class SettingsActivity extends CollabifyActivity {
     }
 
     public void toLogOut(View view) {
-        mAppManager.getUser().setRole("NoRole");
-        mAppManager.spotifyLogout(getApplicationContext());
-        //return to login activity
-        Intent intent = new Intent(this, LoginScreenActivity.class);
-        startActivity(intent);
+        final Intent intent = new Intent(this, LoginScreenActivity.class);
+
+        mAppManager.logout(getApplicationContext(), new CollabifyResponseCallback() {
+            @Override
+            public void exception(Exception e) {
+
+            }
+
+            @Override
+            public void success(Response response) {
+                //return to login activity
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 
 }

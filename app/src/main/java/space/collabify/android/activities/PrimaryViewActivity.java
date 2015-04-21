@@ -105,7 +105,7 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
     @Override
     public Song getSongFromId(String songId) {
         //assumes that all songs are uniquely identified by their id
-        return mCollabifyClient.getSongById(songId);
+        return mAppManager.getSong(songId);
     }
 
 }
