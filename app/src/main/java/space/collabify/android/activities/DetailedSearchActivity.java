@@ -10,12 +10,18 @@ import android.view.Menu;
 
 import java.util.ArrayList;
 
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.R;
+import space.collabify.android.collabify.api.CollabifyService;
+import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.models.Song;
+import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.requests.PlaylistRequest;
 
 // for json data from spotify search
@@ -31,6 +37,10 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
     private static final String TAG = DetailedSearchActivity.class.getSimpleName();
 
     private SearchDetailsFragment mSearchDetailsFragment;
+
+    private RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://collabify.space:1337").build();
+
+    private CollabifyService mCollabifyService = restAdapter.create(CollabifyService.class);
 
     String query;
 
@@ -89,7 +99,10 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: send song to server
-                        addSong(song);
+
+                        mCollabifyService.addSong(mAppManager.getUser().getId(), mAppManager.getEvent().getId(), song, new afterAddSong());
+
+                        // addSong(song);
                         dialog.cancel();
                     }
                 });
@@ -103,10 +116,26 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         builder.show();
     }
 
+
+
     private void addSong(final Song song){
         // TODO make server call
 
         new PostSongToServer().execute(song);
+    }
+
+    private class afterAddSong implements Callback<Playlist>{
+
+        @Override
+        public void success(Playlist playlist, Response response) {
+
+            System.out.println("this is a test");
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+
+        }
     }
 
 
@@ -177,7 +206,23 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
                     String artUrl = album.getJSONArray("images").getJSONObject(0).getString("url");
 
-                    songs.add(new Song(title, artist, albumName, 9999, id, artUrl, AppManager.getInstance().getUser().getId()));
+                    Song newSong = new Song();
+
+                    newSong.setTitle(title);
+
+                    newSong.setArtist(artist);
+
+                    newSong.setAlbum(albumName);
+
+                    newSong.setYear(9999);
+
+                    newSong.setSongId(id);
+
+                    newSong.setArtworkUrl(artUrl);
+
+                    newSong.setUserId(mAppManager.getUser().getId());
+
+                    songs.add(newSong);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -208,14 +253,12 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                           .put("artist", song.getArtist())
                           .put("album", song.getAlbum())
                           .put("year", 99999)
-                          .put("artworkUrl", song.getArtwork());
+                          .put("artworkUrl", song.getArtworkUrl());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             String response = Json.postJSONObject(url, jsonObject, headerKey, headerValue);
-
-            mCollabifyClient.getEventPlaylist(new PlaylistRequest()).addSong(song);
 
             return null;
         }

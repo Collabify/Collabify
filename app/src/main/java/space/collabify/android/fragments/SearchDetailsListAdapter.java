@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import space.collabify.android.R;
-import space.collabify.android.models.Song;
+import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.models.User;
 
 /**

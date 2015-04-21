@@ -12,7 +12,7 @@ import java.util.List;
 
 import space.collabify.android.collabify.CollabifyClient;
 import space.collabify.android.activities.DetailedSearchActivity;
-import space.collabify.android.models.Song;
+import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.models.User;
 
 
