@@ -44,7 +44,7 @@ public class LoginScreenActivityTest extends ActivityInstrumentationTestCase2<Lo
      */
     public void testBackDoesntGoToModeSelect() {
         //first log user out of spotify
-         mAppManager.spotifyLogout(getInstrumentation().getTargetContext());
+        mAppManager.logout(getInstrumentation().getTargetContext(), null);
 
         Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(ModeSelectActivity.class.getName(), null, false);
 

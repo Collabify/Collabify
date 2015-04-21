@@ -9,6 +9,8 @@ import java.util.List;
 public class Event {
     private String mName;
     private boolean mAllowVoting;
+    private String mLatitude;
+    private String mLongitude;
     private String mPassword;
     private String mId;
     private List<User> mUserList;
@@ -31,7 +33,7 @@ public class Event {
     }
 
     public boolean isProtectedEvent() {
-        return !(mPassword.equals(""));
+        return (mPassword != null && !("".equals(mPassword)));
     }
 
     public String getPassword() {
@@ -64,5 +66,21 @@ public class Event {
 
     public void setmUserList(List<User> mUserList) {
         this.mUserList = mUserList;
+    }
+
+    public String getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(String mLongitude) {
+        this.mLongitude = mLongitude;
+    }
+
+    public String getLatitude() {
+        return mLatitude;
+    }
+
+    public void setLatitude(String mLatitude) {
+        this.mLatitude = mLatitude;
     }
 }
