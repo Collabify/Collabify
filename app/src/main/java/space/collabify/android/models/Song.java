@@ -1,5 +1,6 @@
 package space.collabify.android.models;
 
+
 import space.collabify.android.managers.AppManager;
 
 /**

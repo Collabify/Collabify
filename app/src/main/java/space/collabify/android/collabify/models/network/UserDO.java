@@ -10,7 +10,7 @@ import space.collabify.android.collabify.models.domain.UserSettings;
 public class UserDO {
     private String name;
     private String userId;
-    private UserSettings settings;
+    private String role;
 
     public String getName() {
         return name;
@@ -28,11 +28,11 @@ public class UserDO {
         this.userId = userId;
     }
 
-    public UserSettings getSettings() {
-        return settings;
+    public String getRole() {
+        return role;
     }
 
-    public void setSettings(UserSettings settings) {
-        this.settings = settings;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

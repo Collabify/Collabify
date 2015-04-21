@@ -3,7 +3,6 @@ package space.collabify.android.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -19,7 +18,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import space.collabify.android.collabify.CollabifyClient;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.requests.UsersRequest;
 import space.collabify.android.R;
 import space.collabify.android.models.Role;
@@ -65,7 +67,26 @@ public class UserListFragment extends SwipeRefreshListFragment {
         Log.i(TAG, "initiate event list refresh");
         UsersRequest request = new UsersRequest();
         setRefreshing(true);
-        new LoadUsersTask().execute(request);
+        AppManager.getInstance().loadEventUsers(new CollabifyCallback<List<User>>() {
+            @Override
+            public void exception(Exception e) {
+                setRefreshing(false);
+            }
+
+            @Override
+            public void success(List<User> users, Response response) {
+                //post results
+                onRefreshComplete(users);
+                setRefreshing(false);
+
+                userlist = users;
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                setRefreshing(false);
+            }
+        });
     }
 
     /**
@@ -135,27 +156,6 @@ public class UserListFragment extends SwipeRefreshListFragment {
         }
     }
 
-    /**
-     * A background task to fetch users from our server without slowing ui
-     */
-    private class LoadUsersTask extends AsyncTask<UsersRequest, Void, List<User>> {
-        @Override
-        protected List<User> doInBackground(UsersRequest... params) {
-            return CollabifyClient.getInstance().getUsers(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<User> users) {
-            super.onPostExecute(users);
-
-            //post results
-            onRefreshComplete(users);
-            setRefreshing(false);
-
-            userlist = users;
-        }
-    }
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
       final User u = userlist.get(position);
@@ -179,7 +179,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
         roles[rolePos] += " (Current)";
       }
 
-      if (!CollabifyClient.getInstance().isUsersUpdating()) {
+      if (!AppManager.getInstance().isUsersUpdating()) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle("Change User Role:");
