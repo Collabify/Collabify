@@ -43,7 +43,6 @@ public class CreateEventActivity extends CollabifyActivity {
       EditText mPassword = (EditText) findViewById(R.id.password_field);
       CheckBox mPasswordProtected = (CheckBox) findViewById(R.id.password_protected_checkbox);
       CheckBox mAllowFeedback = (CheckBox) findViewById(R.id.allow_feedback_checkbox);
-      CheckBox mRestrictNearby = (CheckBox) findViewById(R.id.restrict_nearby_checkbox);
 
       String name = mName.getText().toString();
       String password = mPassword.getText().toString();
@@ -58,17 +57,21 @@ public class CreateEventActivity extends CollabifyActivity {
         mPassword.setError(null);
         mName.setError(null);
 
-        mName.setText("");
-        mPassword.setText("");
-        mPasswordProtected.setChecked(false);
-        mPassword.setText("");
-        mAllowFeedback.setChecked(false);
-
         mAppManager.createEvent(new Event(name, mAppManager.getUser().getId(), password, allowFeedback),
           new Callback<space.collabify.android.collabify.models.domain.Event>() {
             @Override
             public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
               Log.d(TAG, "Successfully created");
+
+              runOnUiThread(new Runnable() {
+                public void run() {
+                  ((EditText) findViewById(R.id.event_field)).setText("");
+                  ((EditText) findViewById(R.id.password_field)).setText("");
+                  ((CheckBox) findViewById(R.id.password_protected_checkbox)).setChecked(false);
+                  ((CheckBox) findViewById(R.id.allow_feedback_checkbox)).setChecked(false);
+                }
+              });
+
               Intent intent = new Intent(CreateEventActivity.this, DjActivity.class);
               startActivity(intent);
             }
