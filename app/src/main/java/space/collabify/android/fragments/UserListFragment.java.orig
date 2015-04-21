@@ -77,12 +77,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
             @Override
             public void success(List<User> users, Response response) {
                 //post results
-                final List<User> temp = users;
-                getActivity().runOnUiThread(new Runnable() {
-                  public void run() {
-                    onRefreshComplete(temp);
-                  }
-                });
+                onRefreshComplete(users);
                 setRefreshing(false);
 
                 userlist = users;
@@ -186,7 +181,8 @@ public class UserListFragment extends SwipeRefreshListFragment {
         roles[rolePos] += " (Current)";
       }
 
-      if (AppManager.getInstance().isUsersUpdating()) {
+<<<<<<< HEAD
+      if (CollabifyClient.getInstance().isUsersUpdating()) {
 
         ListAdapter ladapter = new ArrayAdapterWithIcon(getActivity(), roles, icons);
 
@@ -200,6 +196,20 @@ public class UserListFragment extends SwipeRefreshListFragment {
                 u.getRole().setRole(roles[item]);
                 adapter.notifyDataSetChanged();
               }
+=======
+      if (!AppManager.getInstance().isUsersUpdating()) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        builder.setTitle("Change User Role:");
+        builder.setItems(roles, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int item) {
+            // Do something with the selection if not same as current role
+            String current = u.getRole().getRole() + " (Current)";
+            if (!current.equals(roles[item])) {
+              Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
+              u.getRole().setRole(roles[item]);
+              adapter.notifyDataSetChanged();
+>>>>>>> fc41bd0920d2e1cde406cf3c6162b93039143f07
             }
           }).setNegativeButton(android.R.string.cancel, null).show();
 

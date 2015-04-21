@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -35,12 +38,16 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         View customView = inflater.inflate(R.layout.playlist_collabifier_list_row, parent, false);
         Song songItem = getItem(position);
 
+        ImageView albumArt = (ImageView) customView.findViewById(R.id.playlist_collabifier_album_art);
         TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
         TextView songIdView = (TextView) customView.findViewById(R.id.playlist_row_song_id);
         //TODO: set upvote_icon,downvote_icon button image backgrounds depending on user vote?
         ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
         ImageToggleButton downvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
+
+        //use picasso to load album art
+        Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
 
         //initialize button states
         upvoteButton.setChecked(songItem.isUpvoted());
