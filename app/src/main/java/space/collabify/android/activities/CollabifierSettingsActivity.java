@@ -29,7 +29,7 @@ public class CollabifierSettingsActivity extends CollabifyActivity { //BaseSetti
 
     public void toLogOut(View view) {
         mAppManager.getUser().setRole("NoRole");
-        mAppManager.spotifyLogout(getApplicationContext());
+        mAppManager.logout(getApplicationContext(), null);
         //return to login activity
         Intent intent = new Intent(this, LoginScreenActivity.class);
         startActivity(intent);

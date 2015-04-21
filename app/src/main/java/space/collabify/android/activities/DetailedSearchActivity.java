@@ -20,9 +20,7 @@ import space.collabify.android.R;
 import space.collabify.android.collabify.api.CollabifyService;
 import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
-import space.collabify.android.managers.AppManager;
-import space.collabify.android.collabify.models.domain.Song;
-import space.collabify.android.requests.PlaylistRequest;
+import space.collabify.android.models.Song;
 
 // for json data from spotify search
 import org.json.JSONArray;
@@ -100,8 +98,6 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: send song to server
 
-                        mCollabifyService.addSong(mAppManager.getUser().getId(), mAppManager.getEvent().getId(), song, new afterAddSong());
-
                         // addSong(song);
                         dialog.cancel();
                     }
@@ -114,14 +110,6 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     }
                 });
         builder.show();
-    }
-
-
-
-    private void addSong(final Song song){
-        // TODO make server call
-
-        new PostSongToServer().execute(song);
     }
 
     private class afterAddSong implements Callback<Playlist>{
@@ -206,21 +194,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
                     String artUrl = album.getJSONArray("images").getJSONObject(0).getString("url");
 
-                    Song newSong = new Song();
-
-                    newSong.setTitle(title);
-
-                    newSong.setArtist(artist);
-
-                    newSong.setAlbum(albumName);
-
-                    newSong.setYear(9999);
-
-                    newSong.setSongId(id);
-
-                    newSong.setArtworkUrl(artUrl);
-
-                    newSong.setUserId(mAppManager.getUser().getId());
+                    Song newSong = new Song(title, artist, albumName, 9999, id, artUrl, mAppManager.getUser().getId());
 
                     songs.add(newSong);
 
@@ -240,7 +214,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
             Song song = songs[0];
 
-            String url = Endpoints.PLAYLIST.replaceAll(":eventID", mAppManager.getEvent().getId());
+            String url = Endpoints.PLAYLIST.replaceAll(":eventID", mAppManager.getEvent().getEventId());
 
             String[] headerKey = new String[]{"userid"};
 
@@ -253,7 +227,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                           .put("artist", song.getArtist())
                           .put("album", song.getAlbum())
                           .put("year", 99999)
-                          .put("artworkUrl", song.getArtworkUrl());
+                          .put("artworkUrl", song.getArtwork());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

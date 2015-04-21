@@ -1,15 +1,17 @@
 package space.collabify.android.base;
 
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import space.collabify.android.*;
-import space.collabify.android.activities.CollabifierActivity;
 import space.collabify.android.activities.CollabifierSettingsActivity;
 import space.collabify.android.activities.DjSettingsActivity;
 import space.collabify.android.activities.LoginScreenActivity;
 import space.collabify.android.activities.SettingsActivity;
-import space.collabify.android.collabify.CollabifyClient;
 import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.User;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -21,7 +23,6 @@ import android.view.MenuItem;
  */
 public class CollabifyActivity extends ActionBarActivity {
     protected AppManager mAppManager;
-    protected CollabifyClient mCollabifyClient;
     protected User mUser;
     protected String mRole;
 
@@ -32,16 +33,14 @@ public class CollabifyActivity extends ActionBarActivity {
 
     public CollabifyActivity(){
         this.mAppManager = AppManager.getInstance();
-        this.mCollabifyClient = mCollabifyClient.getInstance();
         //mParentActivity = (CollabifyActivity) getActivity();
         this.mUser = getCurrentUser();
 
         invalidateOptionsMenu();
     }
 
-    public CollabifyActivity(AppManager mAppManager, CollabifyClient collabifyClient) {
+    public CollabifyActivity(AppManager mAppManager) {
         this.mAppManager = mAppManager;
-        this.mCollabifyClient = collabifyClient;
     }
 
     @Override
@@ -104,10 +103,26 @@ public class CollabifyActivity extends ActionBarActivity {
             */
 
             case R.id.action_logout:
-                mAppManager.spotifyLogout(getApplicationContext());
-                //return to login activity
-                Intent intent = new Intent(this, LoginScreenActivity.class);
-                startActivity(intent);
+                final Context ctx = this;
+                mAppManager.logout(this, new CollabifyResponseCallback() {
+                    @Override
+                    public void success(Response response) {
+                        //return to login activity
+                        Intent intent = new Intent(ctx, LoginScreenActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+
+                    }
+
+                    @Override
+                    public void exception(Exception e) {
+
+                    }
+                });
+
                 return true;
 
           case R.id.action_leave:
