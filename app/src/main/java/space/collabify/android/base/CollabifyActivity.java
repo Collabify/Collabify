@@ -13,15 +13,28 @@ import space.collabify.android.models.User;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 /**
  * This file was born on March 11 at 13:44
  */
-public class CollabifyActivity extends ActionBarActivity {
+public class CollabifyActivity extends ActionBarActivity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
+    private static final String TAG = CollabifyActivity.class.getSimpleName();
     protected AppManager mAppManager;
     protected User mUser;
     protected String mRole;
@@ -30,6 +43,9 @@ public class CollabifyActivity extends ActionBarActivity {
     protected boolean SHOW_LEAVE = false;
     protected boolean SHOW_LOGOUT = false;
     //protected CollabifyActivity mParentActivity;
+
+
+    private static GoogleApiClient mGoogleApiClient;
 
     public CollabifyActivity(){
         this.mAppManager = AppManager.getInstance();
@@ -55,6 +71,39 @@ public class CollabifyActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(mGoogleApiClient == null){
+            buildGoogleApiClient();
+        }
+    }
+
+
+    /**
+     * Initializes the google api for location services
+     */
+    protected synchronized void buildGoogleApiClient(){
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -171,5 +220,39 @@ public class CollabifyActivity extends ActionBarActivity {
             return null;
         }
         return mAppManager.getUser();
+    }
+
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        LocationRequest request = LocationRequest.create().setInterval(100)
+                .setFastestInterval(0)
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setNumUpdates(1);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, this);
+
+        if(lastLocation != null){
+            mJoinEventListFragment.updateLocation(lastLocation);
+        }
+    }
+
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.w(TAG, "google api location services suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.w(TAG, "google api location services connection failed");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //update location
+        mJoinEventListFragment.updateLocation(location);
     }
 }
