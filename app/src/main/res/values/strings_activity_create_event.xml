@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="label_create_event">Create Event</string>
+  <string name="label_create_event">+ Create Event</string>
 
   <string name="create_event_button">Create Event</string>
   <string name="restrict_nearby_checkbox">Restrict to Nearby Users?</string>

@@ -161,7 +161,7 @@ public class JoinEventActivity extends CollabifyActivity implements
         } else {
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("No Spotify Premium");
-            alertDialog.setMessage("We are sorry, but you need Spotify Premium to access the DJ Mode.");
+            alertDialog.setMessage("We are sorry, but you need a Spotify Premium account to create events.");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
