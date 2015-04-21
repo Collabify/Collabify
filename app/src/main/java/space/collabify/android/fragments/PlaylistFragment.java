@@ -80,14 +80,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     /**
      * Updates the list of songs visible. Must be called by parent activity for anything interesting to happen
      *
-     * @param playlist the new playlist to be shown
+     * @param songs the new playlist to be shown
      */
-    private void updatePlaylist(Playlist playlist) {
+    private void updatePlaylist(List<Song> songs) {
         // Remove all items from the ListAdapter, and then replace them with the new items
         PlaylistListAdapter adapter = (PlaylistListAdapter) getListAdapter();
         adapter.clear();
 
-        List<Song> songs = playlist.getmList();
         if (songs.size() != 0) {
             for (Song song : songs) {
                 adapter.add(song);
@@ -215,16 +214,16 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         mAppManager.loadEventPlaylist(new LoadPlaylistCallback());
     }
 
-    private class LoadPlaylistCallback implements CollabifyCallback<Playlist> {
+    private class LoadPlaylistCallback implements CollabifyCallback<List<Song>> {
         @Override
-        public void success(Playlist playlist, Response response) {
+        public void success(final List<Song> songs, Response response) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     setRefreshing(false);
+                    updatePlaylist(songs);
                 }
             });
-            updatePlaylist(playlist);
         }
 
         @Override

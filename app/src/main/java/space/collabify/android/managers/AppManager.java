@@ -54,7 +54,9 @@ public class AppManager {
 
     private User mUser;
     private Event mEvent;
-    private Playlist mPlaylist;
+    private List<Song> mPlaylist;
+
+    private int currentSong = -1;
 
     private boolean mEventUpdating = false;
     private boolean mUsersUpdating = false;
@@ -550,7 +552,7 @@ public class AppManager {
      * @return
      */
     public Song getSong(String songId) {
-        for(Song song: mPlaylist.getmList()) {
+        for(Song song: mPlaylist) {
             if (song.getId().equals(songId)){
                 return song;
             }
@@ -563,15 +565,14 @@ public class AppManager {
      *
      * @param callback
      */
-    public void loadEventPlaylist(final CollabifyCallback<Playlist> callback) {
+    public void loadEventPlaylist(final CollabifyCallback<List<Song>> callback) {
 
         mPlaylistUpdating = true;
         try {
-            mCollabifyApi.getEventPlaylist(mEvent.getEventId(), new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
+            mCollabifyApi.getEventPlaylist(mEvent.getEventId(), new Callback<List<space.collabify.android.collabify.models.domain.Song>>() {
                 @Override
-                public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
-                    mPlaylist = Converter.getAppPlaylist(playlist);
-
+                public void success(List<space.collabify.android.collabify.models.domain.Song> songs, Response response) {
+                    mPlaylist = Converter.updatePlaylist(mPlaylist, songs);
                     mPlaylistUpdating = false;
 
                     // call callback success
@@ -605,7 +606,7 @@ public class AppManager {
      * @param song
      * @param callback
      */
-    public void addSong(Song song, final CollabifyCallback<Playlist> callback) {
+    public void addSong(Song song, final CollabifyCallback<Song> callback) {
 
         if (song == null) {
             return;
@@ -622,14 +623,15 @@ public class AppManager {
 
 
         try {
-            mCollabifyApi.addSong(mEvent.getEventId(), songDO, new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
+            mCollabifyApi.addSong(mEvent.getEventId(), songDO, new Callback<space.collabify.android.collabify.models.domain.Song>() {
                 @Override
-                public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+                public void success(space.collabify.android.collabify.models.domain.Song song, Response response) {
                     mPlaylistUpdating = false;
-                    mPlaylist = Converter.getAppPlaylist(playlist);
+                    Song songModel = Converter.toSong(song);
+                    mPlaylist.add(songModel);
 
                     if (callback != null) {
-                        callback.success(mPlaylist, response);
+                        callback.success(songModel, response);
                     }
                 }
 
@@ -688,4 +690,24 @@ public class AppManager {
             e.printStackTrace();
         }
     }
+
+    public Song getCurrentSong() {
+        if (mPlaylist == null || mPlaylist.size() == 0) {
+            return null;
+        }
+
+        if (currentSong == -1 || currentSong == mPlaylist.size() - 1) {
+            currentSong = 0;
+        }
+        return mPlaylist.get(currentSong);
+    }
+
+    public Song nextSong() {
+        if (mPlaylist == null || mPlaylist.size() == 0 || currentSong == mPlaylist.size() -1) {
+            return null;
+        }
+        currentSong++;
+        return mPlaylist.get(currentSong);
+    }
+
 }

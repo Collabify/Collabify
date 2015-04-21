@@ -17,6 +17,8 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import java.util.List;
+
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
@@ -34,19 +36,13 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
     private AppManager mAppManager;
-
     private Player mPlayer;
-
-    private Playlist mPlaylist;
+    private Song mCurrentSong;
+    private TextView mSongTitle;
+    private ImageToggleButton mPlayPauseBtn;
 
     private boolean isDJ;
     private boolean currSongDidStart = false;
-
-    private Song mCurrentSong;
-
-    private TextView mSongTitle;
-
-    private ImageToggleButton mPlayPauseBtn;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -84,16 +80,15 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     private void setUpPlayer() {
-        mAppManager.loadEventPlaylist(new CollabifyCallback<Playlist>() {
+        mAppManager.loadEventPlaylist(new CollabifyCallback<List<Song>>() {
             @Override
             public void exception(Exception e) {
 
             }
 
             @Override
-            public void success(Playlist playlist, Response response) {
-                mPlaylist = playlist;
-                updateSong();
+            public void success(List<Song> songs, Response response) {
+
             }
 
             @Override
@@ -122,10 +117,9 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     private void updateSong() {
-
-        if (mSongTitle != null && mCurrentSong != null) {
-            if (mPlaylist != null) {
-                mCurrentSong = mPlaylist.getCurrent();
+        if (mSongTitle != null) {
+            mCurrentSong = mAppManager.getCurrentSong();
+            if (mCurrentSong != null) {
                 mSongTitle.setText(mCurrentSong.getTitle());
             }
             else {
