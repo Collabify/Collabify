@@ -142,7 +142,7 @@ public interface CollabifyService {
      * @return
      */
     @GET(PLAYLIST_URL)
-    public Playlist getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
+    public List<Song> getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Get an event's playlist
@@ -152,7 +152,7 @@ public interface CollabifyService {
      * @param callback
      */
     @GET(PLAYLIST_URL)
-    public void getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<Playlist> callback);
+    public void getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<List<Song>> callback);
 
     /**
      * Add a song to an event's playlist
@@ -163,7 +163,7 @@ public interface CollabifyService {
      * @return
      */
     @POST(PLAYLIST_URL)
-    public Playlist addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song);
+    public Song addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song);
 
     /**
      * Add a song to an event's playlist
@@ -174,7 +174,7 @@ public interface CollabifyService {
      * @param callback
      */
     @POST(PLAYLIST_URL)
-    public void addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song, Callback<Playlist> callback);
+    public void addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song, Callback<Song> callback);
 
     /**
      * Reorder an event's playlist

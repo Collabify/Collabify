@@ -1,7 +1,9 @@
 package space.collabify.android.collabify.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Location;
@@ -19,18 +21,50 @@ import space.collabify.android.models.User;
  * Fill in methods as needed
  */
 public class Converter {
-    public static Playlist getAppPlaylist(space.collabify.android.collabify.models.domain.Playlist playlist){
-        ArrayList<Song> appSongs = new ArrayList<>(playlist.getSongs().size());
 
-        for(space.collabify.android.collabify.models.domain.Song song: playlist.getSongs()){
-            appSongs.add(getAppSong(song));
+    public static List<Song> updatePlaylist(List<Song> original, List<space.collabify.android.collabify.models.domain.Song> updated) {
+        if (updated == null) {
+            return null;
         }
 
-        Playlist appPlaylist = new Playlist("converted name", -1, appSongs);
-        return appPlaylist;
+        List<Song> converted = new ArrayList<Song>();
+
+        // convert the domain songs to model songs
+        for (space.collabify.android.collabify.models.domain.Song song: updated) {
+            converted.add(new Song(song.getTitle(),
+                    song.getArtist(),
+                    song.getAlbum(),
+                    song.getYear(),
+                    song.getSongId(),
+                    song.getArtworkUrl(),
+                    song.getUserId()));
+        }
+
+        // if original is not null we are creating an updated playlist
+        if (original != null) {
+            Map<String, Song> songMap = new HashMap<String, Song>();
+
+            for (Song song: original) {
+                if (song.isDownvoted() || song.isUpvoted()) {
+                    songMap.put(song.getId(), song);
+                }
+            }
+
+            for (Song song: converted) {
+                Song match = songMap.get(song.getId());
+                if (match != null && match.isDownvoted()) {
+                    song.downvote();
+                }
+                else if (match != null && match.isUpvoted()) {
+                    song.upvote();
+                }
+            }
+        }
+
+        return converted;
     }
 
-    public static Song getAppSong(space.collabify.android.collabify.models.domain.Song song){
+    public static Song toSong(space.collabify.android.collabify.models.domain.Song song){
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
                 song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId());
         return appSong;
