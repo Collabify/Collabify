@@ -20,7 +20,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import space.collabify.android.managers.AppManager2;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.requests.UsersRequest;
 import space.collabify.android.R;
@@ -67,7 +67,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
         Log.i(TAG, "initiate event list refresh");
         UsersRequest request = new UsersRequest();
         setRefreshing(true);
-        AppManager2.getInstance().loadEventUsers(new CollabifyCallback<List<User>>() {
+        AppManager.getInstance().loadEventUsers(new CollabifyCallback<List<User>>() {
             @Override
             public void exception(Exception e) {
                 setRefreshing(false);
@@ -179,7 +179,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
         roles[rolePos] += " (Current)";
       }
 
-      if (!AppManager2.getInstance().isUsersUpdating()) {
+      if (!AppManager.getInstance().isUsersUpdating()) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         builder.setTitle("Change User Role:");

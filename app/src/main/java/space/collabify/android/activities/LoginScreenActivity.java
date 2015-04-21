@@ -1,11 +1,8 @@
 package space.collabify.android.activities;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,18 +13,13 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 
-import org.json.JSONObject;
-
-import kaaes.spotify.webapi.android.SpotifyApi;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import space.collabify.android.*;
+import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
-import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.AppManager2;
-import space.collabify.android.models.User;
+import space.collabify.android.managers.CollabifyResponseCallback;
 
 /**
  * This file was born on March 11 at 13:57
@@ -93,7 +85,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                 progress = ProgressDialog.show(this, "Logging you in",  "Crunching the numbers", true);
 
                 // handle all post login stuff in the app manager
-                AppManager2.getInstance().login(response.getAccessToken(), new ResponseCallback() {
+                AppManager.getInstance().login(response.getAccessToken(), new CollabifyResponseCallback() {
                     @Override
                     public void success(Response response) {
                         progress.dismiss();
@@ -104,6 +96,12 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
 
                     @Override
                     public void failure(RetrofitError retrofitError) {
+                        progress.dismiss();
+                        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void exception(Exception e) {
                         progress.dismiss();
                         Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
                     }

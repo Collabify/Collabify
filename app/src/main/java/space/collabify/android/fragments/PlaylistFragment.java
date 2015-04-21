@@ -1,7 +1,6 @@
 package space.collabify.android.fragments;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -9,28 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.base.CollabifyActivity;
-import space.collabify.android.collabify.api.CollabifyApi;
-import space.collabify.android.collabify.api.CollabifyApiException;
-import space.collabify.android.collabify.models.Converter;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.AppManager2;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
-import space.collabify.android.requests.PlaylistRequest;
 
 
 /**
@@ -49,12 +40,12 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     protected CollabifyActivity mParentActivity;
     protected PlaylistListAdapter mAdapter;
 
-    private AppManager2 mAppManager;
+    private AppManager mAppManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAppManager = AppManager2.getInstance();
+        mAppManager = AppManager.getInstance();
     }
 
     @Override

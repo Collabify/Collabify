@@ -52,8 +52,8 @@ public class Converter {
       eventNew.setSettings(eventSettings);
 
       Location eventLocation = new Location();
-      eventLocation.setLatitude(296);
-      eventLocation.setLongitude(-248);
+      eventLocation.setLatitude("296");
+      eventLocation.setLongitude("-248");
       eventNew.setLocation(eventLocation);
 
       return eventNew;

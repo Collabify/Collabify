@@ -4,22 +4,22 @@ package space.collabify.android.collabify.models.domain;
  * Created by ricardolopez on 4/10/15.
  */
 public class Location {
-    private double latitude;
-    private double longitude;
+    private String latitude;
+    private String longitude;
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 }

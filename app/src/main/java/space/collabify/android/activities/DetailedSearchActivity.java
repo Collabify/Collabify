@@ -10,17 +10,11 @@ import android.view.Menu;
 
 import java.util.ArrayList;
 
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.R;
-import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Song;
-import space.collabify.android.requests.PlaylistRequest;
 
 // for json data from spotify search
 import org.json.JSONArray;

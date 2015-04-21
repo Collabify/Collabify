@@ -1,6 +1,5 @@
 package space.collabify.android.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,18 +17,15 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
-import kaaes.spotify.webapi.android.SpotifyService;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
 
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.AppManager2;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
-import space.collabify.android.requests.PlaylistRequest;
 
 /**
  * This file was born on March 11 at 14:11
@@ -37,7 +33,7 @@ import space.collabify.android.requests.PlaylistRequest;
 public class BasePlayerFragment extends Fragment implements ConnectionStateCallback, PlayerNotificationCallback, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
-    private AppManager2 mAppManager;
+    private AppManager mAppManager;
 
     private Player mPlayer;
 
@@ -56,7 +52,7 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         isDJ = AppManager.getInstance().getUser().getRole().isDJ();
-        mAppManager = AppManager2.getInstance();
+        mAppManager = AppManager.getInstance();
         if (isDJ) {
             setUpPlayer();
         }

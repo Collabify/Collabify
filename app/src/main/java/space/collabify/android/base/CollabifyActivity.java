@@ -1,16 +1,13 @@
 package space.collabify.android.base;
 
-import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.*;
-import space.collabify.android.activities.CollabifierActivity;
 import space.collabify.android.activities.CollabifierSettingsActivity;
 import space.collabify.android.activities.DjSettingsActivity;
 import space.collabify.android.activities.LoginScreenActivity;
 import space.collabify.android.activities.SettingsActivity;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.AppManager2;
 import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.User;
 
@@ -25,7 +22,7 @@ import android.view.MenuItem;
  * This file was born on March 11 at 13:44
  */
 public class CollabifyActivity extends ActionBarActivity {
-    protected AppManager2 mAppManager;
+    protected AppManager mAppManager;
     protected User mUser;
     protected String mRole;
 
@@ -35,14 +32,14 @@ public class CollabifyActivity extends ActionBarActivity {
     //protected CollabifyActivity mParentActivity;
 
     public CollabifyActivity(){
-        this.mAppManager = AppManager2.getInstance();
+        this.mAppManager = AppManager.getInstance();
         //mParentActivity = (CollabifyActivity) getActivity();
         this.mUser = getCurrentUser();
 
         invalidateOptionsMenu();
     }
 
-    public CollabifyActivity(AppManager2 mAppManager) {
+    public CollabifyActivity(AppManager mAppManager) {
         this.mAppManager = mAppManager;
     }
 

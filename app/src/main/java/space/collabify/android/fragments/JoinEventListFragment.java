@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.InputType;
@@ -18,14 +17,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import space.collabify.android.managers.AppManager2;
-import space.collabify.android.managers.CollabifyCallback;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.requests.EventsRequest;
 import space.collabify.android.R;
 import space.collabify.android.activities.JoinEventActivity;
@@ -38,6 +38,14 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     private static final String TAG = JoinEventListFragment.class.getSimpleName();
 
     private Location mLastUserLocation;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        LocationRequest locationRequest = LocationRequest.create();
+//        mLastUserLocation.setLatitude(10);
+//        mLastUserLocation.setLongitude(10);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -68,7 +76,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
             return;
         }
 
-        if (!AppManager2.getInstance().isEventUpdating()) {
+        if (!AppManager.getInstance().isEventUpdating()) {
             if (item.isProtectedEvent()) {
                 setupPasswordDialog(item);
             } else {
@@ -147,11 +155,16 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
         request.userLocation = mLastUserLocation;
 
         // load the events
-        AppManager2.getInstance().loadEvents(String.valueOf(mLastUserLocation.getLatitude()),
-                String.valueOf(mLastUserLocation.getLongitude()), new Callback<List<Event>>() {
+        AppManager.getInstance().loadEvents("10", "10", new Callback<List<Event>>() {
                     @Override
-                    public void success(List<Event> events, Response response) {
-                        onRefreshComplete(events);
+                    public void success(final List<Event> events, Response response) {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onRefreshComplete(events);
+                            }
+                        });
                     }
 
                     @Override

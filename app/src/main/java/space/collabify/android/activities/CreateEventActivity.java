@@ -22,7 +22,7 @@ import space.collabify.android.models.Role;
  * This file was born on March 11 at 14:00
  */
 public class CreateEventActivity extends CollabifyActivity {
-    private static final String TAG = JoinEventActivity.class.getSimpleName();
+    private static final String TAG = CreateEventActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +67,11 @@ public class CreateEventActivity extends CollabifyActivity {
             mPassword.setText("");
             mAllowFeedback.setChecked(false);
 
+            Event djEvent = new Event(name, mAppManager.getUser().getId(), password, allowFeedback);
+            djEvent.setLatitude("10");
+            djEvent.setLongitude("10");
 
-
-            mAppManager.createEvent(new Event(name, mAppManager.getUser().getId(), password, allowFeedback), new CollabifyCallback<space.collabify.android.collabify.models.domain.Event>() {
+            mAppManager.createEvent(djEvent, new CollabifyCallback<space.collabify.android.collabify.models.domain.Event>() {
                 @Override
                 public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
                     Log.d(TAG, "Successfully created");
