@@ -12,6 +12,7 @@
         android:layout_height="0dp"
         android:layout_width="0dp"
         android:enabled="false"/>
+
     <ImageView android:id="@+id/playlist_collabifier_album_art"
         android:layout_width="50dp"
         android:layout_height="50dp"
