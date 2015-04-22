@@ -28,6 +28,7 @@ public class CollabifyActivity extends ActionBarActivity {
 
     protected boolean SHOW_SETTINGS = false;
     protected boolean SHOW_LEAVE = false;
+    protected boolean SHOW_END = false;
     protected boolean SHOW_LOGOUT = false;
     //protected CollabifyActivity mParentActivity;
 
@@ -50,6 +51,7 @@ public class CollabifyActivity extends ActionBarActivity {
 
         menu.findItem(R.id.action_settings).setVisible(SHOW_SETTINGS);
         menu.findItem(R.id.action_leave).setVisible(SHOW_LEAVE);
+        menu.findItem(R.id.action_end).setVisible(SHOW_END);
         menu.findItem(R.id.action_logout).setVisible(SHOW_LOGOUT);
 
         return super.onCreateOptionsMenu(menu);
@@ -129,11 +131,14 @@ public class CollabifyActivity extends ActionBarActivity {
             Intent leave = new Intent("leave_event");
             sendBroadcast(leave);
             return true;
-
+          case R.id.action_end:
+              Intent end = new Intent("end_event");
+              sendBroadcast(end);
+              return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    } //TODO: add event event
 
     /** Launch settings activity */
     private void openSettings() {

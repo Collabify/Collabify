@@ -1,7 +1,11 @@
 package space.collabify.android.activities;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -23,6 +27,7 @@ public class DjActivity extends PrimaryViewActivity {
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks", "User List"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj, R.drawable.ic_users};
+    private BroadcastReceiver broadcast_receiver; //TODO: add this to DJ activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +35,7 @@ public class DjActivity extends PrimaryViewActivity {
         setContentView(R.layout.activity_dj);
 
         SHOW_SETTINGS = true;
-        SHOW_LEAVE = true;
+        SHOW_END = true;
         SHOW_LOGOUT = true;
 
         // Initilization
@@ -77,12 +82,28 @@ public class DjActivity extends PrimaryViewActivity {
 
         mViewPager.setCurrentItem(1);
 
+        broadcast_receiver = new BroadcastReceiver() { //TODO: add this to DJ activity
+
+            @Override
+            public void onReceive(Context arg0, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("end_event")) {
+                    endEvent();
+                }
+            }
+        };
+        registerReceiver(broadcast_receiver, new IntentFilter("end_event"));
+
     }
 
 
 
     @Override
     public void onBackPressed() {
+        endEvent();
+    }
+
+    private void endEvent(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // construct the dialog
         builder.setTitle(R.string.title_end_event);
@@ -124,7 +145,13 @@ public class DjActivity extends PrimaryViewActivity {
         );
 
         builder.show();
+
     }
 
+    @Override
+    protected void onStop() { //TODO: add this to DJ activity
+        unregisterReceiver(broadcast_receiver);
+        super.onStop();
+    }
 
 }
