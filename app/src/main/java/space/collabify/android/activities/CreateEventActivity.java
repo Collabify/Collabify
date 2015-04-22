@@ -61,12 +61,6 @@ public class CreateEventActivity extends CollabifyActivity {
             mPassword.setError(null);
             mName.setError(null);
 
-            mName.setText("");
-            mPassword.setText("");
-            mPasswordProtected.setChecked(false);
-            mPassword.setText("");
-            mAllowFeedback.setChecked(false);
-
             Event djEvent = new Event(name, mAppManager.getUser().getId(), password, allowFeedback);
             djEvent.setLatitude("10");
             djEvent.setLongitude("10");
@@ -75,6 +69,16 @@ public class CreateEventActivity extends CollabifyActivity {
                 @Override
                 public void success(space.collabify.android.collabify.models.domain.Event event, Response response) {
                     Log.d(TAG, "Successfully created");
+
+              runOnUiThread(new Runnable() {
+                public void run() {
+                  ((EditText) findViewById(R.id.event_field)).setText("");
+                  ((EditText) findViewById(R.id.password_field)).setText("");
+                  ((CheckBox) findViewById(R.id.password_protected_checkbox)).setChecked(false);
+                  ((CheckBox) findViewById(R.id.allow_feedback_checkbox)).setChecked(false);
+                }
+              });
+
                     Intent intent = new Intent(CreateEventActivity.this, DjActivity.class);
                     startActivity(intent);
                 }

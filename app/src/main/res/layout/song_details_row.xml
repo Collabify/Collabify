@@ -6,6 +6,8 @@
     <ImageView android:id="@+id/song_details_album_art"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
         android:src="@drawable/test_album_art"
         android:layout_margin="5dp"/>
 
@@ -26,11 +28,15 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/song_row_add"
-        android:src="@drawable/ic_menu_add"
-        android:layout_alignBottom="@+id/song_details_album_art"
+        android:src="@drawable/ic_plus"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:background="#00ffffff"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_margin="5dp"/>
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"/>
 
 </RelativeLayout>

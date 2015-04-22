@@ -114,10 +114,10 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         mAppManager.addSong(song, new afterAddSong());
     }
 
-    private class afterAddSong implements CollabifyCallback<Playlist>{
+    private class afterAddSong implements CollabifyCallback<Song>{
 
         @Override
-        public void success(Playlist playlist, Response response) {
+        public void success(Song song, Response response) {
 
             System.out.println("this is a test");
         }

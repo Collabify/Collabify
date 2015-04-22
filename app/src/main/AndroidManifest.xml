@@ -54,7 +54,10 @@
             android:name="space.collabify.android.activities.CreateEventActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_create_event" >
+            android:label="@string/label_create_event">
+            <meta-data
+              android:name="android.support.PARENT_ACTIVITY"
+              android:value="space.collabify.android.activities.JoinEventActivity"/>
         </activity>
 
         <activity

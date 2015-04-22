@@ -56,7 +56,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
-        temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "no artwork", ""));
+        temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRr1zUShmzD7lDdo5RBTBCphL_3KVi_R-6DPEq-l4H32K5uE48mOA", ""));
         User user = mParentActivity.getCurrentUser();
         mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
@@ -80,14 +80,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     /**
      * Updates the list of songs visible. Must be called by parent activity for anything interesting to happen
      *
-     * @param playlist the new playlist to be shown
+     * @param songs the new playlist to be shown
      */
-    private void updatePlaylist(Playlist playlist) {
+    private void updatePlaylist(List<Song> songs) {
         // Remove all items from the ListAdapter, and then replace them with the new items
         PlaylistListAdapter adapter = (PlaylistListAdapter) getListAdapter();
         adapter.clear();
 
-        List<Song> songs = playlist.getmList();
         if (songs.size() != 0) {
             for (Song song : songs) {
                 adapter.add(song);
@@ -215,16 +214,16 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         mAppManager.loadEventPlaylist(new LoadPlaylistCallback());
     }
 
-    private class LoadPlaylistCallback implements CollabifyCallback<Playlist> {
+    private class LoadPlaylistCallback implements CollabifyCallback<List<Song>> {
         @Override
-        public void success(Playlist playlist, Response response) {
+        public void success(final List<Song> songs, Response response) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     setRefreshing(false);
+                    updatePlaylist(songs);
                 }
             });
-            updatePlaylist(playlist);
         }
 
         @Override

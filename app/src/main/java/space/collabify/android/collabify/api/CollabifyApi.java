@@ -36,7 +36,7 @@ public class CollabifyApi {
     public CollabifyApi() {
         Executor executor = Executors.newSingleThreadExecutor();
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.BASIC)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setClient(new OkClient(new OkHttpClient()))
                 .setExecutors(executor, executor)
                 .setEndpoint(COLLABIFY_ENDPOINT)
@@ -172,7 +172,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public Playlist getEventPlaylist(String eventId) throws CollabifyApiException {
+    public List<Song> getEventPlaylist(String eventId) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -187,7 +187,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void getEventPlaylist(String eventId, Callback<Playlist> callback) throws CollabifyApiException {
+    public void getEventPlaylist(String eventId, Callback<List<Song>> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -203,7 +203,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public Playlist addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
+    public Song addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -218,7 +218,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void addSong(String eventId, SongRequestDO song, Callback<Playlist> callback) throws CollabifyApiException {
+    public void addSong(String eventId, SongRequestDO song, Callback<Song> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }

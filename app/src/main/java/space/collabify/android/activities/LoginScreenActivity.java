@@ -41,7 +41,6 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getWindow().setBackgroundDrawableResource(R.drawable.background);
 
         SHOW_SETTINGS = true;
         SHOW_LEAVE = false;

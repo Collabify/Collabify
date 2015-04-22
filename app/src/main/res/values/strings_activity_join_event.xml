@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_join_event">Choose Event to Join</string>
+    <string name="label_join_event">Create or Join an Event</string>
     <string name="join_event_button">Join Event</string>
     <string name="refresh_menu_item_title">Refresh</string>
     <string name="event_name_row">some text</string>
