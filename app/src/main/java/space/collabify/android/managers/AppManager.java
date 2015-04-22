@@ -662,6 +662,10 @@ public class AppManager {
      */
     public void removeSong(String songId, final CollabifyResponseCallback callback) {
 
+        if (songId == null) {
+            return;
+        }
+
         try {
             mCollabifyApi.removeSong(mEvent.getEventId(), songId, new ResponseCallback() {
                 @Override
