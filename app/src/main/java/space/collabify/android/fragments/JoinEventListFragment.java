@@ -155,7 +155,6 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
                     Double.toString(request.userLocation.getLongitude()), new Callback<List<Event>>() {
                 @Override
                 public void success(final List<Event> events, Response response) {
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -166,7 +165,6 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
-
                 }
             });
         }else{

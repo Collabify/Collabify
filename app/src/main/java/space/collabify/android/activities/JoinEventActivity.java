@@ -161,7 +161,6 @@ public class JoinEventActivity extends CollabifyActivity implements
         }
     }
 
-
     /**
      * Initializes the google api for location services
      */
