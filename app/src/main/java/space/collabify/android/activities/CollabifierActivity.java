@@ -150,7 +150,12 @@ public class CollabifierActivity extends PrimaryViewActivity {
 
     @Override
     protected void onStop() { //TODO: add this to DJ activity
-        unregisterReceiver(broadcast_receiver);
+
+        try {
+            unregisterReceiver(broadcast_receiver);
+        } catch(IllegalArgumentException e) {
+
+        }
         super.onStop();
     }
 }

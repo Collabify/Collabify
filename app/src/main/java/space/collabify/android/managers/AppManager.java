@@ -95,6 +95,10 @@ public class AppManager {
 
     }
 
+    public SpotifyService getmSpotifyService(){
+
+        return mSpotifyService;
+    }
 
     /*
      * User
