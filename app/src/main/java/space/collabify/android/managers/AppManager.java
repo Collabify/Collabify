@@ -617,6 +617,7 @@ public class AppManager {
         SongRequestDO songDO = new SongRequestDO();
         songDO.setAlbum(song.getAlbum());
         songDO.setArtist(song.getArtist());
+        songDO.setSongId(song.getId());
         songDO.setArtworkUrl(song.getArtwork());
         songDO.setTitle(song.getTitle());
         songDO.setYear(song.getYear());

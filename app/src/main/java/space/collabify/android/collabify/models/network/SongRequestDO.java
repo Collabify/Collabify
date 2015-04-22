@@ -7,6 +7,7 @@ public class SongRequestDO {
     private String title;
     private String artist;
     private String album;
+    private String songId;
     private Integer year;
     private String artworkUrl;
 
@@ -48,5 +49,13 @@ public class SongRequestDO {
 
     public void setArtworkUrl(String artworkUrl) {
         this.artworkUrl = artworkUrl;
+    }
+
+    public String getSongId() {
+        return songId;
+    }
+
+    public void setSongId(String songId) {
+        this.songId = songId;
     }
 }
