@@ -51,16 +51,7 @@
         android:layout_marginTop="23dp"
         android:onClick="toAbout" />
 
-<!--
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/log_out_button"
-        android:id="@+id/log_out_button"
-        android:layout_below="@+id/about_button"
-        android:layout_centerHorizontal="true"
-        android:onClick="toLogOut" />
--->
+
 
 
 </RelativeLayout>
