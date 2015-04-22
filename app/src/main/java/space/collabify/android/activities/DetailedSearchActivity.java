@@ -154,7 +154,13 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
             for(Track track : tracks){
 
-                Song song = new Song(track.name, track.artists.toString(), track.album.name, 9999, track.id, track.uri, mAppManager.getUser().getId());
+                String url = "";
+
+                if(track.album.images.size() >=3){
+                    url = track.album.images.get(2).url;
+                }
+
+                Song song = new Song(track.name, track.artists.toString(), track.album.name, 9999, track.id, url, mAppManager.getUser().getId());
 
                 songs.add(song);
             }
