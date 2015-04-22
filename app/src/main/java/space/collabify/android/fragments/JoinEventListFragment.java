@@ -37,14 +37,9 @@ import space.collabify.android.models.Event;
 public class JoinEventListFragment extends SwipeRefreshListFragment {
     private static final String TAG = JoinEventListFragment.class.getSimpleName();
 
-    private Location mLastUserLocation;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        LocationRequest locationRequest = LocationRequest.create();
-//        mLastUserLocation.setLatitude(10);
-//        mLastUserLocation.setLongitude(10);
     }
 
     @Override
@@ -152,27 +147,31 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
         EventsRequest request = new EventsRequest();
-        request.userLocation = mLastUserLocation;
+        request.userLocation = AppManager.getInstance().getLocation();
 
         // load the events
-        AppManager.getInstance().loadEvents("10", "10", new Callback<List<Event>>() {
-                    @Override
-                    public void success(final List<Event> events, Response response) {
+        if(request.userLocation != null){
+            AppManager.getInstance().loadEvents(Double.toString(request.userLocation.getLatitude()),
+                    Double.toString(request.userLocation.getLongitude()), new Callback<List<Event>>() {
+                @Override
+                public void success(final List<Event> events, Response response) {
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                onRefreshComplete(events);
-                            }
-                        });
-                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onRefreshComplete(events);
+                        }
+                    });
+                }
 
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
+                @Override
+                public void failure(RetrofitError retrofitError) {
 
-                    }
-                });
-
+                }
+            });
+        }else{
+            setRefreshing(false);
+        }
     }
 
     /**
@@ -191,13 +190,6 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
         setRefreshing(false);
     }
 
-    /**
-     * Set the latest user location for event queries
-     * @param location user location
-     */
-    public void updateLocation(Location location) {
-        mLastUserLocation = location;
-    }
 
     /**
      * Displays the refresh circle and gets the events around the user

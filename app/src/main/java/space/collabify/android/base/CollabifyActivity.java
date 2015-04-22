@@ -13,15 +13,25 @@ import space.collabify.android.models.User;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 /**
  * This file was born on March 11 at 13:44
  */
-public class CollabifyActivity extends ActionBarActivity {
+public class CollabifyActivity extends ActionBarActivity  {
+    private static final String TAG = CollabifyActivity.class.getSimpleName();
     protected AppManager mAppManager;
     protected User mUser;
     protected String mRole;
@@ -31,6 +41,7 @@ public class CollabifyActivity extends ActionBarActivity {
     protected boolean SHOW_END = false;
     protected boolean SHOW_LOGOUT = false;
     //protected CollabifyActivity mParentActivity;
+
 
     public CollabifyActivity(){
         this.mAppManager = AppManager.getInstance();
@@ -55,6 +66,11 @@ public class CollabifyActivity extends ActionBarActivity {
         menu.findItem(R.id.action_logout).setVisible(SHOW_LOGOUT);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
 
@@ -177,4 +193,5 @@ public class CollabifyActivity extends ActionBarActivity {
         }
         return mAppManager.getUser();
     }
+
 }

@@ -60,6 +60,7 @@ public class AppManager {
     private boolean mPlaylistUpdating = false;
 
     private int currentSong = -1;
+    private android.location.Location mLastUserLocation = null;
 
     /**
      * Private constructor
@@ -90,10 +91,18 @@ public class AppManager {
         return mPlaylistUpdating;
     }
 
-    public void setUpLocationClient() {
-
+    public void updateLocation(android.location.Location location){
+        mLastUserLocation = location;
     }
 
+    public android.location.Location getLocation() {
+        return mLastUserLocation;
+    }
+
+    public SpotifyService getmSpotifyService(){
+
+        return mSpotifyService;
+    }
 
     /*
      * User
