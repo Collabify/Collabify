@@ -191,7 +191,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     }
 
     private void callRemoveSong(Song song) {
-        mAppManager.removeSong(song, new CollabifyResponseCallback() {
+        mAppManager.removeSong(song.getId(), new CollabifyResponseCallback() {
             @Override
             public void success(Response response) {
                 getActivity().runOnUiThread(new Runnable() {
