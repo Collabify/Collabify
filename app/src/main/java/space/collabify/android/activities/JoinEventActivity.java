@@ -4,6 +4,7 @@ package space.collabify.android.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.location.Location;
@@ -162,12 +163,22 @@ public class JoinEventActivity extends CollabifyActivity implements
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("No Spotify Premium");
             alertDialog.setMessage("We are sorry, but you need a Spotify Premium account to create events.");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Dismiss",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Upgrade",
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Uri url = Uri.parse("https://www.spotify.com/us/premium/");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, url);
+                    startActivity(intent);
+                    dialog.dismiss();
+                }
+            });
+
             alertDialog.show();
         }
     }
