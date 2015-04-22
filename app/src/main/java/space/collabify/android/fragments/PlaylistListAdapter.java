@@ -46,53 +46,67 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
         ImageToggleButton downvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
 
-        //use picasso to load album art
-        Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
+        if(!"".equals(songItem.getId())){
+            //use picasso to load album art
+            Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
 
-        //initialize button states
-        upvoteButton.setChecked(songItem.isUpvoted());
-        downvoteButton.setChecked(songItem.isDownvoted());
-        
-        //add onclick listeners to the row
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPlaylistFragment.onDeleteClick(v);
+            //initialize button states
+            upvoteButton.setChecked(songItem.isUpvoted());
+            downvoteButton.setChecked(songItem.isDownvoted());
+
+            //add onclick listeners to the row
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPlaylistFragment.onDeleteClick(v);
+                }
+            });
+
+            upvoteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mPlaylistFragment.onUpvoteClick(buttonView, isChecked);
+                }
+            });
+            downvoteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mPlaylistFragment.onDownvoteClick(buttonView, isChecked);
+                }
+            });
+
+            String artist = songItem.getArtist();
+            artist = artist.substring(0, Math.min(artist.length(), 30));
+
+            if (!artist.equals("")) {
+                artist = "(" + artist + ")";
             }
-        });
 
-        upvoteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mPlaylistFragment.onUpvoteClick(buttonView, isChecked);
-            }
-        });
+            //set up the row elements
+            String title = songItem.getTitle();
+            title = title.substring(0, Math.min(title.length(), 30));
 
-        downvoteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mPlaylistFragment.onDownvoteClick(buttonView, isChecked);
-            }
-        });
+            String newSongDescription = title + "\n" + artist;
+            songDescriptionTextView.setText(newSongDescription);
+            songIdView.setText(songItem.getId());
 
-
-        //set up the row elements
-        String title = songItem.getTitle();
-        title = title.substring(0, Math.min(title.length(), 30));
-        String artist = songItem.getArtist();
-        artist = artist.substring(0, Math.min(artist.length(), 30));
-
-        if (!artist.equals("")) {
-          artist = "(" + artist + ")";
+            int visibility = isDeleteVisible(songItem) ? View.VISIBLE : View.INVISIBLE;
+            deleteButton.setVisibility(visibility);
         }
+        else {
+            // only entering here when no songs in playlist (upon creating event)
 
-        String newSongDescription = title + "\n" + artist;
-        songDescriptionTextView.setText(newSongDescription);
-        songIdView.setText(songItem.getId());
+            //set up the row elements
+            String title = songItem.getTitle();
+            title = title.substring(0, Math.min(title.length(), 30));
 
+            songDescriptionTextView.setText(title);
 
-        int visibility = isDeleteVisible(songItem) ? View.VISIBLE : View.INVISIBLE;
-        deleteButton.setVisibility(visibility);
+            deleteButton.setVisibility(View.INVISIBLE);
+            upvoteButton.setVisibility(View.INVISIBLE);
+            downvoteButton.setVisibility(View.INVISIBLE);
+            albumArt.setVisibility(View.INVISIBLE);
+        }
 
         return customView;
     }

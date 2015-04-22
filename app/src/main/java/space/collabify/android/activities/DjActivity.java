@@ -27,7 +27,7 @@ public class DjActivity extends PrimaryViewActivity {
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks", "User List"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj, R.drawable.ic_users};
-    private BroadcastReceiver broadcast_receiver; //TODO: add this to DJ activity
+    //private BroadcastReceiver broadcast_receiver; //TODO: add this to DJ activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +82,7 @@ public class DjActivity extends PrimaryViewActivity {
 
         mViewPager.setCurrentItem(1);
 
+        /*
         broadcast_receiver = new BroadcastReceiver() { //TODO: add this to DJ activity
 
             @Override
@@ -93,6 +94,7 @@ public class DjActivity extends PrimaryViewActivity {
             }
         };
         registerReceiver(broadcast_receiver, new IntentFilter("end_event"));
+        */
 
     }
 
@@ -103,55 +105,13 @@ public class DjActivity extends PrimaryViewActivity {
         endEvent();
     }
 
-    private void endEvent(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // construct the dialog
-        builder.setTitle(R.string.title_end_event);
-        builder.setMessage(R.string.label_end_event);
 
-        // exit if OK button pressed
-        builder.setPositiveButton(getString(R.string.ok_button),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mAppManager.endEvent(new CollabifyResponseCallback() {
-                            @Override
-                            public void exception(Exception e) {
-                                Log.e(TAG, "Exception encountered while ending event.");
-                            }
 
-                            @Override
-                            public void success(Response response) {
-                                finish();
-                            }
-
-                            @Override
-                            public void failure(RetrofitError retrofitError) {
-                                Log.e(TAG, "Failed to end event: " + retrofitError.getMessage());
-                            }
-                        });
-                    }
-                }
-        );
-
-        // close dialog on Cancel button pressed
-        builder.setNegativeButton(getString(R.string.cancel_button),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }
-        );
-
-        builder.show();
-
-    }
-
+    /*
     @Override
     protected void onStop() { //TODO: add this to DJ activity
         unregisterReceiver(broadcast_receiver);
         super.onStop();
     }
-
+    */
 }

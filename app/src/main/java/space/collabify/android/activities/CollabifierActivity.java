@@ -30,7 +30,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
     // Tab titles
     private static final String TAG = JoinEventActivity.class.getSimpleName();
 
-    private BroadcastReceiver broadcast_receiver; //TODO: add this to DJ
+    //private BroadcastReceiver broadcast_receiver; //TODO: add this to DJ
 
     private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj};
@@ -86,6 +86,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
                     .setTabListener(this));
         }
 
+        /*
         broadcast_receiver = new BroadcastReceiver() { //TODO: add this to DJ activity
 
             @Override
@@ -97,7 +98,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
             }
         };
         registerReceiver(broadcast_receiver, new IntentFilter("leave_event"));
-
+        */
     }
 
 
@@ -106,51 +107,15 @@ public class CollabifierActivity extends PrimaryViewActivity {
         leaveEvent();
     }
 
-    public void leaveEvent() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // construct the dialog
-        builder.setTitle(R.string.title_exit_event);
-        builder.setMessage(R.string.label_exit_event);
 
-        // exit if OK button pressed
-        builder.setPositiveButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mAppManager.leaveEvent(new CollabifyResponseCallback() {
-                    @Override
-                    public void success(Response response) {
-                        finish();
-                    }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.e(TAG, "Failed to leave event:\n" + error.toString());
-                        finish();
-                    }
-
-                    @Override
-                    public void exception(Exception e) {
-                        Log.e(TAG, "Failed to leave event ");
-                        finish();
-                    }
-                });
-            }
-        });
-
-        // close dialog on Cancel button pressed
-        builder.setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
-
+    /*
     @Override
     protected void onStop() { //TODO: add this to DJ activity
         unregisterReceiver(broadcast_receiver);
         super.onStop();
     }
+    */
+
+
 }

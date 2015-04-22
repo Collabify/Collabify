@@ -11,9 +11,12 @@ import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.User;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
  * This file was born on March 11 at 13:44
  */
 public class CollabifyActivity extends ActionBarActivity {
+    protected final String TAG = CollabifyActivity.class.getSimpleName();
     protected AppManager mAppManager;
     protected User mUser;
     protected String mRole;
@@ -128,12 +132,14 @@ public class CollabifyActivity extends ActionBarActivity {
                 return true;
 
           case R.id.action_leave:
-            Intent leave = new Intent("leave_event");
-            sendBroadcast(leave);
+            //Intent leave = new Intent("leave_event");
+            //sendBroadcast(leave);
+              leaveEvent();
             return true;
           case R.id.action_end:
-              Intent end = new Intent("end_event");
-              sendBroadcast(end);
+              //Intent end = new Intent("end_event");
+              //sendBroadcast(end);
+              endEvent();
               return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -176,5 +182,92 @@ public class CollabifyActivity extends ActionBarActivity {
             return null;
         }
         return mAppManager.getUser();
+    }
+
+    protected void leaveEvent() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // construct the dialog
+        builder.setTitle(R.string.title_exit_event);
+        builder.setMessage(R.string.label_exit_event);
+
+        // exit if OK button pressed
+        builder.setPositiveButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAppManager.leaveEvent(new CollabifyResponseCallback() {
+                    @Override
+                    public void success(Response response) {
+                        finish();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e(TAG, "Failed to leave event:\n" + error.toString());
+                        finish();
+                    }
+
+                    @Override
+                    public void exception(Exception e) {
+                        Log.e(TAG, "Failed to leave event ");
+                        finish();
+                    }
+                });
+            }
+        });
+
+        // close dialog on Cancel button pressed
+        builder.setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    protected void endEvent(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // construct the dialog
+        builder.setTitle(R.string.title_end_event);
+        builder.setMessage(R.string.label_end_event);
+
+        // exit if OK button pressed
+        builder.setPositiveButton(getString(R.string.ok_button),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAppManager.endEvent(new CollabifyResponseCallback() {
+                            @Override
+                            public void exception(Exception e) {
+                                Log.e(TAG, "Exception encountered while ending event.");
+                            }
+
+                            @Override
+                            public void success(Response response) {
+                                finish();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError retrofitError) {
+                                Log.e(TAG, "Failed to end event: " + retrofitError.getMessage());
+                            }
+                        });
+                    }
+                }
+        );
+
+        // close dialog on Cancel button pressed
+        builder.setNegativeButton(getString(R.string.cancel_button),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }
+        );
+
+        builder.show();
+
     }
 }
