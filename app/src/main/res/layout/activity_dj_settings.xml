@@ -102,6 +102,7 @@
           android:layout_marginTop="23dp"
           android:id="@+id/DJ_settings_line"/>
 
+      <!--
       <Button
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -109,20 +110,22 @@
           android:id="@+id/DJ_settings_EndEvent_button"
           android:layout_below="@+id/DJ_settings_line"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="23dp" />
-      <!-- android:onClick="toDj"/> -->
+          android:layout_marginTop="23dp"
+          android:onClick="endEvent"/>
+-->
 
       <Button
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/DJ_settings_about_button"
           android:id="@+id/DJ_settings_about_button"
-          android:layout_below="@+id/DJ_settings_EndEvent_button"
+          android:layout_below="@+id/DJ_settings_line"
           android:layout_centerHorizontal="true"
           android:layout_marginTop="10dp"
           android:onClick="toAbout" />
 
 
+      <!--
       <Button
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -132,7 +135,7 @@
           android:layout_centerHorizontal="true"
           android:layout_marginTop="10dp"
           android:onClick="toLogOut" />
-
+-->
 
   </RelativeLayout>
 
