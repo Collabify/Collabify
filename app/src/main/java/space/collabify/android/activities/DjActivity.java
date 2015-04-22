@@ -81,7 +81,6 @@ public class DjActivity extends PrimaryViewActivity {
 
         mViewPager.setCurrentItem(1);
 
-
     }
 
 
