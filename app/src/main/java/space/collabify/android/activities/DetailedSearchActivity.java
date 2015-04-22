@@ -1,25 +1,26 @@
 package space.collabify.android.activities;
 
+import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
+import kaaes.spotify.webapi.android.SpotifyCallback;
+import kaaes.spotify.webapi.android.SpotifyError;
+import kaaes.spotify.webapi.android.models.Track;
+import kaaes.spotify.webapi.android.models.TracksPager;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import space.collabify.android.Endpoints;
 import space.collabify.android.Json;
 import space.collabify.android.R;
-import space.collabify.android.collabify.api.CollabifyService;
-import space.collabify.android.collabify.models.domain.Playlist;
+import space.collabify.android.models.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Song;
 
 // for json data from spotify search
@@ -29,16 +30,13 @@ import org.json.JSONObject;
 import java.util.List;
 
 
-
 public class DetailedSearchActivity extends PrimaryViewActivity {
 
     private static final String TAG = DetailedSearchActivity.class.getSimpleName();
 
     private SearchDetailsFragment mSearchDetailsFragment;
 
-    private RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint("http://collabify.space:1337").build();
-
-    private CollabifyService mCollabifyService = restAdapter.create(CollabifyService.class);
+    private ProgressDialog progress;
 
     String query;
 
@@ -77,212 +75,11 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
     @Override
     public boolean handleQuery(String query) {
 
-        new CallSpotifySearch().execute(query);
+        progress = ProgressDialog.show(this, "Performing Search", "Searching tracks...", true);
+
+        mAppManager.getmSpotifyService().searchTracks(query, new afterSpotifySearch());
 
         return true;
-    }
-
-    private void onSpotifySearchComplete(final List<Song> songs) {
-
-        mSearchDetailsFragment.populateSongList(songs);
-    }
-
-    public void setupAddDialog(final String songDescription, final Song song) {
-        // prompt to add song
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.add_song_dialog_title));
-        builder.setMessage(songDescription);
-        builder.setPositiveButton(getString(R.string.add_song_dialog_positive_text),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO: send song to server
-
-                        // addSong(song);
-                        dialog.cancel();
-                    }
-                });
-        builder.setNegativeButton(getString(R.string.add_song_dialog_negative_text),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        builder.show();
-    }
-
-    private class afterAddSong implements Callback<Playlist>{
-
-        @Override
-        public void success(Playlist playlist, Response response) {
-
-            System.out.println("this is a test");
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-
-        }
-    }
-
-
-    private class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
-
-        protected JSONArray doInBackground(String... urls) {
-            String[] splitQuery = urls[0].split("\\s+");
-
-            String searchQuery = "https://api.spotify.com/v1/search?q=";
-
-            if(splitQuery.length >= 1){
-
-                searchQuery += splitQuery[0];
-            }
-
-            for(int i = 1; i < splitQuery.length; i++){
-
-                searchQuery += "+" + splitQuery[i];
-            }
-
-            searchQuery += "&type=track";
-
-            JSONObject jsonObject = Json.getJsonObject(searchQuery);
-
-            JSONArray items = null;
-
-            try {
-                items = jsonObject.getJSONObject("tracks").getJSONArray("items");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return items;
-        }
-
-        protected void onPostExecute(JSONArray jsonArray) {
-
-            List<Song> songs = new ArrayList<>();
-
-            for(int i = 0; i < jsonArray.length(); i++){
-
-                try {
-
-                    JSONObject track = jsonArray.getJSONObject(i);
-
-                    String id = track.getString("id");
-
-                    String title = track.getString("name");
-
-                    JSONArray artists = track.getJSONArray("artists");
-
-                    String artist = "";
-
-                    if(artists != null && artists.length() >= 1){
-
-                        artist = artists.getJSONObject(0).getString("name");
-
-                        for(int j = 1; j < artists.length(); j++){
-
-                            artist += ", " + artists.getJSONObject(j).getString("name");
-                        }
-                    }
-
-                    JSONObject album = track.getJSONObject("album");
-
-                    String albumName = album.getString("name");
-
-                    String artUrl = album.getJSONArray("images").getJSONObject(0).getString("url");
-
-                    Song newSong = new Song(title, artist, albumName, 9999, id, artUrl, mAppManager.getUser().getId());
-
-                    songs.add(newSong);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            onSpotifySearchComplete(songs);
-        }
-    }
-
-    private class PostSongToServer extends AsyncTask<Song, Void, Void> {
-
-        protected Void doInBackground(Song... songs) {
-
-            Song song = songs[0];
-
-            String url = Endpoints.PLAYLIST.replaceAll(":eventID", mAppManager.getEvent().getEventId());
-
-            String[] headerKey = new String[]{"userid"};
-
-            String[] headerValue = new String[]{getCurrentUser().getId()};
-
-            JSONObject jsonObject = new JSONObject();
-
-            try {
-                jsonObject.put("title", song.getTitle())
-                          .put("artist", song.getArtist())
-                          .put("album", song.getAlbum())
-                          .put("year", 99999)
-                          .put("artworkUrl", song.getArtwork());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            String response = Json.postJSONObject(url, jsonObject, headerKey, headerValue);
-
-            return null;
-        }
-
-        protected void onPostExecute(Void v) {
-
-        }
-    }
-}
-
-
-/**
- * This file was born on March 11 at 14:01
- */
-/*public class DetailedSearchActivity extends ListActivity {
-
-    private String query;
-
-    private List<Song> songs;
-
-    private SearchDetailsListAdapter adapter;
-
-    private SearchDetailsFragment mSearchDetailsFragment;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detailed_search);
-
-        songs = new ArrayList<>();
-
-        adapter = new SearchDetailsListAdapter(getApplicationContext(), songs);
-        setListAdapter(adapter);
-
-        Intent intent = getIntent();
-        String query = intent.getStringExtra("query");
-
-        this.query = query;
-
-        new CallSpotifySearch().execute(query);
-    }
-
-    private void onSpotifySearchComplete(List<Song> songs){
-
-        adapter.clear();
-
-        for (Song song : this.songs = songs) {
-
-            adapter.add(song);
-        }
     }
 
     private void setupAddDialog(final String songDescription, final Song song) {
@@ -295,8 +92,10 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: send song to server
-                        addSong(song);
+
                         dialog.cancel();
+
+                        addSong(song);
                     }
                 });
         builder.setNegativeButton(getString(R.string.add_song_dialog_negative_text),
@@ -309,144 +108,53 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         builder.show();
     }
 
-    private void addSong(final Song song) {
+    private void addSong(final Song song){
+        progress = ProgressDialog.show(this, "Adding Song", "Adding song to playlist...", true);
 
-        // TODO : call async to send data
+        mAppManager.addSong(song, new afterAddSong());
     }
 
-    *//**
-     * Handles the display of events in a row
-     *//*
-    private class SongDetailsListAdapter extends ArrayAdapter<Song> {
-        private SongDetailsListAdapter(Context context, List<Song> objects) {
-            super(context, R.layout.song_details_row, objects);
-            songs = objects;
-        }
+    private class afterAddSong implements CollabifyCallback<Playlist>{
 
-        private SongDetailsListAdapter(Context context, Song[] songs) {
-            super(context, R.layout.song_details_row, songs);
+        @Override
+        public void success(Playlist playlist, Response response) {
+
+            System.out.println("this is a test");
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            View customView = inflater.inflate(R.layout.song_details_row, parent, false);
+        public void failure(RetrofitError error) {
 
-            final Song song = getItem(position);
-            TextView rowDesc = (TextView) customView.findViewById(R.id.song_row_description);
-            ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
-            ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
+        }
 
-            //set up the row elements
-            String title = song.getTitle();
-            title = title.substring(0, Math.min(title.length(), 30));
-            String artist = song.getArtist();
-            artist = artist.substring(0, Math.min(artist.length(), 30));
+        @Override
+        public void exception(Exception e) {
 
-            final String newSongDescription = title + "\n(" + artist + ")";
-
-            rowDesc.setText(newSongDescription);
-
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setupAddDialog(newSongDescription, song);
-                }
-            });
-
-            return customView;
         }
     }
 
-    private class CallSpotifySearch extends AsyncTask<String, Void, JSONArray> {
+    private class afterSpotifySearch extends SpotifyCallback<TracksPager>{
 
-        protected JSONArray doInBackground(String... urls) {
-            String[] splitQuery = urls[0].split("\\s+");
+        @Override
+        public void failure(SpotifyError spotifyError) {
 
-            String searchQuery = "https://api.spotify.com/v1/search?q=";
-
-            if(splitQuery.length >= 1){
-
-                searchQuery += splitQuery[0];
-            }
-
-            for(int i = 1; i < splitQuery.length; i++){
-
-                searchQuery += "+" + splitQuery[i];
-            }
-
-            searchQuery += "&type=track";
-
-            JSONObject jsonObject = Json.getJsonObject(searchQuery);
-
-            JSONArray items = null;
-
-            try {
-                items = jsonObject.getJSONObject("tracks").getJSONArray("items");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return items;
         }
 
-        protected void onPostExecute(JSONArray jsonArray) {
+        @Override
+        public void success(TracksPager tracksPager, Response response) {
+
+            List<Track> tracks = tracksPager.tracks.items;
 
             List<Song> songs = new ArrayList<>();
 
-            for(int i = 0; i < jsonArray.length(); i++){
+            for(Track track : tracks){
 
-                try {
-
-                    JSONObject track = jsonArray.getJSONObject(i);
-
-                    String id = track.getString("id");
-
-                    String title = track.getString("name");
-
-                    JSONArray artists = track.getJSONArray("artists");
-
-                    String artist = "";
-
-                    if(artists != null && artists.length() >= 1){
-
-                        artist = artists.getJSONObject(0).getString("name");
-
-                        for(int j = 1; j < artists.length(); j++){
-
-                            artist += ", " + artists.getJSONObject(j).getString("name");
-                        }
-                    }
-
-                    JSONObject album = track.getJSONObject("album");
-
-                    String albumName = album.getString("name");
-
-                    String artUrl = album.getJSONArray("images").getJSONObject(0).getString("url");
-
-                    songs.add(new Song(title, artist, albumName, 9999, id, artUrl, AppManager.getInstance().getUser().getId()));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                Song song = new Song(track.name, track.artists.toString(), track.album.name, 9999, track.id, track.uri, mAppManager.getUser().getId());
             }
 
-            onSpotifySearchComplete(songs);
+            mSearchDetailsFragment.populateSongList(songs);
+
+            progress.dismiss();
         }
     }
-
-
-    private class addSongToServer extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... uri) {
-
-            return null;
-        }
-    }
-}*/
-
-
-
+}
