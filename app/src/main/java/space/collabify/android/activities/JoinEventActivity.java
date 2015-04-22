@@ -39,7 +39,7 @@ import space.collabify.android.models.User;
 public class JoinEventActivity extends CollabifyActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener {
 
     private static final String TAG = JoinEventActivity.class.getSimpleName();
     private JoinEventListFragment mJoinEventListFragment;
@@ -91,8 +91,8 @@ public class JoinEventActivity extends CollabifyActivity implements
 
     @Override
     protected void onStop() {
-        super.onStop();
         mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     /**

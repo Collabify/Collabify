@@ -45,7 +45,6 @@ import space.collabify.android.models.User;
 public class AppManager {
     private static final AppManager instance = new AppManager();
     private static final String TAG = AppManager.class.getSimpleName();
-
     private static final String PRODUCT_PREMIUM = "premium";
 
     private SpotifyApi mSpotifyApi;
@@ -56,11 +55,11 @@ public class AppManager {
     private Event mEvent;
     private List<Song> mPlaylist;
 
-    private int currentSong = -1;
-
     private boolean mEventUpdating = false;
     private boolean mUsersUpdating = false;
     private boolean mPlaylistUpdating = false;
+
+    private int currentSong = -1;
 
     /**
      * Private constructor
@@ -161,6 +160,13 @@ public class AppManager {
             mCollabifyApi.addUser(userDO, new Callback<space.collabify.android.collabify.models.domain.User>() {
                 @Override
                 public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
+
+                    if (user.getEventId() == user.getUserId()) {
+                        // user is a dj in an event
+                    }
+                    else if (user.getEventId() != null && user.getEventId().length() > 0) {
+                        // user is already part of an event
+                    }
 
                     // call the callback
                     if (callback != null) {

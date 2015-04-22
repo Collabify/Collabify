@@ -45,13 +45,9 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         SHOW_SETTINGS = true;
         SHOW_LEAVE = false;
         SHOW_LOGOUT = false;
-
     }
 
     public void loginWithSpotify(View view) {
-        // TODO: at this point don't know if the user will need streaming scope, will have to be done on choose mode
-        //may want to have some sort of 'load screen' that just shows our icon and name for like two seconds
-        // before prompting the user to sign up through spotify
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
@@ -109,68 +105,6 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
         }
     }
 
-//  private class LongOperation extends AsyncTask<String, Void, JSONObject> {
-//
-//    @Override
-//    protected JSONObject doInBackground(String... params) {
-//      try {
-//        JSONObject me = Json.getJsonObject(
-//          "https://api.spotify.com/v1/me",
-//          new String[] {"Authorization"},
-//          new String[] {"Bearer " + params[0]}
-//        );
-//
-//        JSONObject myUser = new JSONObject();
-//        myUser.put("name", me.getString("display_name"));
-//
-//        Json.postJSONObject(
-//          Endpoints.USERS,
-//          myUser,
-//          new String[] {"userid"},
-//          new String[] {me.getString("id")}
-//        );
-//
-//        return me;
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
-//      }
-//      return null;
-//    }
-//
-//    @Override
-//    protected void onPostExecute(JSONObject me) {
-//      progress.dismiss();
-//
-//      try {
-//        finish();
-//
-//        User u = mAppManager.getUser();
-//        u.setName(me.getString("display_name"));
-//        u.setPremium(me.getString("product").equals("premium"));
-//        u.setId(me.getString("id"));
-//
-//        mAppManager.getCollabifyClient().getCollabifyApi().setCurrentUserId(me.getString("id"));
-//
-//        Intent i = new Intent(mainContext, JoinEventActivity.class);
-//        startActivity(i);
-//
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
-//      }
-//
-//    }
-//
-//    @Override
-//    protected void onPreExecute() {
-//    }
-//
-//    @Override
-//    protected void onProgressUpdate(Void... values) {}
-//  }
-
-
     @Override
     public void onLoggedIn() {
         Log.d(TAG, "User logged in");
@@ -201,6 +135,4 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
     protected void onDestroy() {
         super.onDestroy();
     }
-
-
 }
