@@ -150,7 +150,11 @@ public class CollabifierActivity extends PrimaryViewActivity {
 
     @Override
     protected void onStop() {
-        unregisterReceiver(broadcast_receiver);
+        try {
+            unregisterReceiver(broadcast_receiver);
+        } catch(IllegalArgumentException e){
+
+        }
         super.onStop();
     }
 }

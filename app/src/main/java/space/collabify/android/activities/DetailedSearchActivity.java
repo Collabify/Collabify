@@ -16,17 +16,11 @@ import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.TracksPager;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import space.collabify.android.Json;
 import space.collabify.android.R;
-import space.collabify.android.models.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Song;
 
-// for json data from spotify search
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.List;
 
 
@@ -73,6 +67,15 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (progress != null) {
+            progress.dismiss();
+            progress = null;
+        }
+    }
+
+    @Override
     public boolean handleQuery(String query) {
 
         progress = ProgressDialog.show(this, "Performing Search", "Searching tracks...", true);
@@ -82,7 +85,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         return true;
     }
 
-    private void setupAddDialog(final String songDescription, final Song song) {
+    public void setupAddDialog(final String songDescription, final Song song) {
         // prompt to add song
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.add_song_dialog_title));
@@ -119,6 +122,8 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         @Override
         public void success(Song song, Response response) {
 
+            progress.dismiss();
+
             System.out.println("this is a test");
         }
 
@@ -145,14 +150,22 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
             List<Track> tracks = tracksPager.tracks.items;
 
-            List<Song> songs = new ArrayList<>();
+            final List<Song> songs = new ArrayList<>();
 
             for(Track track : tracks){
 
                 Song song = new Song(track.name, track.artists.toString(), track.album.name, 9999, track.id, track.uri, mAppManager.getUser().getId());
+
+                songs.add(song);
             }
 
-            mSearchDetailsFragment.populateSongList(songs);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mSearchDetailsFragment.populateSongList(songs);
+                }
+            });
+
 
             progress.dismiss();
         }
