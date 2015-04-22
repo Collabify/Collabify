@@ -3,5 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
+      <item name="colorAccent">@color/spotify_green</item>
     </style>
+
+  <style name="StyledDialog" parent="Base.Theme.AppCompat.Dialog">
+    <item name="colorAccent">@color/spotify_green</item>
+  </style>
+
 </resources>

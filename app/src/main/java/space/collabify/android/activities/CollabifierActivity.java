@@ -30,7 +30,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
     // Tab titles
     private static final String TAG = JoinEventActivity.class.getSimpleName();
 
-    private BroadcastReceiver broadcast_receiver;
+    private BroadcastReceiver broadcast_receiver; //TODO: add this to DJ
 
     private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj};
@@ -86,7 +86,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
                     .setTabListener(this));
         }
 
-        broadcast_receiver = new BroadcastReceiver() {
+        broadcast_receiver = new BroadcastReceiver() { //TODO: add this to DJ activity
 
             @Override
             public void onReceive(Context arg0, Intent intent) {
@@ -149,7 +149,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop() { //TODO: add this to DJ activity
         unregisterReceiver(broadcast_receiver);
         super.onStop();
     }
