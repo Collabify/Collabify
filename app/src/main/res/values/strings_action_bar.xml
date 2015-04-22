@@ -4,6 +4,7 @@
     <string name="action_Collabifier_settings">Collab Settings</string>
     <string name="action_DJ_settings">DJ Settings</string>
     <string name="action_leave">Leave Event</string>
+    <string name="action_end">End Event</string>
     <string name="action_logout">Logout</string>
     <string name="action_search">Search</string>
 </resources>
