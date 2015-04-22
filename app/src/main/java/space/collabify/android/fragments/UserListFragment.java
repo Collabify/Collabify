@@ -79,18 +79,23 @@ public class UserListFragment extends SwipeRefreshListFragment {
                 //post results
                 final List<User> temp = users;
                 getActivity().runOnUiThread(new Runnable() {
-                  public void run() {
-                    onRefreshComplete(temp);
-                  }
+                    public void run() {
+                        onRefreshComplete(temp);
+                        setRefreshing(false);
+                    }
                 });
-                setRefreshing(false);
 
                 userlist = users;
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                setRefreshing(false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setRefreshing(false);
+                    }
+                });
             }
         });
     }
