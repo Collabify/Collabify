@@ -60,6 +60,8 @@ public class AppManager {
     private boolean mUsersUpdating = false;
     private boolean mPlaylistUpdating = false;
 
+    private android.location.Location mLastUserLocation = null;
+
     /**
      * Private constructor
      */
@@ -89,10 +91,13 @@ public class AppManager {
         return mPlaylistUpdating;
     }
 
-    public void setUpLocationClient() {
-
+    public void updateLocation(android.location.Location location){
+        mLastUserLocation = location;
     }
 
+    public android.location.Location getLocation() {
+        return mLastUserLocation;
+    }
 
 
     /*

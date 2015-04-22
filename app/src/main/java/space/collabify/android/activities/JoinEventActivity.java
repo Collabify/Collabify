@@ -35,10 +35,15 @@ import space.collabify.android.models.User;
 /**
  * This file was born on March 11 at 14:00
  */
-public class JoinEventActivity extends CollabifyActivity {
+public class JoinEventActivity extends CollabifyActivity implements
+    GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener,
+    LocationListener{
 
     private static final String TAG = JoinEventActivity.class.getSimpleName();
     private JoinEventListFragment mJoinEventListFragment;
+
+    private static GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,10 @@ public class JoinEventActivity extends CollabifyActivity {
             transaction.commit();
         }else {
             //TODO: get join event fragment reference from savedInstanceState?
+        }
+
+        if(mGoogleApiClient == null){
+            buildGoogleApiClient();
         }
     }
 
@@ -77,7 +86,6 @@ public class JoinEventActivity extends CollabifyActivity {
     }
 
     public void toCollabifier(Event event, String password){
-
         if (event.isProtectedEvent()) {
             if (event.getPassword() == null) {
                 Toast.makeText(JoinEventActivity.this, "There is an error with this event. Sorry :(", Toast.LENGTH_LONG).show();
@@ -88,7 +96,6 @@ public class JoinEventActivity extends CollabifyActivity {
                 return;
             }
         }
-
 
         mAppManager.joinEvent(event.getId(), new CollabifyCallback<space.collabify.android.collabify.models.domain.User>() {
             @Override
@@ -143,4 +150,62 @@ public class JoinEventActivity extends CollabifyActivity {
         }
     }
 
+
+    /**
+     * Initializes the google api for location services
+     */
+    protected synchronized void buildGoogleApiClient(){
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        LocationRequest request = LocationRequest.create().setInterval(100)
+                .setFastestInterval(0)
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setNumUpdates(1);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, this);
+
+        if(lastLocation != null){
+            mAppManager.updateLocation(lastLocation);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.w(TAG, "google api location services suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.w(TAG, "google api location services connection failed");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //update location
+        mAppManager.updateLocation(location);
+    }
 }
