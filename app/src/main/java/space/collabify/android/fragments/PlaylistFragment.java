@@ -194,7 +194,11 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         mAppManager.removeSong(song, new CollabifyResponseCallback() {
             @Override
             public void success(Response response) {
-                callLoadPlaylist();
+                getActivity().runOnUiThread(new Runnable() {
+                  public void run() {
+                    callLoadPlaylist();
+                  }
+                });
             }
 
             @Override
@@ -218,11 +222,11 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         @Override
         public void success(final List<Song> songs, Response response) {
             getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setRefreshing(false);
-                    updatePlaylist(songs);
-                }
+              @Override
+              public void run() {
+                setRefreshing(false);
+                updatePlaylist(songs);
+              }
             });
         }
 

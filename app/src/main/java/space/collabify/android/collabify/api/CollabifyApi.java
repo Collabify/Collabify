@@ -286,7 +286,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.removeSong(mCurrentUserId, eventId, songId);
+        mCollabifyService.removeSong(mCurrentUserId, eventId, songId, callback);
     }
 
     /*--------------------------------------------------------------------------------------------*
