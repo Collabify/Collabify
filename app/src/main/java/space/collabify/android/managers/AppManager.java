@@ -657,17 +657,13 @@ public class AppManager {
     /**
      * Removes a song from the event playlist
      *
-     * @param song
+     * @param songId
      * @param callback
      */
-    public void removeSong(Song song, final CollabifyResponseCallback callback) {
-
-        if (song == null) {
-            return;
-        }
+    public void removeSong(String songId, final CollabifyResponseCallback callback) {
 
         try {
-            mCollabifyApi.removeSong(mEvent.getEventId(), song.getId(), new ResponseCallback() {
+            mCollabifyApi.removeSong(mEvent.getEventId(), songId, new ResponseCallback() {
                 @Override
                 public void success(Response response) {
 
