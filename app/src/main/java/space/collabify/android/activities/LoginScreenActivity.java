@@ -1,8 +1,11 @@
 package space.collabify.android.activities;
 
+import android.app.ActivityManager;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +15,8 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
+
+import java.io.File;
 
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
@@ -95,6 +100,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                clearAppData();
                                 Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -106,6 +112,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                clearAppData();
                                 Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -113,6 +120,42 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                 });
             }
         }
+    }
+
+    private void clearAppData(){
+        // use old hacky way, which can be removed
+        // once minSdkVersion goes above 19 in a few years.
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                    Log.i("TAG", "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
+                }
+            }
+        }
+    }
+
+    public boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //TODO: better way?
+        System.exit(0);
     }
 
     @Override
