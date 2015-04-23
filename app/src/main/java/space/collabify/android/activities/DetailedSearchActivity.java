@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -129,12 +130,20 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
         @Override
         public void failure(RetrofitError error) {
+          progress.dismiss();
+
+          runOnUiThread(new Runnable() {
+            public void run() {
+              Toast.makeText(getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+            }
+          });
 
         }
 
         @Override
         public void exception(Exception e) {
-
+          progress.dismiss();
+          Toast.makeText(getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
         }
     }
 
