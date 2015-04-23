@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import space.collabify.android.R;
@@ -39,6 +41,11 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
         TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
         ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
         ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
+
+        if(!"".equals(song.getId())) {
+            //use picasso to load album art
+            Picasso.with(getContext()).load(song.getArtwork()).into(albumArt);
+        }
 
         final String newSongDescription = song.getTitle() + "\n(" + song.getArtist() + ")";
 
