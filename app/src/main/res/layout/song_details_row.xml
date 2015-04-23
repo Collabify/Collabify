@@ -11,18 +11,42 @@
         android:src="@drawable/test_album_art"
         android:layout_margin="5dp"/>
 
-    <TextView android:id="@+id/song_row_description"
+    <TextView android:id="@+id/song_row_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="3"
+        android:layout_height="25dp"
+        android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
 
+        android:text="title"
         android:layout_alignTop="@+id/song_details_album_art"
         android:layout_toRightOf="@+id/song_details_album_art"
         android:layout_toLeftOf="@+id/song_row_add"
         android:layout_toStartOf="@+id/song_row_add"
-        android:layout_alignBottom="@+id/song_details_album_art" />
+        android:paddingTop="4dp"/>
+
+  <TextView android:id="@+id/song_row_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+
+            android:text="artist"
+            android:layout_alignBottom="@+id/song_details_album_art"
+            android:layout_alignLeft="@+id/song_row_title"
+            android:layout_alignStart="@+id/song_row_title"
+            android:layout_alignRight="@+id/song_row_title"
+            android:layout_alignEnd="@+id/song_row_title"
+            android:paddingTop="4dp"/>
 
     <ImageButton
         android:layout_width="40dp"

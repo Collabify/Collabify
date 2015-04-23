@@ -35,19 +35,15 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
         View customView = inflater.inflate(R.layout.song_details_row, parent, false);
 
         final Song song = getItem(position);
-        TextView rowDesc = (TextView) customView.findViewById(R.id.song_row_description);
+        TextView rowTitle = (TextView) customView.findViewById(R.id.song_row_title);
+        TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
         ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
         ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
 
-        //set up the row elements
-        String title = song.getTitle();
-        title = title.substring(0, Math.min(title.length(), 30));
-        String artist = song.getArtist();
-        artist = artist.substring(0, Math.min(artist.length(), 30));
+        final String newSongDescription = song.getTitle() + "\n(" + song.getArtist() + ")";
 
-        final String newSongDescription = title + "\n(" + artist + ")";
-
-        rowDesc.setText(newSongDescription);
+        rowTitle.setText(song.getTitle());
+        rowArtist.setText("(" + song.getArtist() + ")");
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
