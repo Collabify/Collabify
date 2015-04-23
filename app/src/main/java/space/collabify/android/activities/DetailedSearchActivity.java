@@ -80,7 +80,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
         progress = ProgressDialog.show(this, "Performing Search", "Searching tracks...", true);
 
-        mAppManager.getmSpotifyService().searchTracks(query, new afterSpotifySearch());
+        mAppManager.getSpotifyService().searchTracks(query, new afterSpotifySearch());
 
         return true;
     }

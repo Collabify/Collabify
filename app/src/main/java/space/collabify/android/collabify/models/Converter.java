@@ -64,6 +64,16 @@ public class Converter {
         return converted;
     }
 
+    public static List<Song> toSongs(List<space.collabify.android.collabify.models.domain.Song> songs) {
+        List<Song> appSongs = new ArrayList<Song>();
+
+        for (space.collabify.android.collabify.models.domain.Song curr: songs) {
+            appSongs.add(toSong(curr));
+        }
+
+        return appSongs;
+    }
+
     public static Song toSong(space.collabify.android.collabify.models.domain.Song song){
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
                 song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId());
@@ -73,6 +83,9 @@ public class Converter {
     public static Event getAppEvent(space.collabify.android.collabify.models.domain.Event event) {
       Event appEvent = new Event(event.getName(), event.getEventId(),
         event.getSettings().getPassword(), event.getSettings().isAllowVoting());
+
+      appEvent.setLatitude(event.getLocation().getLatitude());
+      appEvent.setLongitude(event.getLocation().getLongitude());
       return appEvent;
     }
 

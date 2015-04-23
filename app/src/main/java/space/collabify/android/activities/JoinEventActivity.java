@@ -37,9 +37,9 @@ import space.collabify.android.models.User;
  * This file was born on March 11 at 14:00
  */
 public class JoinEventActivity extends CollabifyActivity implements
-    GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener,
-    LocationListener{
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     private static final String TAG = JoinEventActivity.class.getSimpleName();
     private JoinEventListFragment mJoinEventListFragment;
@@ -86,6 +86,17 @@ public class JoinEventActivity extends CollabifyActivity implements
         }, 10);
     }
 
+    /**
+     * Initializes the google api for location services
+     */
+    protected synchronized void buildGoogleApiClient(){
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
     public void toCollabifier(Event event, String password){
         if (event.isProtectedEvent()) {
             if (event.getPassword() == null) {
@@ -98,15 +109,12 @@ public class JoinEventActivity extends CollabifyActivity implements
             }
         }
 
-        mAppManager.joinEvent(event.getId(), new CollabifyCallback<space.collabify.android.collabify.models.domain.User>() {
+        mAppManager.joinEvent(event.getId(), new CollabifyCallback<Event>() {
             @Override
-            public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
-                User current = mAppManager.getUser();
-                if (current.getId().equals(user.getUserId())) {
-                    Log.d(TAG, "Successfully joined");
-                    Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
-                    startActivity(intent);
-                }
+            public void success(Event event, Response response) {
+                Log.d(TAG, "Successfully joined");
+                Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
+                startActivity(intent);
             }
 
             @Override
@@ -162,16 +170,7 @@ public class JoinEventActivity extends CollabifyActivity implements
     }
 
 
-    /**
-     * Initializes the google api for location services
-     */
-    protected synchronized void buildGoogleApiClient(){
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
+
 
     @Override
     protected void onStart() {

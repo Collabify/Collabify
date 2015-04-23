@@ -479,7 +479,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public User joinEvent(String eventId) throws CollabifyApiException {
+    public Event joinEvent(String eventId) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -494,7 +494,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void joinEvent(String eventId, Callback<User> callback) throws CollabifyApiException {
+    public void joinEvent(String eventId, Callback<Event> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }

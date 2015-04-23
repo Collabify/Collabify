@@ -146,13 +146,12 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
      */
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
-        EventsRequest request = new EventsRequest();
-        request.userLocation = AppManager.getInstance().getLocation();
+        android.location.Location userLocation = AppManager.getInstance().getLocation();
 
         // load the events
-        if(request.userLocation != null){
-            AppManager.getInstance().loadEvents(Double.toString(request.userLocation.getLatitude()),
-                    Double.toString(request.userLocation.getLongitude()), new Callback<List<Event>>() {
+        if(userLocation != null){
+            AppManager.getInstance().loadEvents(Double.toString(userLocation.getLatitude()),
+                    Double.toString(userLocation.getLongitude()), new Callback<List<Event>>() {
                 @Override
                 public void success(final List<Event> events, Response response) {
 

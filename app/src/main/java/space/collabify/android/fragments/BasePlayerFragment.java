@@ -123,7 +123,7 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
                 mSongTitle.setText(mCurrentSong.getTitle());
             }
             else {
-                mSongTitle.setText(getText(R.string.label_player_song_nosong));
+                mSongTitle.setText(getText(R.string.label_nothing_to_play));
             }
         }
     }
