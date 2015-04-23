@@ -83,7 +83,7 @@ public class JoinEventActivity extends CollabifyActivity implements
             public void run() {
                 mJoinEventListFragment.initializeList();
             }
-        }, 10);
+        }, 500);
     }
 
     public void toCollabifier(Event event, String password){
