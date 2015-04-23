@@ -27,7 +27,7 @@
         android:layout_toRightOf="@+id/song_details_album_art"
         android:layout_toLeftOf="@+id/song_row_add"
         android:layout_toStartOf="@+id/song_row_add"
-        android:paddingTop="4dp"/>
+        android:paddingTop="2dp"/>
 
   <TextView android:id="@+id/song_row_artist"
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             android:layout_alignStart="@+id/song_row_title"
             android:layout_alignRight="@+id/song_row_title"
             android:layout_alignEnd="@+id/song_row_title"
-            android:paddingTop="4dp"/>
+            android:paddingTop="2dp"/>
 
     <ImageButton
         android:layout_width="40dp"
