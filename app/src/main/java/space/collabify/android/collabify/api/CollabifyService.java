@@ -357,7 +357,7 @@ public interface CollabifyService {
      * @return
      */
     @POST(EVENT_USERS_URL)
-    public User joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
+    public Event joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
 
     /**
      * Join an event
@@ -367,7 +367,7 @@ public interface CollabifyService {
      * @param callback
      */
     @POST(EVENT_USERS_URL)
-    public void joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<User> callback);
+    public void joinEvent(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<Event> callback);
 
     /**
      * Leave an event

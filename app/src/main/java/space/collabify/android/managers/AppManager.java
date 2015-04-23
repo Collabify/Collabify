@@ -60,7 +60,7 @@ public class AppManager {
     private boolean mPlaylistUpdating = false;
 
     private int currentSong = -1;
-    private android.location.Location mLastUserLocation = null;
+    private android.location.Location mLastUserLocation;
 
     /**
      * Private constructor
@@ -99,8 +99,7 @@ public class AppManager {
         return mLastUserLocation;
     }
 
-    public SpotifyService getmSpotifyService(){
-
+    public SpotifyService getSpotifyService(){
         return mSpotifyService;
     }
 
@@ -170,6 +169,7 @@ public class AppManager {
                 @Override
                 public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
 
+//                    mUser.setRole(user.getRole());
                     if (user.getEventId() == user.getUserId()) {
                         // user is a dj in an event
                     }
@@ -328,22 +328,23 @@ public class AppManager {
      * @param eventID
      * @param callback
      */
-    public void joinEvent(String eventID, final CollabifyCallback<space.collabify.android.collabify.models.domain.User> callback) {
+    public void joinEvent(String eventID, final CollabifyCallback<space.collabify.android.models.Event> callback) {
 
         mEventUpdating = true;
         try {
-            mCollabifyApi.joinEvent(eventID, new Callback<space.collabify.android.collabify.models.domain.User>() {
+            mCollabifyApi.joinEvent(eventID, new Callback<Event>() {
                 @Override
-                public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
+                public void success(Event event, Response response) {
                     // do my stuff here
                     mEvent = new Event();
-                    mEvent.setEventId(user.getEventId());
+                    mEvent.setEventId(event.getEventId());
                     mEventUpdating = false;
                     mUser.setRole(Role.COLLABIFIER);
+                    mPlaylist = Converter.toSongs(event.getPlaylist().getSongs());
 
                     // call callback
                     if (callback != null) {
-                        callback.success(user, response);
+                        callback.success(Converter.getAppEvent(event), response);
                     }
                 }
 

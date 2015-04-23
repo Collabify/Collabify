@@ -109,15 +109,12 @@ public class JoinEventActivity extends CollabifyActivity implements
             }
         }
 
-        mAppManager.joinEvent(event.getId(), new CollabifyCallback<space.collabify.android.collabify.models.domain.User>() {
+        mAppManager.joinEvent(event.getId(), new CollabifyCallback<Event>() {
             @Override
-            public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
-                User current = mAppManager.getUser();
-                if (current.getId().equals(user.getUserId())) {
-                    Log.d(TAG, "Successfully joined");
-                    Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
-                    startActivity(intent);
-                }
+            public void success(Event event, Response response) {
+                Log.d(TAG, "Successfully joined");
+                Intent intent = new Intent(JoinEventActivity.this, CollabifierActivity.class);
+                startActivity(intent);
             }
 
             @Override
