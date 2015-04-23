@@ -4,6 +4,7 @@ package space.collabify.android.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.spotify.sdk.android.authentication.AuthenticationClient;
 
 
 import retrofit.Callback;
@@ -55,21 +57,46 @@ public class JoinEventActivity extends CollabifyActivity implements
         SHOW_LEAVE = false;
         SHOW_LOGOUT = true;
 
+        //request to enable location if not enabled
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            buildAlertMessageNoGps();
+        }
+
+        if(mGoogleApiClient == null){
+            buildGoogleApiClient();
+        }
+
         if(savedInstanceState == null){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             mJoinEventListFragment = new JoinEventListFragment();
+            mJoinEventListFragment.isGpsEnabled = manager.isProviderEnabled( LocationManager.GPS_PROVIDER );
             transaction.replace(R.id.event_list_frame, mJoinEventListFragment, TAG);
             transaction.commit();
         }else {
             //TODO: get join event fragment reference from savedInstanceState?
         }
 
-        //request to enable location if not enabled
+    }
 
-
-        if(mGoogleApiClient == null){
-            buildGoogleApiClient();
-        }
+    //check it out here: http://stackoverflow.com/questions/843675/how-do-i-find-out-if-the-gps-of-an-android-device-is-enabled
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please enable GPS to see events!")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -123,7 +150,6 @@ public class JoinEventActivity extends CollabifyActivity implements
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Failed to join event:\n" + error.toString());
-
                 runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(JoinEventActivity.this, "Error joining Event. Please try again!", Toast.LENGTH_LONG).show();
@@ -172,9 +198,6 @@ public class JoinEventActivity extends CollabifyActivity implements
         }
     }
 
-
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -202,6 +225,7 @@ public class JoinEventActivity extends CollabifyActivity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, this);
 
         if(lastLocation != null){
+            mJoinEventListFragment.initializeList();
             mAppManager.updateLocation(lastLocation);
         }
     }
@@ -220,5 +244,6 @@ public class JoinEventActivity extends CollabifyActivity implements
     public void onLocationChanged(Location location) {
         //update location
         mAppManager.updateLocation(location);
+        mJoinEventListFragment.initializeList();
     }
 }
