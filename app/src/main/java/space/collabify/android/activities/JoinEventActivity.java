@@ -64,6 +64,9 @@ public class JoinEventActivity extends CollabifyActivity implements
             //TODO: get join event fragment reference from savedInstanceState?
         }
 
+        //request to enable location if not enabled
+
+
         if(mGoogleApiClient == null){
             buildGoogleApiClient();
         }

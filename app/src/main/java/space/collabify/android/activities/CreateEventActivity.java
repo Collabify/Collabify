@@ -1,6 +1,7 @@
 package space.collabify.android.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Event;
 import space.collabify.android.models.Role;
@@ -62,8 +64,14 @@ public class CreateEventActivity extends CollabifyActivity {
             mName.setError(null);
 
             Event djEvent = new Event(name, mAppManager.getUser().getId(), password, allowFeedback);
-            djEvent.setLatitude("10");
-            djEvent.setLongitude("10");
+            Location userLocation = AppManager.getInstance().getLocation();
+            if(userLocation == null){
+                Log.e(TAG, "user location was null when trying to create event");
+                Toast.makeText(getApplicationContext(), "location is null", Toast.LENGTH_LONG);
+                return;
+            }
+            djEvent.setLatitude(Double.toString(userLocation.getLatitude()));
+            djEvent.setLongitude(Double.toString(userLocation.getLongitude()));
 
             mAppManager.createEvent(djEvent, new CollabifyCallback<space.collabify.android.collabify.models.domain.Event>() {
                 @Override
