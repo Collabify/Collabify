@@ -92,13 +92,23 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                     @Override
                     public void failure(RetrofitError retrofitError) {
                         progress.dismiss();
-                        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
 
                     @Override
                     public void exception(Exception e) {
                         progress.dismiss();
-                        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 });
             }
