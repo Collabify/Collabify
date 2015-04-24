@@ -7,7 +7,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="DJ Playlists"
+    android:text="@string/label_dj_playlists_list"
     android:id="@+id/dj_tracks_header"
       android:background="@color/dj_tracks_header"
       android:layout_alignParentLeft="true"
