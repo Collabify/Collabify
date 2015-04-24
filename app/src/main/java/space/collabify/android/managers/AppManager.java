@@ -585,10 +585,10 @@ public class AppManager {
 
         mPlaylistUpdating = true;
         try {
-            mCollabifyApi.getEventPlaylist(mEvent.getEventId(), new Callback<List<space.collabify.android.collabify.models.domain.Song>>() {
+            mCollabifyApi.getEventPlaylist(mEvent.getEventId(), new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
                 @Override
-                public void success(List<space.collabify.android.collabify.models.domain.Song> songs, Response response) {
-                    mPlaylist = Converter.updatePlaylist(mPlaylist, songs);
+                public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+                    mPlaylist = Converter.toPlaylist(playlist);
                     mPlaylistUpdating = false;
 
                     // call callback success
@@ -622,7 +622,7 @@ public class AppManager {
      * @param song
      * @param callback
      */
-    public void addSong(Song song, final CollabifyCallback<Song> callback) {
+    public void addSong(Song song, final CollabifyCallback<List<Song>> callback) {
 
         if (song == null) {
             return;
@@ -640,15 +640,14 @@ public class AppManager {
 
 
         try {
-            mCollabifyApi.addSong(mEvent.getEventId(), songDO, new Callback<space.collabify.android.collabify.models.domain.Song>() {
+            mCollabifyApi.addSong(mEvent.getEventId(), songDO, new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
                 @Override
-                public void success(space.collabify.android.collabify.models.domain.Song song, Response response) {
+                public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
                     mPlaylistUpdating = false;
-                    Song songModel = Converter.toSong(song);
-                    mPlaylist.add(songModel);
+                    mPlaylist = Converter.toPlaylist(playlist);
 
                     if (callback != null) {
-                        callback.success(songModel, response);
+                        callback.success(mPlaylist, response);
                     }
                 }
 

@@ -22,6 +22,8 @@ import space.collabify.android.models.User;
  */
 public class Converter {
 
+
+    /** Not sure what this even does */
     public static List<Song> updatePlaylist(List<Song> original, List<space.collabify.android.collabify.models.domain.Song> updated) {
         if (updated == null) {
             return null;
@@ -63,6 +65,14 @@ public class Converter {
 
         return converted;
     }
+
+  public static List<Song> toPlaylist(space.collabify.android.collabify.models.domain.Playlist current) {
+    List<Song> converted;
+
+    for (current.get)
+
+    return ;
+  }
 
     public static List<Song> toSongs(List<space.collabify.android.collabify.models.domain.Song> songs) {
         List<Song> appSongs = new ArrayList<Song>();
