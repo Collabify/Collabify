@@ -622,7 +622,7 @@ public class AppManager {
      * @param song
      * @param callback
      */
-    public void addSong(Song song, final CollabifyCallback<List<Song>> callback) {
+    public void addSong(Song song, final CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> callback) {
 
         if (song == null) {
             return;
@@ -647,7 +647,7 @@ public class AppManager {
                     mPlaylist = Converter.toPlaylist(playlist);
 
                     if (callback != null) {
-                        callback.success(mPlaylist, response);
+                        callback.success(playlist, response);
                     }
                 }
 

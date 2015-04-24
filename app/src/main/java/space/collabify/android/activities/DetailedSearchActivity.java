@@ -115,18 +115,15 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
     private void addSong(final Song song){
         // TODO: FIX ME!
-//        progress = ProgressDialog.show(this, "Adding Song", "Adding song to playlist...", true);
-//        mAppManager.addSong(song, new afterAddSong());
+        progress = ProgressDialog.show(this, "Adding Song", "Adding song to playlist...", true);
+        mAppManager.addSong(song, new afterAddSong());
     }
 
     private class afterAddSong implements CollabifyCallback<Playlist>{
 
         @Override
         public void success(Playlist playlist, Response response) {
-
             progress.dismiss();
-
-            System.out.println("this is a test");
         }
 
         @Override
