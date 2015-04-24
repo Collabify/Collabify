@@ -7,8 +7,23 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="DJ Tracks"
-    android:id="@+id/textView5"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"/>
+    android:text="DJ Playlists"
+    android:id="@+id/dj_tracks_header"
+      android:background="@color/dj_tracks_header"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:textSize="30dp"
+      android:gravity="center_vertical"
+      android:minHeight="45dp"
+      android:textAlignment="center"
+      android:paddingLeft="10dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@android:id/list"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/dj_tracks_header" />
 </RelativeLayout>
