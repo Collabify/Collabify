@@ -16,6 +16,7 @@ import java.util.List;
 
 import space.collabify.android.R;
 import space.collabify.android.controls.ImageToggleButton;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
 
@@ -46,6 +47,17 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
         ImageToggleButton downvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
 
+        ImageButton upButton = (ImageButton) customView.findViewById(R.id.playlist_dj_up_button);
+        ImageButton downButton = (ImageButton) customView.findViewById(R.id.playlist_dj_down_button);
+
+        if (AppManager.getInstance().getUser().getRole().isDJ()) {
+          upvoteButton.setVisibility(View.INVISIBLE);
+          downvoteButton.setVisibility(View.INVISIBLE);
+        } else {
+          upButton.setVisibility(View.INVISIBLE);
+          downButton.setVisibility(View.INVISIBLE);
+        }
+
         if(!"".equals(songItem.getId())){
             //use picasso to load album art
             Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
@@ -73,6 +85,20 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mPlaylistFragment.onDownvoteClick(buttonView, isChecked);
                 }
+            });
+
+            upButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                mPlaylistFragment.moveSongUp(v);
+              }
+            });
+
+            downButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                mPlaylistFragment.moveSongDown(v);
+              }
             });
 
             String artist = songItem.getArtist();
@@ -105,6 +131,8 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             deleteButton.setVisibility(View.INVISIBLE);
             upvoteButton.setVisibility(View.INVISIBLE);
             downvoteButton.setVisibility(View.INVISIBLE);
+            upButton.setVisibility(View.INVISIBLE);
+            downButton.setVisibility(View.INVISIBLE);
             albumArt.setVisibility(View.INVISIBLE);
         }
 

@@ -190,6 +190,15 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         }
     }
 
+    public void moveSongUp(View v) {
+      //mAppManager
+      //Collections.swap(arrayList, i, i-1);
+    }
+
+    public void moveSongDown(View v) {
+
+    }
+
     private void callRemoveSong(Song song) {
         mAppManager.removeSong(song.getId(), new CollabifyResponseCallback() {
             @Override
