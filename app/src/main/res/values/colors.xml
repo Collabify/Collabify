@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <item name="spotify_green" type="color">#81C340</item>
+  <item name="dj_tracks_header" type="color">#1F1F1F</item>
 </resources>

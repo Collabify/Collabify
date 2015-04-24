@@ -26,7 +26,7 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
     protected SearchDetailsFragment mSearchDetailsFragment;
 
     public SearchDetailsListAdapter(Context context, List<Song> songs, User user, SearchDetailsFragment fragment) {
-        super(context,  R.layout.playlist_collabifier_list_row, songs);
+        super(context, R.layout.playlist_collabifier_list_row, songs);
         this.mSearchDetailsFragment = fragment;
         this.mUser = user;
     }
