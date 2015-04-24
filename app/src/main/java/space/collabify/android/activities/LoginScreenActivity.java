@@ -155,7 +155,8 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
     @Override
     public void onBackPressed() {
         //TODO: better way?
-        System.exit(0);
+        super.onBackPressed();
+        finish();
     }
 
     @Override
