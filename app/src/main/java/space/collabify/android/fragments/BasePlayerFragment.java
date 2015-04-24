@@ -186,6 +186,8 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
                 if(mPlayer != null && mCurrentSong != null) {
                     mPlayer.play("spotify:track:" + mCurrentSong.getId());
                     currSongDidStart = true;
+                }else {
+                    Log.w(TAG, "Either player or currentSong was NULL, couldn't start playback");
                 }
             }
         }
