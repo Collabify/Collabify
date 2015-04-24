@@ -183,8 +183,10 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
                 mPlayer.resume();
             }
             else {
-                mPlayer.play("spotify:track:" + mCurrentSong.getId());
-                currSongDidStart = true;
+                if(mPlayer != null && mCurrentSong != null) {
+                    mPlayer.play("spotify:track:" + mCurrentSong.getId());
+                    currSongDidStart = true;
+                }
             }
         }
         else {
