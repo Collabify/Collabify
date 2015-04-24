@@ -1,8 +1,11 @@
 package space.collabify.android.activities;
 
+import android.app.ActivityManager;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +15,8 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
+
+import java.io.File;
 
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
@@ -95,6 +100,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                clearAppData();
                                 Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -106,6 +112,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                clearAppData();
                                 Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -113,6 +120,18 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                 });
             }
         }
+    }
+
+    private void clearAppData(){
+        //makes it so the login button doesn't automatically retry with same user/pass
+        AuthenticationClient.logout(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //TODO: better way?
+        super.onBackPressed();
+        finish();
     }
 
     @Override

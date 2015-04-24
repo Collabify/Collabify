@@ -111,7 +111,8 @@ public class JoinEventActivity extends CollabifyActivity implements
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mJoinEventListFragment.initializeList();
+                if(mJoinEventListFragment != null)
+                    mJoinEventListFragment.initializeList();
             }
         }, 10);
     }

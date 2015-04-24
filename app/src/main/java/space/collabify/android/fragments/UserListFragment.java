@@ -71,7 +71,12 @@ public class UserListFragment extends SwipeRefreshListFragment {
         AppManager.getInstance().loadEventUsers(new CollabifyCallback<List<User>>() {
             @Override
             public void exception(Exception e) {
-                setRefreshing(false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setRefreshing(false);
+                    }
+                });
             }
 
             @Override
@@ -79,18 +84,23 @@ public class UserListFragment extends SwipeRefreshListFragment {
                 //post results
                 final List<User> temp = users;
                 getActivity().runOnUiThread(new Runnable() {
-                  public void run() {
-                    onRefreshComplete(temp);
-                  }
+                    public void run() {
+                        onRefreshComplete(temp);
+                        setRefreshing(false);
+                    }
                 });
-                setRefreshing(false);
 
                 userlist = users;
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                setRefreshing(false);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setRefreshing(false);
+                    }
+                });
             }
         });
     }
@@ -144,13 +154,13 @@ public class UserListFragment extends SwipeRefreshListFragment {
           if (userlist.size() != 0) {
             switch (userlist.get(position).getRole().getRole()) {
               case Role.PROMOTED:
-                rowIcon.setImageResource(R.drawable.promoted_user);
+                rowIcon.setImageResource(R.drawable.ic_promoted);
                 break;
               case Role.BLACKLISTED:
-                rowIcon.setImageResource(R.drawable.blacklisted_icon);
+                rowIcon.setImageResource(R.drawable.ic_blacklisted);
                 break;
               case Role.COLLABIFIER:
-                rowIcon.setImageResource(R.drawable.collabifier_icon);
+                rowIcon.setImageResource(R.drawable.ic_collabifier);
                 break;
               default:
                 break;
@@ -167,7 +177,7 @@ public class UserListFragment extends SwipeRefreshListFragment {
       final User u = userlist.get(position);
 
       final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
-      final Integer[] icons = {R.drawable.promoted_user, R.drawable.collabifier_icon, R.drawable.blacklisted_icon};
+      final Integer[] icons = {R.drawable.ic_promoted, R.drawable.ic_collabifier, R.drawable.ic_blacklisted};
 
       int rolePos = -1;
       switch(u.getRole().getRole()) {
