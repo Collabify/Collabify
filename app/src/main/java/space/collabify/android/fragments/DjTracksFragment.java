@@ -129,8 +129,7 @@ public class DjTracksFragment extends ListFragment {
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 
-
-        // mParentActivity.getSpotifyService().getPlaylists(mParentActivity.getCurrentUser().getId(), new afterFetchTracks());
+        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(mParentActivity.getAppManager().getEvent().getEventId(), playlist.getId(), new afterFetchTracks());
     }
 
     private class afterFetchTracks extends SpotifyCallback<kaaes.spotify.webapi.android.models.Pager<kaaes.spotify.webapi.android.models.PlaylistTrack>>{
