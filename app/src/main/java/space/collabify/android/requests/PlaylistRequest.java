@@ -49,6 +49,6 @@ public class PlaylistRequest {
       }
     }
 
-    return new Playlist("Cool new playlist", 0, tempList);
+    return new Playlist("Cool new playlist", "", "", tempList);
   }
 }

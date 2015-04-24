@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="label_dj_tracks">DJ Tracks</string>
+    <string name="label_dj_tracks">DJ Tracks</string>
+    <string name="label_dj_playlists_list">DJ Playlists</string>
+    <string name="populate_playlist_tracks_title">Populate list with playlist tracks?</string>
+    <string name="populate_playlist_tracks_positive_text">OK</string>
+    <string name="populate_playlist_tracks_negative_text">Cancel</string>
+
 </resources>
