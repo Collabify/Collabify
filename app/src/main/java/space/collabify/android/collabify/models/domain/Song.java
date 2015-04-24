@@ -11,7 +11,8 @@ public class Song {
     private String songId;
     private String artworkUrl;
     private String userId;
-    private Integer votes;
+    private Integer voteCount;
+    private Vote   vote;
 
     public String getTitle() {
         return title;
@@ -69,11 +70,20 @@ public class Song {
         this.userId = userId;
     }
 
-    public Integer getVotes() {
-        return votes;
+    public Integer getVoteCount() {
+        return voteCount;
     }
 
-    public void setVotes(Integer votes) {
-        this.votes = votes;
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
+
+    public Vote getVote() {
+      return vote;
+    }
+
+    public void setVote(Vote vote) {
+      this.vote = vote;
+    }
+
 }

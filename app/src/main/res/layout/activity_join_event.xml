@@ -16,15 +16,17 @@
     </FrameLayout>
 
   <ImageButton
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="65dp"
+    android:layout_height="65dp"
     android:id="@+id/imageButton"
-    android:src="@drawable/ic_plus"
+    android:src="@drawable/ic_add"
     android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
+    android:scaleType="fitCenter"
+    android:adjustViewBounds="true"
     android:background="#00ffffff"
-    android:layout_margin="10dp"
+    android:layout_margin="15dp"
     android:onClick="toCreateEvent"/>
 
 </RelativeLayout>

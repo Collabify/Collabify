@@ -12,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import kaaes.spotify.webapi.android.SpotifyService;
 import space.collabify.android.R;
 import space.collabify.android.TabsPagerAdapter;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.fragments.PlaylistFragment;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
 import space.collabify.android.requests.VoteRequest;
@@ -108,4 +110,7 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
         return mAppManager.getSong(songId);
     }
 
+    public AppManager getAppManager(){
+        return mAppManager;
+    }
 }

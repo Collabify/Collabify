@@ -1,5 +1,6 @@
 package space.collabify.android.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,10 @@ import space.collabify.android.models.Event;
 public class JoinEventListFragment extends SwipeRefreshListFragment {
     private static final String TAG = JoinEventListFragment.class.getSimpleName();
 
+    private static final String ENABLE_GPS = "Please enable GPS to see events";
+    private static final String NO_EVENTS = "No events found.\nStart your own by hitting the + below!";
+    public boolean isGpsEnabled = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +51,13 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Event tmpEvent = new Event("Waiting for server", "9999", "", false);
+        Event tmpEvent;
+        if(!isGpsEnabled){
+            tmpEvent = new Event(ENABLE_GPS, "9999", "", false);
+        }else{
+            tmpEvent = new Event(NO_EVENTS, "9999", "", false);
+        }
+
         List<Event> temp = new ArrayList<>();
         temp.add(tmpEvent);
         EventListAdapter adapter = new EventListAdapter(getActivity().getApplicationContext(), temp);
@@ -64,6 +75,11 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         //super.onListItemClick(l, v, position, id);
         final Event item = (Event)l.getItemAtPosition(position);
+
+        //shouldn't be able to click on the dummy message
+        if(item.getName().equalsIgnoreCase(ENABLE_GPS) || item.getName().equalsIgnoreCase(NO_EVENTS)){
+            return;
+        }
 
         //either prompt to join event, or to enter password
         if(item == null){
@@ -154,13 +170,17 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
                     Double.toString(userLocation.getLongitude()), new Callback<List<Event>>() {
                 @Override
                 public void success(final List<Event> events, Response response) {
+                    Activity activity = getActivity();
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onRefreshComplete(events);
-                        }
-                    });
+                    if(activity != null){
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onRefreshComplete(events);
+                            }
+                        });
+                    }
+
                 }
 
                 @Override
@@ -181,8 +201,14 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
         // Remove all items from the ListAdapter, and then replace them with the new items
         EventListAdapter adapter = (EventListAdapter) getListAdapter();
         adapter.clear();
-        for (Event event: events) {
-            adapter.add(event);
+
+        if(events == null || events.size() == 0){
+            Event tmp = new Event(NO_EVENTS, "9999", "", false);
+            adapter.add(tmp);
+        }else{
+            for (Event event: events) {
+                adapter.add(event);
+            }
         }
 
         // Stop the refreshing indicator

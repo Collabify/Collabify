@@ -6,66 +6,76 @@ import java.util.ArrayList;
  * This file was born on March 20, at 19:46
  */
 public class Playlist {
-  private String mName;
-  private int mId;
-  private ArrayList<Song> mList;
+    private String mName;
+    private String mId;
+    private String mArtUrl;
+    private ArrayList<Song> mList;
 
-  public Playlist(String mName, int mId, ArrayList<Song> mList) {
-    this.mName = mName;
-    this.mId = mId;
-    this.mList = mList;
-  }
-
-  public String getName() {
-      return mName;
-  }
-
-  public void setName(String mName) {
-      this.mName = mName;
-  }
-
-  public int getId() {
-      return mId;
-  }
-
-  public void setId(int mId) {
-      this.mId = mId;
-  }
-
-  public ArrayList<Song> getmList() {
-    return mList;
-  }
-
-  public void addSong(Song s) {
-    mList.add(s);
-  }
-
-  public void removeSong(Song s) {
-    mList.remove(s);
-  }
-
-  public void moveSong(Song s, int i) {
-    // TODO: something here
-  }
-
-  public Song getCurrent() {
-    try {
-      return mList.get(0);
-    } catch (IndexOutOfBoundsException e) {
-      return null;
+    public Playlist(String mName, String mId, String mArtUrl, ArrayList<Song> mList) {
+        this.mName = mName;
+        this.mId = mId;
+        this.mArtUrl = mArtUrl;
+        this.mList = mList;
     }
-  }
 
-  public Song getNext() {
-    try {
-      return mList.get(1);
-    } catch (IndexOutOfBoundsException e) {
-      return null;
+    public String getName() {
+        return mName;
     }
-  }
 
-  public void update() {
-    // TODO: something here
-  }
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String mId) {
+        this.mId = mId;
+    }
+
+    public String getArtUrl(){
+        return mArtUrl;
+    }
+
+    public void setArtUrl(String mArtUrl){
+        this.mArtUrl = mArtUrl;
+    }
+
+    public ArrayList<Song> getmList() {
+        return mList;
+    }
+
+    public void addSong(Song s) {
+        mList.add(s);
+    }
+
+    public void removeSong(Song s) {
+        mList.remove(s);
+    }
+
+    public void moveSong(Song s, int i) {
+        // TODO: something here
+    }
+
+    public Song getCurrent() {
+        try {
+            return mList.get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public Song getNext() {
+        try {
+            return mList.get(1);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public void update() {
+        // TODO: something here
+    }
 
 }

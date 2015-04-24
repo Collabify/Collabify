@@ -125,6 +125,8 @@ public class CollabifyActivity extends ActionBarActivity {
                     public void success(Response response) {
                         //return to login activity
                         Intent intent = new Intent(ctx, LoginScreenActivity.class);
+                        //makes the app actually close when hitting back on login screen
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK );
                         startActivity(intent);
                     }
 

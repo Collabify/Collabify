@@ -15,8 +15,10 @@ import retrofit.client.OkClient;
 import space.collabify.android.collabify.models.domain.Event;
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Playlist;
+import space.collabify.android.collabify.models.domain.Role;
 import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.collabify.models.domain.User;
+import space.collabify.android.collabify.models.domain.UserSettings;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
@@ -115,7 +117,7 @@ public class CollabifyApi {
      * @param showName
      * @return
      */
-    public User updateUser(String userId, String showName) {
+    public UserSettings updateUser(String userId, String showName) {
         return mCollabifyService.updateUser(userId, showName);
     }
 
@@ -127,7 +129,7 @@ public class CollabifyApi {
      * @param callback
      * @return
      */
-    public void updateUser(String userId, String showName, Callback<User> callback) {
+    public void updateUser(String userId, String showName, Callback<UserSettings> callback) {
         mCollabifyService.updateUser(userId, showName, callback);
     }
 
@@ -172,7 +174,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public List<Song> getEventPlaylist(String eventId) throws CollabifyApiException {
+    public Playlist getEventPlaylist(String eventId) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -187,7 +189,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void getEventPlaylist(String eventId, Callback<List<Song>> callback) throws CollabifyApiException {
+    public void getEventPlaylist(String eventId, Callback<Playlist> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -203,7 +205,7 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public Song addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
+    public Playlist addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -218,7 +220,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void addSong(String eventId, SongRequestDO song, Callback<Song> callback) throws CollabifyApiException {
+    public void addSong(String eventId, SongRequestDO song, Callback<Playlist> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
@@ -239,7 +241,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.reorderPlaylist(mCurrentUserId, eventId, reorderedPlaylist);
+        return mCollabifyService.reorderPlaylist(eventId, reorderedPlaylist);
     }
 
     /**
@@ -255,7 +257,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.reorderPlaylist(mCurrentUserId, eventId, reorderedPlaylist, callback);
+        mCollabifyService.reorderPlaylist(eventId, reorderedPlaylist, callback);
     }
 
     /**
@@ -305,7 +307,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.getEventInfo(mCurrentUserId, eventId);
+        return mCollabifyService.getEventInfo(eventId);
     }
 
     /**
@@ -321,7 +323,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.getEventInfo(mCurrentUserId, eventId, callback);
+        mCollabifyService.getEventInfo(eventId, callback);
     }
 
     /**
@@ -389,7 +391,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.updateEvent(mCurrentUserId, eventId, eventInfo);
+        return mCollabifyService.updateEvent(eventId, eventInfo);
     }
 
     /**
@@ -405,7 +407,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.updateEvent(mCurrentUserId, eventId, eventInfo, callback);
+        mCollabifyService.updateEvent(eventId, eventInfo, callback);
     }
 
     /**
@@ -419,7 +421,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.deleteEvent(mCurrentUserId, eventId);
+        mCollabifyService.deleteEvent(eventId);
     }
 
     /**
@@ -434,7 +436,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.deleteEvent(mCurrentUserId, eventId, callback);
+        mCollabifyService.deleteEvent(eventId, callback);
     }
 
 
@@ -454,7 +456,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.getEventUsers(mCurrentUserId, eventId);
+        return mCollabifyService.getEventUsers(eventId);
     }
 
     /**
@@ -469,7 +471,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.getEventUsers(mCurrentUserId, eventId, callback);
+        mCollabifyService.getEventUsers(eventId, callback);
     }
 
     /**
@@ -540,12 +542,12 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public String changeUserRole(String eventId, String userId, String role) throws CollabifyApiException {
+    public Role changeUserRole(String eventId, String userId, String role) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.changeUserRole(mCurrentUserId, eventId, userId, role);
+        return mCollabifyService.changeUserRole(eventId, userId, role);
     }
 
     /**
@@ -557,11 +559,11 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void changeUserRole(String eventId, String userId, String role, Callback<String> callback) throws CollabifyApiException {
+    public void changeUserRole(String eventId, String userId, String role, Callback<Role> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.changeUserRole(mCurrentUserId, eventId, userId, role, callback);
+        mCollabifyService.changeUserRole(eventId, userId, role, callback);
     }
 }

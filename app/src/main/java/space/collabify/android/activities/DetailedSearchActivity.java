@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import kaaes.spotify.webapi.android.models.TracksPager;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
+import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Song;
@@ -112,29 +114,34 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
     }
 
     private void addSong(final Song song){
+        // TODO: FIX ME!
         progress = ProgressDialog.show(this, "Adding Song", "Adding song to playlist...", true);
-
         mAppManager.addSong(song, new afterAddSong());
     }
 
-    private class afterAddSong implements CollabifyCallback<Song>{
+    private class afterAddSong implements CollabifyCallback<Playlist>{
 
         @Override
-        public void success(Song song, Response response) {
-
+        public void success(Playlist playlist, Response response) {
             progress.dismiss();
-
-            System.out.println("this is a test");
         }
 
         @Override
         public void failure(RetrofitError error) {
+          progress.dismiss();
+
+          runOnUiThread(new Runnable() {
+            public void run() {
+              Toast.makeText(getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+            }
+          });
 
         }
 
         @Override
         public void exception(Exception e) {
-
+          progress.dismiss();
+          Toast.makeText(getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -160,7 +167,14 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     url = track.album.images.get(2).url;
                 }
 
-                Song song = new Song(track.name, track.artists.toString(), track.album.name, 9999, track.id, url, mAppManager.getUser().getId());
+              String artists = track.artists.get(0).name;
+              if (track.artists.size() > 1) {
+                for (int i = 1; i < track.artists.size() && i < 3; i++) {
+                  artists += ", " + track.artists.get(i).name;
+                }
+              }
+
+              Song song = new Song(track.name, artists, track.album.name, 9999, track.id, url, mAppManager.getUser().getId());
 
                 songs.add(song);
             }

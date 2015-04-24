@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import space.collabify.android.R;
@@ -24,7 +26,7 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
     protected SearchDetailsFragment mSearchDetailsFragment;
 
     public SearchDetailsListAdapter(Context context, List<Song> songs, User user, SearchDetailsFragment fragment) {
-        super(context,  R.layout.playlist_collabifier_list_row, songs);
+        super(context, R.layout.playlist_collabifier_list_row, songs);
         this.mSearchDetailsFragment = fragment;
         this.mUser = user;
     }
@@ -35,19 +37,20 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
         View customView = inflater.inflate(R.layout.song_details_row, parent, false);
 
         final Song song = getItem(position);
-        TextView rowDesc = (TextView) customView.findViewById(R.id.song_row_description);
+        TextView rowTitle = (TextView) customView.findViewById(R.id.song_row_title);
+        TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
         ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
         ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
 
-        //set up the row elements
-        String title = song.getTitle();
-        title = title.substring(0, Math.min(title.length(), 30));
-        String artist = song.getArtist();
-        artist = artist.substring(0, Math.min(artist.length(), 30));
+        if(!"".equals(song.getId())) {
+            //use picasso to load album art
+            Picasso.with(getContext()).load(song.getArtwork()).into(albumArt);
+        }
 
-        final String newSongDescription = title + "\n(" + artist + ")";
+        final String newSongDescription = song.getTitle() + "\n(" + song.getArtist() + ")";
 
-        rowDesc.setText(newSongDescription);
+        rowTitle.setText(song.getTitle());
+        rowArtist.setText("(" + song.getArtist() + ")");
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
