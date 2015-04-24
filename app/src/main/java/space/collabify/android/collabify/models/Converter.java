@@ -66,13 +66,9 @@ public class Converter {
         return converted;
     }
 
-  public static List<Song> toPlaylist(space.collabify.android.collabify.models.domain.Playlist current) {
-    List<Song> converted;
-
-    for (current.get)
-
-    return ;
-  }
+    public static List<Song> toPlaylist(space.collabify.android.collabify.models.domain.Playlist current) {
+      return toSongs(current.getSongs());
+    }
 
     public static List<Song> toSongs(List<space.collabify.android.collabify.models.domain.Song> songs) {
         List<Song> appSongs = new ArrayList<Song>();

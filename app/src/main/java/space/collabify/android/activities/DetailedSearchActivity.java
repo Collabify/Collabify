@@ -18,6 +18,7 @@ import kaaes.spotify.webapi.android.models.TracksPager;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
+import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.fragments.SearchDetailsFragment;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Song;
@@ -113,15 +114,15 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
     }
 
     private void addSong(final Song song){
-        progress = ProgressDialog.show(this, "Adding Song", "Adding song to playlist...", true);
-
-        mAppManager.addSong(song, new afterAddSong());
+        // TODO: FIX ME!
+//        progress = ProgressDialog.show(this, "Adding Song", "Adding song to playlist...", true);
+//        mAppManager.addSong(song, new afterAddSong());
     }
 
-    private class afterAddSong implements CollabifyCallback<Song>{
+    private class afterAddSong implements CollabifyCallback<Playlist>{
 
         @Override
-        public void success(Song song, Response response) {
+        public void success(Playlist playlist, Response response) {
 
             progress.dismiss();
 
