@@ -19,7 +19,7 @@
     android:layout_width="65dp"
     android:layout_height="65dp"
     android:id="@+id/imageButton"
-    android:src="@drawable/ic_plus"
+    android:src="@drawable/ic_add"
     android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
