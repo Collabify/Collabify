@@ -67,7 +67,7 @@ public class CreateEventActivity extends CollabifyActivity {
             Location userLocation = AppManager.getInstance().getLocation();
             if(userLocation == null){
                 Log.e(TAG, "user location was null when trying to create event");
-                Toast.makeText(getApplicationContext(), "location is null", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "Unable to find location, please enable location", Toast.LENGTH_LONG).show();
                 return;
             }
             djEvent.setLatitude(Double.toString(userLocation.getLatitude()));

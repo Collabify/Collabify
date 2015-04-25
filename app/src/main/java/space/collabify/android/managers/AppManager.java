@@ -542,8 +542,6 @@ public class AppManager {
         if (song != null) {
             // do server stuff here and on callback do this
             song.downvote();
-
-            Collections.swap(mPlaylist, i, i - 1);
         }
     }
 
@@ -551,13 +549,47 @@ public class AppManager {
      * Moves a song down in the playlist on the server
      *
      * @param song
+     * @param postion
+     * @param updated
      * @param callback
      */
-    public void moveSongDown(Song song, CollabifyResponseCallback callback) {
+    public void moveSong(Song song, int postion, int updated, final CollabifyCallback<List<Song>> callback) {
       if (song != null) {
         // do server stuff here and on callback do this
-        song.downvote();
+        if (postion >= 0 && postion < mPlaylist.size() && updated >= 0 && updated < mPlaylist.size()) {
+          mPlaylistUpdating = true;
 
+          try {
+            mCollabifyApi.reorderPlaylist(mEvent.getEventId(), postion, updated, new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
+              @Override
+              public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+                mPlaylist = Converter.toPlaylist(playlist);
+                mPlaylistUpdating = false;
+
+                // call callback success
+                if (callback != null) {
+                  callback.success(mPlaylist, response);
+                }
+              }
+
+              @Override
+              public void failure(RetrofitError retrofitError) {
+                mPlaylistUpdating = false;
+
+                // call calback failure
+                if (callback != null) {
+                  callback.failure(retrofitError);
+                }
+              }
+            });
+          } catch (CollabifyApiException e) {
+            if (callback != null) {
+              callback.exception(e);
+            }
+            mPlaylistUpdating = false;
+            e.printStackTrace();
+          }
+        }
       }
     }
 

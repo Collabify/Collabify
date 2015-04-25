@@ -232,32 +232,34 @@ public class CollabifyApi {
      * Reorder an event's playlist
      *
      * @param eventId
-     * @param reorderedPlaylist
+     * @param oldIndex
+     * @param newIndex
      * @return
      * @throws CollabifyApiException
      */
-    public Playlist reorderPlaylist(String eventId, Playlist reorderedPlaylist) throws CollabifyApiException {
+    public Playlist reorderPlaylist(String eventId, int oldIndex, int newIndex) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.reorderPlaylist(eventId, reorderedPlaylist);
+        return mCollabifyService.reorderPlaylist(eventId, oldIndex, newIndex);
     }
 
     /**
      * Reorder an event's playlist
      *
      * @param eventId
-     * @param reorderedPlaylist
+     * @param oldIndex
+     * @param newIndex
      * @param callback
      * @throws CollabifyApiException
      */
-    public void reorderPlaylist(String eventId, Playlist reorderedPlaylist, Callback<Playlist> callback) throws CollabifyApiException {
+    public void reorderPlaylist(String eventId, int oldIndex, int newIndex, Callback<Playlist> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.reorderPlaylist(eventId, reorderedPlaylist, callback);
+        mCollabifyService.reorderPlaylist(eventId, oldIndex, newIndex, callback);
     }
 
     /**
