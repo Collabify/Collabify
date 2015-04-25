@@ -53,8 +53,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         ImageButton upButton = (ImageButton) customView.findViewById(R.id.playlist_dj_up_button);
         ImageButton downButton = (ImageButton) customView.findViewById(R.id.playlist_dj_down_button);
 
-        // TODO: Fix me, debug only!
-        if (!AppManager.getInstance().getUser().getRole().isDJ()) {
+        if (AppManager.getInstance().getUser().getRole().isDJ()) {
           upvoteButton.setVisibility(View.INVISIBLE);
           downvoteButton.setVisibility(View.INVISIBLE);
         } else {
