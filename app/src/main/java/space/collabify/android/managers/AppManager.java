@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 
+import java.util.Collections;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -60,6 +61,7 @@ public class AppManager {
     private boolean mPlaylistUpdating = false;
 
     private int currentSong = -1;
+
     private android.location.Location mLastUserLocation;
 
     /**
@@ -526,7 +528,7 @@ public class AppManager {
     public void upvoteSong(Song song, CollabifyResponseCallback callback) {
         if (song != null) {
             // do server stuff here and on callback do this
-            song.downvote();
+            song.upvote();
         }
     }
 
@@ -540,7 +542,23 @@ public class AppManager {
         if (song != null) {
             // do server stuff here and on callback do this
             song.downvote();
+
+            Collections.swap(mPlaylist, i, i - 1);
         }
+    }
+
+    /**
+     * Moves a song down in the playlist on the server
+     *
+     * @param song
+     * @param callback
+     */
+    public void moveSongDown(Song song, CollabifyResponseCallback callback) {
+      if (song != null) {
+        // do server stuff here and on callback do this
+        song.downvote();
+
+      }
     }
 
     /**

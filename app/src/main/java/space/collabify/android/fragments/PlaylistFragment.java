@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -32,9 +33,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     public static final int ID_POS = 0;
     public static final int ALBUM_ART_POS = 1;
     public static final int SONG_DESCRIPTION_POS = 2;
-    public static final int UPVOTE_POS = 3;
-    public static final int DOWNVOTE_POS = 4;
-    public static final int DELETE_POS = 5;
+    public static final int UPVOTE_POS = 5;
+    public static final int DOWNVOTE_POS = 6;
+    public static final int DELETE_POS = 7;
 
     protected OnPlaylistUpdateRequestListener mListener;
     protected CollabifyActivity mParentActivity;
@@ -192,7 +193,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
     public void moveSongUp(View v) {
       //mAppManager
-      //Collections.swap(arrayList, i, i-1);
+      //Collections.swap(something, i, i - 1);
     }
 
     public void moveSongDown(View v) {
