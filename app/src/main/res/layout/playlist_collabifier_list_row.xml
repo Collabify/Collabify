@@ -34,6 +34,35 @@
         android:layout_alignBottom="@+id/playlist_collabifier_album_art"
         android:layout_margin="3dp"/>
 
+  <ImageButton
+    android:id="@+id/playlist_dj_up_button"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:scaleType="fitXY"
+    android:textOn=""
+    android:textOff=""
+    android:layout_below="@+id/playlist_row_song_id"
+    android:layout_toLeftOf="@+id/playlist_collabifier_downvote_button"
+    android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
+    android:layout_marginTop="12dp"
+    android:background="#00ffffff"
+    android:layout_marginRight="12dp"
+    android:src="@drawable/ic_up_arrow"/>
+
+  <ImageButton
+    android:id="@+id/playlist_dj_down_button"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:scaleType="fitXY"
+    android:textOn=""
+    android:textOff=""
+    android:layout_alignTop="@+id/playlist_collabifier_upvote_button"
+    android:layout_toLeftOf="@+id/playlist_collabifier_delete_button"
+    android:layout_toStartOf="@+id/playlist_collabifier_delete_button"
+    android:background="#00ffffff"
+    android:layout_marginRight="12dp"
+    android:src="@drawable/ic_down_arrow"/>
+
     <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_upvote_button"
         android:layout_width="30dp"
@@ -48,7 +77,8 @@
         android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
         android:layout_marginTop="12dp"
         android:background="#00ffffff"
-        android:layout_marginRight="12dp"/>
+        android:layout_marginRight="12dp"
+        android:checked="false"/>
 
     <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_downvote_button"

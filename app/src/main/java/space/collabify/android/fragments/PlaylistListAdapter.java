@@ -9,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 import space.collabify.android.R;
 import space.collabify.android.controls.ImageToggleButton;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
 
@@ -25,6 +27,7 @@ import space.collabify.android.models.User;
 public class PlaylistListAdapter extends ArrayAdapter<Song> {
     protected User mUser;
     protected PlaylistFragment mPlaylistFragment;
+    protected int position;
 
     public PlaylistListAdapter(Context context, List<Song> songs, User user, PlaylistFragment fragment){
         super(context,  R.layout.playlist_collabifier_list_row, songs);
@@ -33,10 +36,11 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.playlist_collabifier_list_row, parent, false);
         Song songItem = getItem(position);
+        this.position = position;
 
         ImageView albumArt = (ImageView) customView.findViewById(R.id.playlist_collabifier_album_art);
         TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
@@ -45,6 +49,17 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
         ImageToggleButton downvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
+
+        ImageButton upButton = (ImageButton) customView.findViewById(R.id.playlist_dj_up_button);
+        ImageButton downButton = (ImageButton) customView.findViewById(R.id.playlist_dj_down_button);
+
+        if (AppManager.getInstance().getUser().getRole().isDJ()) {
+          upvoteButton.setVisibility(View.INVISIBLE);
+          downvoteButton.setVisibility(View.INVISIBLE);
+        } else {
+          upButton.setVisibility(View.INVISIBLE);
+          downButton.setVisibility(View.INVISIBLE);
+        }
 
         if(!"".equals(songItem.getId())){
             //use picasso to load album art
@@ -73,6 +88,20 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mPlaylistFragment.onDownvoteClick(buttonView, isChecked);
                 }
+            });
+
+            upButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                mPlaylistFragment.moveSong(v, position, position-1);
+              }
+            });
+
+            downButton.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                mPlaylistFragment.moveSong(v, position, position+1);
+              }
             });
 
             String artist = songItem.getArtist();
@@ -105,6 +134,8 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             deleteButton.setVisibility(View.INVISIBLE);
             upvoteButton.setVisibility(View.INVISIBLE);
             downvoteButton.setVisibility(View.INVISIBLE);
+            upButton.setVisibility(View.INVISIBLE);
+            downButton.setVisibility(View.INVISIBLE);
             albumArt.setVisibility(View.INVISIBLE);
         }
 

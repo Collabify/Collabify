@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -32,9 +33,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     public static final int ID_POS = 0;
     public static final int ALBUM_ART_POS = 1;
     public static final int SONG_DESCRIPTION_POS = 2;
-    public static final int UPVOTE_POS = 3;
-    public static final int DOWNVOTE_POS = 4;
-    public static final int DELETE_POS = 5;
+    public static final int UPVOTE_POS = 5;
+    public static final int DOWNVOTE_POS = 6;
+    public static final int DELETE_POS = 7;
 
     protected OnPlaylistUpdateRequestListener mListener;
     protected CollabifyActivity mParentActivity;
@@ -56,7 +57,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
-        temp.add(new Song("temp song", "temp artist", "temp album", -1, "temp id", "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRr1zUShmzD7lDdo5RBTBCphL_3KVi_R-6DPEq-l4H32K5uE48mOA", ""));
+        temp.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
         User user = mParentActivity.getCurrentUser();
         mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
@@ -188,6 +189,34 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
             callRemoveSong(song);
         }
+    }
+
+    public void moveSong(View view, int position, int updated) {
+      ViewGroup rowViewGroup = (ViewGroup) view.getParent();
+      Song song = getSongFromLayout(rowViewGroup);
+
+
+      mAppManager.moveSong(song, position, updated, new CollabifyCallback<List<Song>>() {
+
+        @Override
+        public void success(final List<Song> songs, Response response) {
+          getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+              updatePlaylist(songs);
+            }
+          });
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+          Log.e(TAG, "Failed to remove the song:\n" + retrofitError.getMessage());
+        }
+
+        @Override
+        public void exception(Exception e) {
+
+        }
+      });
     }
 
     private void callRemoveSong(Song song) {
