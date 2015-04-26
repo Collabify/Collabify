@@ -34,6 +34,8 @@ public interface CollabifyService {
     public static final String USER_HEADER = "userid";
     public static final String LAT_HEADER = "latitude";
     public static final String LONG_HEADER = "longitude";
+    public static final String OLD_INDEX_HEADER = "oldindex";
+    public static final String NEW_INDEX_HEADER = "newindex";
 
     public static final String USER_PATHVAL = "userId";
     public static final String USERS_URL = "/users/";
@@ -186,21 +188,23 @@ public interface CollabifyService {
      * Reorder an event's playlist
      *
      * @param eventId
-     * @param reorderedPlaylist
+     * @param oldIndex
+     * @param newIndex
      * @return
      */
     @PUT(PLAYLIST_SONGS_URL)
-    public Playlist reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Body Playlist reorderedPlaylist);
+    public Playlist reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Header(OLD_INDEX_HEADER) int oldIndex, @Header(NEW_INDEX_HEADER) int newIndex);
 
     /**
      * Reorder an event's playlist
      *
      * @param eventId
-     * @param reorderedPlaylist
+     * @param oldIndex
+     * @param newIndex
      * @param callback
      */
     @PUT(PLAYLIST_SONGS_URL)
-    public void reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Body Playlist reorderedPlaylist, Callback<Playlist> callback);
+    public void reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Header(OLD_INDEX_HEADER) int oldIndex, @Header(NEW_INDEX_HEADER) int newIndex, Callback<Playlist> callback);
 
     /**
      * Remove a song from an event's playlist
