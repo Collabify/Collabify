@@ -37,7 +37,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/dj_playlist_tracks_add"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_chevron_right"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:background="#00ffffff"
