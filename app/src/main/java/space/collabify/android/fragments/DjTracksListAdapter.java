@@ -34,32 +34,57 @@ public class DjTracksListAdapter extends ArrayAdapter<Song> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customView = inflater.inflate(R.layout.song_details_row, parent, false);
 
         final Song song = getItem(position);
-        TextView rowTitle = (TextView) customView.findViewById(R.id.song_row_title);
-        TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
-        ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
-        ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
+
+        // declare a viewholder
+        ViewHolder viewHolder;
+
+        // create a new viewHolder
+        if (convertView == null) {
+            // create a new viewholder
+            viewHolder = new ViewHolder();
+
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.song_details_row, parent, false);
+
+            viewHolder.rowTitle = (TextView) convertView.findViewById(R.id.song_row_title);
+            viewHolder.rowArtist = (TextView) convertView.findViewById(R.id.song_row_artist);
+            viewHolder.albumArt = (ImageView) convertView.findViewById(R.id.song_details_album_art);
+            viewHolder.addButton = (ImageButton) convertView.findViewById(R.id.song_row_add);
+
+            // attach to actual view
+            convertView.setTag(viewHolder);
+        }
+        // reuse view
+        else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
         if(!"".equals(song.getId()) && song.getArtwork() != null && !song.getArtwork().isEmpty()){
             //use picasso to load album art
-            Picasso.with(getContext()).load(song.getArtwork()).into(albumArt);
+            Picasso.with(getContext()).load(song.getArtwork()).into(viewHolder.albumArt);
         }
 
         final String newSongDescription = song.getTitle() + "\n(" + song.getArtist() + ")";
 
-        rowTitle.setText(song.getTitle());
-        rowArtist.setText("(" + song.getArtist() + ")");
+        viewHolder.rowTitle.setText(song.getTitle());
+        viewHolder.rowArtist.setText("(" + song.getArtist() + ")");
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDjTracksFragment.setupAddDialog(newSongDescription, song);
             }
         });
 
-        return customView;
+        return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView rowTitle;
+        TextView rowArtist;
+        ImageView albumArt;
+        ImageButton addButton;
     }
 }
