@@ -10,7 +10,8 @@
         android:layout_height="50dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:src="@drawable/test_album_art"
+        android:src="@drawable/ic_album"
+        android:background="#ff444444"
         android:layout_margin="5dp"/>
 
     <TextView android:id="@+id/dj_playlist_title"

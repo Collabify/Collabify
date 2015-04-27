@@ -24,6 +24,7 @@ import space.collabify.android.collabify.models.domain.Location;
 import space.collabify.android.collabify.models.domain.UserSettings;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.RoleDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.network.UserRequestDO;
@@ -784,5 +785,38 @@ public class AppManager {
             return null;
         }
         return Converter.toSong(mPlaylist.getCurrentSong());
+    }
+
+    /**
+     * Handles changing a user's role at an event
+     *
+     * @param callback
+     */
+    public void changeUserRole(User user, String role, final CollabifyCallback callback) {
+      try {
+        RoleDO newRole = new RoleDO();
+        newRole.setRole(role);
+        mCollabifyApi.changeUserRole(mEvent.getEventId(), user.getId(), newRole, new Callback<space.collabify.android.collabify.models.domain.Role>() {
+          @Override
+          public void success(space.collabify.android.collabify.models.domain.Role newrole, Response response) {
+            if (callback != null) {
+              callback.success(newrole, response);
+            }
+          }
+
+          @Override
+          public void failure(RetrofitError retrofitError) {
+            // call callback failure
+            if (callback != null) {
+              callback.failure(retrofitError);
+            }
+          }
+        });
+      } catch (CollabifyApiException e) {
+        if (callback != null) {
+          callback.exception(e);
+        }
+        e.printStackTrace();
+      }
     }
 }

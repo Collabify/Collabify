@@ -21,6 +21,7 @@ import space.collabify.android.collabify.models.domain.User;
 import space.collabify.android.collabify.models.domain.UserSettings;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.RoleDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.network.UserRequestDO;
@@ -599,7 +600,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void changeUserRole(String eventId, String userId, String role, Callback<Role> callback) throws CollabifyApiException {
+    public void changeUserRole(String eventId, String userId, RoleDO role, Callback<Role> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }

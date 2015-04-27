@@ -16,6 +16,7 @@ import space.collabify.android.collabify.models.domain.Role;
 import space.collabify.android.collabify.models.domain.UserSettings;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.RoleDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.domain.EventSettings;
@@ -47,7 +48,7 @@ public interface CollabifyService {
     public static final String EVENT_URL = EVENTS_URL + "{" + EVENT_PATHVAL + "}/";
     public static final String EVENT_USERS_URL = EVENT_URL + "users/";
     public static final String EVENT_USER_URL = EVENT_USERS_URL + "{" + USER_PATHVAL + "}";
-    public static final String EVENT_USER_ROLE_URL = EVENT_USER_URL + "role/";
+    public static final String EVENT_USER_ROLE_URL = EVENT_USER_URL + "/role/";
     public static final String EVENT_SETTINGS_URL = EVENT_URL + "settings/";
 
     public static final String PLAYLIST_URL = EVENT_URL + "playlist/";
@@ -435,5 +436,5 @@ public interface CollabifyService {
      * @param callback
      */
     @PUT(EVENT_USER_ROLE_URL)
-    public void changeUserRole(@Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body String role, Callback<Role> callback);
+    public void changeUserRole(@Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body RoleDO role, Callback<Role> callback);
 }
