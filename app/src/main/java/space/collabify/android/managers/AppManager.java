@@ -776,4 +776,35 @@ public class AppManager {
         return mPlaylist.get(currentSong);
     }
 
+    /**
+     * Handles changing a user's role at an event
+     *
+     * @param callback
+     */
+    public void changeUserRole(User user, String role, final CollabifyCallback callback) {
+      try {
+        mCollabifyApi.changeUserRole(mEvent.getEventId(), user.getId(), role, new Callback<space.collabify.android.collabify.models.domain.Role>() {
+          @Override
+          public void success(space.collabify.android.collabify.models.domain.Role newrole, Response response) {
+            if (callback != null) {
+              callback.success(newrole, response);
+            }
+          }
+
+          @Override
+          public void failure(RetrofitError retrofitError) {
+            // call callback failure
+            if (callback != null) {
+              callback.failure(retrofitError);
+            }
+          }
+        });
+      } catch (CollabifyApiException e) {
+        if (callback != null) {
+          callback.exception(e);
+        }
+        e.printStackTrace();
+      }
+    }
+
 }

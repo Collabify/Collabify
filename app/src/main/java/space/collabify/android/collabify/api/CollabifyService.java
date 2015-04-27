@@ -47,7 +47,7 @@ public interface CollabifyService {
     public static final String EVENT_URL = EVENTS_URL + "{" + EVENT_PATHVAL + "}/";
     public static final String EVENT_USERS_URL = EVENT_URL + "users/";
     public static final String EVENT_USER_URL = EVENT_USERS_URL + "{" + USER_PATHVAL + "}";
-    public static final String EVENT_USER_ROLE_URL = EVENT_USER_URL + "role/";
+    public static final String EVENT_USER_ROLE_URL = EVENT_USER_URL + "/role/";
     public static final String EVENT_SETTINGS_URL = EVENT_URL + "settings/";
 
     public static final String PLAYLIST_URL = EVENT_URL + "playlist/";
