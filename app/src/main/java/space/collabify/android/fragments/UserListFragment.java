@@ -214,14 +214,13 @@ public class UserListFragment extends SwipeRefreshListFragment {
                 AppManager.getInstance().changeUserRole(u, newrole, new CollabifyCallback<space.collabify.android.collabify.models.domain.Role>() {
                   @Override
                   public void success(space.collabify.android.collabify.models.domain.Role role, Response response) {
+                    u.setRole(role.getRole());
                     getActivity().runOnUiThread(new Runnable() {
                       public void run() {
                         Toast.makeText(getActivity(), u.getName() + " changed to " + newrole, Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
                       }
                     });
-
-                      u.setRole(role.getRole());
-                      adapter.notifyDataSetChanged();
                   }
 
                     @Override

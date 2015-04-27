@@ -24,6 +24,7 @@ import space.collabify.android.collabify.models.domain.Location;
 import space.collabify.android.collabify.models.domain.UserSettings;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.RoleDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.network.UserRequestDO;
@@ -793,7 +794,9 @@ public class AppManager {
      */
     public void changeUserRole(User user, String role, final CollabifyCallback callback) {
       try {
-        mCollabifyApi.changeUserRole(mEvent.getEventId(), user.getId(), role, new Callback<space.collabify.android.collabify.models.domain.Role>() {
+        RoleDO newRole = new RoleDO();
+        newRole.setRole(role);
+        mCollabifyApi.changeUserRole(mEvent.getEventId(), user.getId(), newRole, new Callback<space.collabify.android.collabify.models.domain.Role>() {
           @Override
           public void success(space.collabify.android.collabify.models.domain.Role newrole, Response response) {
             if (callback != null) {
