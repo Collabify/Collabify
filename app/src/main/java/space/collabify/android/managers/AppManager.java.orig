@@ -785,6 +785,7 @@ public class AppManager {
         }
         return Converter.toSong(mPlaylist.getCurrentSong());
     }
+<<<<<<< HEAD
 
     /**
      * Handles changing a user's role at an event
@@ -816,4 +817,7 @@ public class AppManager {
         e.printStackTrace();
       }
     }
+
+=======
+>>>>>>> 58d465bda2e12e9a1e0a0b02ebf91db356c82a68
 }

@@ -69,6 +69,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
                 initiateRefresh();
             }
         });
+        initiateRefresh();
     }
 
     @Override
@@ -163,6 +164,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
         android.location.Location userLocation = AppManager.getInstance().getLocation();
+        final Activity activity = getActivity();
 
         // load the events
         if(userLocation != null){
@@ -170,8 +172,6 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
                     Double.toString(userLocation.getLongitude()), new Callback<List<Event>>() {
                 @Override
                 public void success(final List<Event> events, Response response) {
-                    Activity activity = getActivity();
-
                     if(activity != null){
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -185,7 +185,12 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
-
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onRefreshComplete(null);
+                        }
+                    });
                 }
             });
         }else{

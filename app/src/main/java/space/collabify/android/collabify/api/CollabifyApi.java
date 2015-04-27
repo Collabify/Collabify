@@ -197,36 +197,7 @@ public class CollabifyApi {
         mCollabifyService.getEventPlaylist(mCurrentUserId, eventId, callback);
     }
 
-    /**
-     * Add a song to an event's playlist
-     *
-     * @param eventId
-     * @param song
-     * @return
-     * @throws CollabifyApiException
-     */
-    public Playlist addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
-        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
-            throw new CollabifyApiException();
-        }
-        return mCollabifyService.addSong(mCurrentUserId, eventId, song);
-    }
 
-    /**
-     * Add a song to an event's playlist
-     *
-     * @param eventId
-     * @param song
-     * @param callback
-     * @throws CollabifyApiException
-     */
-    public void addSong(String eventId, SongRequestDO song, Callback<Playlist> callback) throws CollabifyApiException {
-        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
-            throw new CollabifyApiException();
-        }
-
-        mCollabifyService.addSong(mCurrentUserId, eventId, song, callback);
-    }
 
     /**
      * Reorder an event's playlist
@@ -262,6 +233,41 @@ public class CollabifyApi {
         mCollabifyService.reorderPlaylist(eventId, oldIndex, newIndex, callback);
     }
 
+    /*--------------------------------------------------------------------------------------------*
+     * Songs ------------------------------------------------------------------------------ Songs *
+     *--------------------------------------------------------------------------------------------*/
+
+    /**
+     * Add a song to an event's playlist
+     *
+     * @param eventId
+     * @param song
+     * @return
+     * @throws CollabifyApiException
+     */
+    public Playlist addSong(String eventId, SongRequestDO song) throws CollabifyApiException {
+        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
+            throw new CollabifyApiException();
+        }
+        return mCollabifyService.addSong(mCurrentUserId, eventId, song);
+    }
+
+    /**
+     * Add a song to an event's playlist
+     *
+     * @param eventId
+     * @param song
+     * @param callback
+     * @throws CollabifyApiException
+     */
+    public void addSong(String eventId, SongRequestDO song, Callback<Playlist> callback) throws CollabifyApiException {
+        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
+            throw new CollabifyApiException();
+        }
+
+        mCollabifyService.addSong(mCurrentUserId, eventId, song, callback);
+    }
+
     /**
      * Remove a song from an event's playlist
      *
@@ -291,6 +297,38 @@ public class CollabifyApi {
         }
 
         mCollabifyService.removeSong(mCurrentUserId, eventId, songId, callback);
+    }
+
+    /**
+     * End the current song and advance the queue to the next song (which is already on deck) and
+     * get the updated playlist
+     *
+     * @param eventId
+     * @return
+     * @throws CollabifyApiException
+     */
+    public Playlist endCurrentSong(String eventId) throws CollabifyApiException {
+        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
+            throw new CollabifyApiException();
+        }
+
+        return mCollabifyService.endCurrentSong(mCurrentUserId, eventId);
+    }
+
+    /**
+     * End the current song and advance the queue to the next song (which is already on deck) and
+     * get the updated playlist
+     *
+     * @param eventId
+     * @param callback
+     * @throws CollabifyApiException
+     */
+    public void endCurrentSong(String eventId, Callback<Playlist> callback) throws CollabifyApiException {
+        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
+            throw new CollabifyApiException();
+        }
+
+        mCollabifyService.endCurrentSong(mCurrentUserId, eventId, callback);
     }
 
     /*--------------------------------------------------------------------------------------------*
