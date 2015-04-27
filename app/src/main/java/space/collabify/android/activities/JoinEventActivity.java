@@ -2,8 +2,10 @@ package space.collabify.android.activities;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
@@ -26,6 +28,7 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.LocationService;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.collabify.models.network.UserDO;
@@ -38,15 +41,9 @@ import space.collabify.android.models.User;
 /**
  * This file was born on March 11 at 14:00
  */
-public class JoinEventActivity extends CollabifyActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
-
+public class JoinEventActivity extends CollabifyActivity {
     private static final String TAG = JoinEventActivity.class.getSimpleName();
     private JoinEventListFragment mJoinEventListFragment;
-
-    private static GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +61,12 @@ public class JoinEventActivity extends CollabifyActivity implements
             buildAlertMessageNoGps();
         }
 
-        if(mGoogleApiClient == null){
-            buildGoogleApiClient();
-        }
+        //start the location service
+        Intent locationIntent = new Intent(this, LocationService.class);
+        startService(locationIntent);
+
+        //register for location updates
+        registerReceiver(mLocationReceiver, new IntentFilter(LocationService.BROADCAST_INTENT));
 
         if(savedInstanceState == null){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -112,21 +112,11 @@ public class JoinEventActivity extends CollabifyActivity implements
             @Override
             public void run() {
                 if(mJoinEventListFragment != null)
-                    mJoinEventListFragment.initializeList();
+                    mJoinEventListFragment.initializeList(null);
             }
         }, 10);
     }
 
-    /**
-     * Initializes the google api for location services
-     */
-    protected synchronized void buildGoogleApiClient(){
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
 
     public void toCollabifier(Event event, String password){
         if (event.isProtectedEvent()) {
@@ -199,52 +189,14 @@ public class JoinEventActivity extends CollabifyActivity implements
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(mGoogleApiClient != null){
-            mGoogleApiClient.connect();
+
+    private BroadcastReceiver mLocationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getBundleExtra(LocationService.BUNDLE_EXTRA);
+            Location location = bundle.getParcelable(LocationService.PARCEL_LOCATION);
+            mJoinEventListFragment.initializeList(location);
         }
-    }
+    };
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(mGoogleApiClient != null){
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        LocationRequest request = LocationRequest.create().setInterval(100)
-                .setFastestInterval(0)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
-                .setNumUpdates(1);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, this);
-
-        if(lastLocation != null){
-            mJoinEventListFragment.initializeList();
-            mAppManager.updateLocation(lastLocation);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.w(TAG, "google api location services suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.w(TAG, "google api location services connection failed");
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        //update location
-        mAppManager.updateLocation(location);
-        mJoinEventListFragment.initializeList();
-    }
 }
