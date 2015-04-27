@@ -36,6 +36,7 @@ public class DjTracksFragment extends ListFragment {
     protected PrimaryViewActivity mParentActivity;
     protected DjPlaylistsListAdapter mDjPlaylistsListAdapter;
     protected DjTracksListAdapter mDjTracksListAdapter;
+    protected ImageButton backButton;
 
     private ProgressDialog progress;
 
