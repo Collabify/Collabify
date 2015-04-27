@@ -87,6 +87,13 @@ public class Converter {
     public static Song toSong(space.collabify.android.collabify.models.domain.Song song){
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
                 song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId());
+
+        if (song.getVote().isDownvoted()) {
+            appSong.downvote();
+        }
+        else if (song.getVote().isUpvoted()) {
+            appSong.upvote();
+        }
         return appSong;
     }
 
@@ -140,5 +147,9 @@ public class Converter {
         }
 
         return users;
+    }
+
+    public static void updateUser(User currUser, space.collabify.android.collabify.models.domain.User newUser) {
+        currUser.setRole(newUser.getRole());
     }
 }

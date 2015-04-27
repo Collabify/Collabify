@@ -24,6 +24,7 @@ import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.managers.AppManager;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
 
 /**
@@ -80,44 +81,75 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                 return;
             }
 
-            if(response.getAccessToken() != null && response.getType().name().equalsIgnoreCase("TOKEN")) {
-                mainContext = this;
-                progress = ProgressDialog.show(this, "Logging you in",  "Crunching the numbers", true);
+            switch (response.getType()) {
+                case TOKEN:
 
-                // handle all post login stuff in the app manager
-                AppManager.getInstance().login(response.getAccessToken(), new CollabifyResponseCallback() {
-                    @Override
-                    public void success(Response response) {
-                        progress.dismiss();
-                        finish();
-                        Intent i = new Intent(mainContext, JoinEventActivity.class);
-                        startActivity(i);
-                    }
+                    if (response.getAccessToken() != null) {
+                        mainContext = this;
+                        progress = ProgressDialog.show(this, "Logging you in",  "Crunching the numbers", true);
 
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        runOnUiThread(new Runnable() {
+                        // handle all post login stuff in the app manager
+                        AppManager.getInstance().login(response.getAccessToken(), new CollabifyCallback<String>() {
                             @Override
-                            public void run() {
+                            public void success(String eventId, Response response) {
+
+                                Intent i = null;
+
+                                // the user is already at an event
+                                if (!mAppManager.getUser().getRole().isNoRole() && eventId != null) {
+
+                                    // the user is aj
+                                    if (mAppManager.getUser().getRole().isDJ()) {
+                                        i = new Intent(mainContext, DjActivity.class);
+                                    }
+                                    // the user is a collabifier
+                                    else {
+                                        i = new Intent(mainContext, CollabifierActivity.class);
+                                    }
+                                }
+                                // the user will need to join an event
+                                else {
+                                    i = new Intent(mainContext, JoinEventActivity.class);
+                                }
+
                                 progress.dismiss();
-                                clearAppData();
-                                Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                                finish();
+                                startActivity(i);
+                            }
+
+                            @Override
+                            public void failure(RetrofitError retrofitError) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progress.dismiss();
+                                        clearAppData();
+                                        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void exception(Exception e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progress.dismiss();
+                                        clearAppData();
+                                        Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
                         });
                     }
 
-                    @Override
-                    public void exception(Exception e) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                progress.dismiss();
-                                clearAppData();
-                                Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                });
+                    break;
+                case ERROR:
+                    Log.e(TAG, "an error occured attempting spotify login");
+                    break;
+                default:
+                    // cancelled?
+                    Log.i(TAG, "auth was possibly cancelled");
             }
         }
     }
