@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ public class DjTracksFragment extends ListFragment {
     protected DjPlaylistsListAdapter mDjPlaylistsListAdapter;
     protected DjTracksListAdapter mDjTracksListAdapter;
     protected ImageButton backButton;
+    protected TextView djHeaderText;
 
     private ProgressDialog progress;
 
@@ -62,14 +66,19 @@ public class DjTracksFragment extends ListFragment {
         mDjTracksListAdapter = new DjTracksListAdapter(mParentActivity.getApplicationContext(), emptySonglist, mParentActivity.getCurrentUser(), this);
         setListAdapter(mDjPlaylistsListAdapter);
 
+        djHeaderText = (TextView) view.findViewById(R.id.dj_tracks_text);
         backButton = (ImageButton) view.findViewById(R.id.djBackButton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageButton button = (ImageButton) v;
-                button.setClickable(false);
-                button.setVisibility(View.INVISIBLE);
+                backButton.setClickable(false);
+                backButton.setVisibility(View.INVISIBLE);
+
+                djHeaderText.setText("DJ Playlists");
+
+                // GO BACK TO PLAYLIST VIEW HERE
+                setListAdapter(mDjPlaylistsListAdapter);
             }
         });
 
@@ -157,9 +166,14 @@ public class DjTracksFragment extends ListFragment {
 
         @Override
         public void failure(SpotifyError spotifyError) {
-            progress.dismiss();
-            Toast.makeText(mParentActivity.getBaseContext(), "Error populating list with dj tracks", Toast.LENGTH_LONG).show();
+            mParentActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    progress.dismiss();
+                    Toast.makeText(mParentActivity.getBaseContext(), "Error populating list with dj tracks", Toast.LENGTH_LONG).show();
+                }
+            });
         }
+
 
         @Override
         public void success(final Pager<kaaes.spotify.webapi.android.models.PlaylistTrack> playlistTrackPager, Response response) {
@@ -202,6 +216,9 @@ public class DjTracksFragment extends ListFragment {
                         mDjTracksListAdapter.add(newSong);
                     }
 
+
+                    djHeaderText.setText("DJ Tracks");
+                    enableBackButton();
                     progress.dismiss();
                 }
             });
@@ -267,6 +284,12 @@ public class DjTracksFragment extends ListFragment {
             progress.dismiss();
             Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void enableBackButton(){
+
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setClickable(true);
     }
 
     public void setmParentActivity(PrimaryViewActivity mParentActivity){

@@ -73,10 +73,19 @@ public class DjPlaylistsListAdapter extends ArrayAdapter<Playlist> {
         viewHolder.rowTitle.setText(playlist.getName());
 
         // bind add button
-        viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
+        /*viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                mDjTracksFragment.setupViewPlaylistTracksDialog(playlist.getName(), playlist);
+            }
+        });*/
+
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mDjTracksFragment.setupViewPlaylistTracksDialog(playlist.getName(), playlist);
             }
         });
 
