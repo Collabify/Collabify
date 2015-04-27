@@ -33,27 +33,60 @@ public class DjPlaylistsListAdapter extends ArrayAdapter<Playlist> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View customView = inflater.inflate(R.layout.dj_playlist_list_row, parent, false);
 
+        // get item for this position
         final Playlist playlist = getItem(position);
-        TextView rowTitle = (TextView) customView.findViewById(R.id.dj_playlist_title);
-        ImageView playlistArt = (ImageView) customView.findViewById(R.id.dj_playlist_art);
-        ImageButton addButton = (ImageButton) customView.findViewById(R.id.dj_playlist_tracks_add);
 
-        if(!"".equals(playlist.getId()) && playlist.getArtUrl() != null && !playlist.getArtUrl().isEmpty()){
-            Picasso.with(getContext()).load(playlist.getArtUrl()).into(playlistArt);
+        // declare a viewholder
+        ViewHolder viewHolder;
+
+        // create a new viewHolder
+        if (convertView == null) {
+            // create a new viewholder
+            viewHolder = new ViewHolder();
+
+            // inflate the view
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.dj_playlist_list_row, parent, false);
+
+            // add new views to viewholder
+            viewHolder.rowTitle = (TextView) convertView.findViewById(R.id.dj_playlist_title);
+            viewHolder.playlistArt = (ImageView) convertView.findViewById(R.id.dj_playlist_art);
+            viewHolder.addButton = (ImageButton) convertView.findViewById(R.id.dj_playlist_tracks_add);
+
+            // attach to actual view
+            convertView.setTag(viewHolder);
+        }
+        // reuse view
+        else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        rowTitle.setText(playlist.getName());
+        // populate with data
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        // add playlist art
+        if(!"".equals(playlist.getId()) && playlist.getArtUrl() != null && !playlist.getArtUrl().isEmpty()){
+            Picasso.with(getContext()).load(playlist.getArtUrl()).into(viewHolder.playlistArt);
+        }
+
+        // add row title
+        viewHolder.rowTitle.setText(playlist.getName());
+
+        // bind add button
+        viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                mDjTracksFragment.setupViewPlaylistTracksDialog(playlist.getName(), playlist);
             }
         });
 
-        return customView;
+        return convertView;
+    }
+
+
+    private static class ViewHolder {
+        TextView rowTitle;
+        ImageView playlistArt;
+        ImageButton addButton;
     }
 }

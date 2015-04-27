@@ -30,8 +30,8 @@ public class CollabifierActivity extends PrimaryViewActivity {
     // Tab titles
     private static final String TAG = JoinEventActivity.class.getSimpleName();
 
-    private String[] tabs = {"Player", "Playlist", "DJ Tracks"};
-    private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj};
+    private String[] tabs = {"Playlist", "DJ Tracks"};
+    private int[] icons = {R.drawable.ic_playlist, R.drawable.ic_dj};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
 
 
         mActionBar = getSupportActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), mAppManager.getUser().getRole());
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), this, mAppManager.getUser().getRole());
 
         mViewPager.setAdapter(mAdapter);
         mActionBar.setHomeButtonEnabled(false);
@@ -85,10 +85,8 @@ public class CollabifierActivity extends PrimaryViewActivity {
         }
     }
 
-
     @Override
     public void onBackPressed () {
         leaveEvent();
     }
-
 }
