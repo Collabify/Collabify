@@ -129,6 +129,12 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateSong();
+    }
+
+    @Override
     public void onLoggedIn() {
         Toast.makeText(getActivity().getApplicationContext(), "Logged In cb from Player", Toast.LENGTH_LONG).show();
     }

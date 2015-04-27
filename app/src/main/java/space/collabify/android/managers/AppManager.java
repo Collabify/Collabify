@@ -780,6 +780,9 @@ public class AppManager {
     }
 
     public Song getCurrentSong() {
+        if (mPlaylist == null) {
+            return null;
+        }
         return Converter.toSong(mPlaylist.getCurrentSong());
     }
 }

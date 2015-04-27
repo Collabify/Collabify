@@ -85,6 +85,10 @@ public class Converter {
     }
 
     public static Song toSong(space.collabify.android.collabify.models.domain.Song song){
+        if (song == null) {
+            return null;
+        }
+
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
                 song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId());
 
