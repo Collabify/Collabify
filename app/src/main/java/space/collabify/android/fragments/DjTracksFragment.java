@@ -16,9 +16,12 @@ import java.util.List;
 import kaaes.spotify.webapi.android.SpotifyCallback;
 import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.models.Pager;
+import kaaes.spotify.webapi.android.models.Track;
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.activities.PrimaryViewActivity;
+import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
@@ -35,6 +38,8 @@ public class DjTracksFragment extends ListFragment {
 
     private ProgressDialog progress;
 
+    private List<Playlist> currentPlaylists = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View listFragment = inflater.inflate(R.layout.fragment_dj_tracks, container, false);
@@ -48,10 +53,11 @@ public class DjTracksFragment extends ListFragment {
         mParentActivity = (PrimaryViewActivity)getActivity();
 
         //will probably just want empty list, but this is useful for debug
-        List<Playlist> temp = new ArrayList<>();
+        List<Playlist> emptyPlaylist = new ArrayList<>();
+        List<Song> emptySonglist = new ArrayList<>();
         User user = mParentActivity.getCurrentUser();
-        mDjPlaylistsListAdapter = new DjPlaylistsListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
-        // mDjTracksListAdapter = new DjTracksListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
+        mDjPlaylistsListAdapter = new DjPlaylistsListAdapter(mParentActivity.getApplicationContext(), emptyPlaylist, mParentActivity.getCurrentUser(), this);
+        mDjTracksListAdapter = new DjTracksListAdapter(mParentActivity.getApplicationContext(), emptySonglist, mParentActivity.getCurrentUser(), this);
         setListAdapter(mDjPlaylistsListAdapter);
 
         mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
@@ -91,6 +97,7 @@ public class DjTracksFragment extends ListFragment {
 
                         Playlist newPlaylist = new Playlist(playlist.name, playlist.id, artUrl, new ArrayList<Song>());
 
+                        currentPlaylists.add(newPlaylist);
                         mDjPlaylistsListAdapter.add(newPlaylist);
                     }
 
@@ -125,6 +132,7 @@ public class DjTracksFragment extends ListFragment {
         builder.show();
     }
 
+
     private void populateListWithTracks(Playlist playlist){
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
@@ -137,11 +145,114 @@ public class DjTracksFragment extends ListFragment {
         @Override
         public void failure(SpotifyError spotifyError) {
             progress.dismiss();
+            Toast.makeText(mParentActivity.getBaseContext(), "Error populating list with dj tracks", Toast.LENGTH_LONG).show();
         }
 
         @Override
-        public void success(Pager<kaaes.spotify.webapi.android.models.PlaylistTrack> playlistTrackPager, Response response) {
+        public void success(final Pager<kaaes.spotify.webapi.android.models.PlaylistTrack> playlistTrackPager, Response response) {
+
+            mParentActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    // TODO: switch out adapters
+                    List<kaaes.spotify.webapi.android.models.PlaylistTrack> playlistTracks = playlistTrackPager.items;
+
+                    if (playlistTracks.isEmpty()) {
+
+                        progress.dismiss();
+                        Toast.makeText(mParentActivity.getBaseContext(), "No tracks found", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    mDjTracksListAdapter.clear();
+
+                    setListAdapter(mDjTracksListAdapter);
+
+                    for (kaaes.spotify.webapi.android.models.PlaylistTrack playlistTrack : playlistTracks) {
+
+                        Track track = playlistTrack.track;
+
+                        String url = "";
+
+                        if(track.album.images.size() >=3){
+                            url = track.album.images.get(2).url;
+                        }
+
+                        String artists = track.artists.get(0).name;
+                        if (track.artists.size() > 1) {
+                            for (int i = 1; i < track.artists.size() && i < 3; i++) {
+                                artists += ", " + track.artists.get(i).name;
+                            }
+                        }
+
+                        Song newSong = new Song(track.name, artists, track.album.name, 9999, track.id, url, mParentActivity.getAppManager().getUser().getId());
+
+                        mDjTracksListAdapter.add(newSong);
+                    }
+
+                    progress.dismiss();
+                }
+            });
+        }
+    }
+
+
+    public void setupAddDialog(final String songDescription, final Song song) {
+        // prompt to add song
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mParentActivity);
+        builder.setTitle(getString(R.string.add_song_dialog_title));
+        builder.setMessage(songDescription);
+        builder.setPositiveButton(getString(R.string.add_song_dialog_positive_text),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: send song to server
+
+                        dialog.cancel();
+
+                        addSong(song);
+                    }
+                });
+        builder.setNegativeButton(getString(R.string.add_song_dialog_negative_text),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
+
+
+    private void addSong(final Song song){
+        // TODO: FIX ME!
+        progress = ProgressDialog.show(mParentActivity, "Adding Song", "Adding song to playlist...", true);
+        mParentActivity.getAppManager().addSong(song, new afterAddSong());
+    }
+
+
+    private class afterAddSong implements CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> {
+
+        @Override
+        public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
             progress.dismiss();
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            progress.dismiss();
+
+            mParentActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+
+        @Override
+        public void exception(Exception e) {
+            progress.dismiss();
+            Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
         }
     }
 

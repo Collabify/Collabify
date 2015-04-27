@@ -42,7 +42,7 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
         ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
         ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
 
-        if(!"".equals(song.getId())) {
+        if(!"".equals(song.getId()) && song.getArtwork() != null && !song.getArtwork().isEmpty()) {
             //use picasso to load album art
             Picasso.with(getContext()).load(song.getArtwork()).into(albumArt);
         }
