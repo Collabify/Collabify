@@ -11,10 +11,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="space.collabify.android.activities.LoginScreenActivity"
-            android:screenOrientation="portrait"
+            android:name=".activities.LoginScreenActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_collabify_login" >
+            android:label="@string/label_collabify_login"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,91 +22,88 @@
             </intent-filter>
         </activity>
 
-
-
         <!-- Needed for spotify login to work -->
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
-            android:name="space.collabify.android.activities.CollabifierSettingsActivity"
+            android:name=".activities.CollabifierSettingsActivity"
             android:label="CollabifierSettings" />
 
         <!-- need 2 new activities for settings? -->
         <activity
-            android:name="space.collabify.android.activities.DjSettingsActivity"
+            android:name=".activities.DjSettingsActivity"
             android:label="DjSettingsActivity" />
-
         <activity
-            android:name="space.collabify.android.activities.AboutActivity"
+            android:name=".activities.AboutActivity"
             android:label="AboutActivity" />
-
         <activity
-            android:name="space.collabify.android.activities.SettingsActivity"
-            android:screenOrientation="portrait"
+            android:name=".activities.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_settings" />
+            android:label="@string/label_settings"
+            android:screenOrientation="portrait" />
 
-
-        <!-- Mode Activities-->
+        <!-- Mode Activities -->
         <activity
-            android:name="space.collabify.android.activities.CreateEventActivity"
-            android:screenOrientation="portrait"
+            android:name=".activities.CreateEventActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_create_event">
+            android:label="@string/label_create_event"
+            android:screenOrientation="portrait" >
             <meta-data
-              android:name="android.support.PARENT_ACTIVITY"
-              android:value="space.collabify.android.activities.JoinEventActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="space.collabify.android.activities.JoinEventActivity" />
+        </activity>
+        <activity
+            android:name=".activities.JoinEventActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/label_join_event"
+            android:screenOrientation="portrait" >
         </activity>
 
+        <!-- Tab Activites -->
         <activity
-          android:name="space.collabify.android.activities.JoinEventActivity"
-          android:screenOrientation="portrait"
-          android:configChanges="keyboardHidden|orientation|screenSize"
-          android:label="@string/label_join_event" >
-        </activity>
-
-        <!-- Tab Activites-->
-        <activity
-            android:name="space.collabify.android.activities.CollabifierActivity"
-            android:screenOrientation="portrait"
+            android:name=".activities.CollabifierActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_collabifier" />
-
+            android:label="@string/label_collabifier"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="space.collabify.android.activities.DjActivity"
-            android:screenOrientation="portrait"
+            android:name=".activities.DjActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/label_dj" />
+            android:label="@string/label_dj"
+            android:screenOrientation="portrait" />
 
         <!-- make for sending search string in an intent -->
-        <activity android:name="space.collabify.android.activities.DetailedSearchActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="keyboardHidden|orientation|screenSize">
+        <activity
+            android:name=".activities.DetailedSearchActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
         </activity>
-
 
         <!-- only for testing fragments -->
         <activity
-            android:name="space.collabify.android.test.TestFragmentActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-
+            android:name=".test.TestFragmentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
 
         <!-- Fragments -->
         <fragment
-          android:name=".fragments.CollabifierPlayerFragment"
-          android:label="@string/label_collabifier_player" />
+            android:name=".fragments.CollabifierPlayerFragment"
+            android:label="@string/label_collabifier_player" />
         <fragment
-          android:name=".fragments.PlaylistFragment"
-          android:label="@string/label_playlist" />
+            android:name=".fragments.PlaylistFragment"
+            android:label="@string/label_playlist" />
         <fragment
-          android:name=".fragments.DjTracksFragment"
-          android:label="@string/label_dj_tracks" />
+            android:name=".fragments.DjTracksFragment"
+            android:label="@string/label_dj_tracks" />
         <fragment
-          android:name=".fragments.UserListFragment"
-          android:label="@string/label_user_list" />
+            android:name=".fragments.UserListFragment"
+            android:label="@string/label_user_list" />
+
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

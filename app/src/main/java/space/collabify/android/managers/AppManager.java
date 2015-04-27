@@ -94,13 +94,6 @@ public class AppManager {
         return mPlaylistUpdating;
     }
 
-    public void updateLocation(android.location.Location location){
-        mLastUserLocation = location;
-    }
-
-    public android.location.Location getLocation() {
-        return mLastUserLocation;
-    }
 
     public SpotifyService getSpotifyService(){
         return mSpotifyService;
@@ -785,4 +778,5 @@ public class AppManager {
         }
         return Converter.toSong(mPlaylist.getCurrentSong());
     }
+
 }
