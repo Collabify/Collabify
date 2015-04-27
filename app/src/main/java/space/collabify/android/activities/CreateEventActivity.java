@@ -13,6 +13,7 @@ import android.widget.Toast;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.LocationService;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.managers.AppManager;
@@ -64,10 +65,14 @@ public class CreateEventActivity extends CollabifyActivity {
             mName.setError(null);
 
             Event djEvent = new Event(name, mAppManager.getUser().getId(), password, allowFeedback);
-            Location userLocation = AppManager.getInstance().getLocation();
+            Location userLocation = AppManager.getInstance().getLastKnownLocation();
             if(userLocation == null){
                 Log.e(TAG, "user location was null when trying to create event");
                 Toast.makeText(getApplicationContext(), "Unable to find location, please enable location", Toast.LENGTH_LONG).show();
+
+                //start the location service
+                Intent locationIntent = new Intent(this, LocationService.class);
+                startService(locationIntent);
                 return;
             }
             djEvent.setLatitude(Double.toString(userLocation.getLatitude()));

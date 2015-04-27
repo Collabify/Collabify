@@ -99,6 +99,17 @@ public class AppManager {
         return mSpotifyService;
     }
 
+
+    public android.location.Location getLastKnownLocation() {
+        return mLastUserLocation;
+    }
+
+    public void updateLocation(android.location.Location location){
+        if(location != null){
+            mLastUserLocation = location;
+        }
+    }
+
     /*
      * User
      */
@@ -252,7 +263,7 @@ public class AppManager {
 
                     List<String> userIds = new ArrayList<String>();
 
-                    for (UserDO userDO: userDOs) {
+                    for (UserDO userDO : userDOs) {
                         userIds.add(userDO.getUserId());
                     }
 

@@ -132,12 +132,12 @@ public class CollabifyActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError retrofitError) {
-
+                        Log.e(TAG, "Retrofit error on logout: " + retrofitError.toString());
                     }
 
                     @Override
                     public void exception(Exception e) {
-
+                        Log.e(TAG, "Exception on logout: " + e.toString());
                     }
                 });
 
