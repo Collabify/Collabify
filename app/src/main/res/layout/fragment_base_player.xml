@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/player_song_album"
         android:layout_marginTop="35dp"
-        android:src="@drawable/ic_album_grey600_48dp"
+        android:src="@drawable/ic_album"
         android:background="#ff444444" />
 
     <TextView
