@@ -9,9 +9,9 @@ import space.collabify.android.fragments.BasePlayerFragment;
 import space.collabify.android.fragments.DjTracksFragment;
 import space.collabify.android.fragments.PlaylistFragment;
 import space.collabify.android.fragments.UserListFragment;
-import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Role;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,45 +24,63 @@ import android.view.ViewGroup;
  * for allowing access to a fragment
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-    private Role mRole;
-    private Fragment mCurrentFragment;
-
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    private Fragment mCurrentFragment;
+    private Context mContext;
+    private Role mUserRole;
 
-    public TabsPagerAdapter(FragmentManager fm, Role role) {
+    public TabsPagerAdapter(FragmentManager fm, Context context, Role userRole) {
         super(fm);
-        this.mRole = role;
+        this.mContext = context;
+        this.mUserRole = userRole;
     }
 
     @Override
     public Fragment getItem(int index) {
+        Fragment fragment = null;
 
-        switch (index) {
-            case 0:
-                // Base Player fragment activity
-                return new BasePlayerFragment();
-            case 1:
-                // Playlist fragment activity
-                return new PlaylistFragment();
-            case 2:
-                // DJ Tracks fragment activity
-                return new DjTracksFragment();
-            case 3:
-                // User List fragment activity
-                return new UserListFragment();
+        // DJ Tabs
+        if (mUserRole.isDJ()) {
+            switch (index) {
+                case 0:
+                    // DJ Player fragment
+                    fragment = Fragment.instantiate(mContext, BasePlayerFragment.class.getName());
+                    break;
+                case 1:
+                    // Playlist Fragment
+                    fragment = Fragment.instantiate(mContext, PlaylistFragment.class.getName());
+                    break;
+                case 2:
+                    // DJ Tracks Fragment
+                    fragment = Fragment.instantiate(mContext, DjTracksFragment.class.getName());
+                    break;
+                case 3:
+                    // User List Fragment
+                    fragment = Fragment.instantiate(mContext, UserListFragment.class.getName());
+                    break;
+            }
+        }
+        // Collabifier Tabs
+        else {
+            switch (index) {
+                case 0:
+                    // Playlist Fragment
+                    fragment = Fragment.instantiate(mContext, PlaylistFragment.class.getName());
+                    break;
+                case 1:
+                    // DJ Tracks Fragment
+                    fragment = Fragment.instantiate(mContext, DjTracksFragment.class.getName());
+                    break;
+            }
         }
 
-        return null;
+        return fragment;
     }
 
     @Override
     public int getCount() {
         // get item count - equal to number of tabs
-        if (AppManager.getInstance().getUser().getRole().isDJ()) {
-            return 4;
-        } else {
-            return 3;
-        }
+        return (mUserRole.isDJ()) ? 4 : 2;
     }
 
 

@@ -58,7 +58,7 @@ public class DjActivity extends PrimaryViewActivity {
 
 
         mActionBar = getSupportActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), mAppManager.getUser().getRole());
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), this, mAppManager.getUser().getRole());
 
         mViewPager.setAdapter(mAdapter);
         mActionBar.setHomeButtonEnabled(false);
@@ -80,15 +80,10 @@ public class DjActivity extends PrimaryViewActivity {
         }
 
         mViewPager.setCurrentItem(1);
-
-
     }
-
-
 
     @Override
     public void onBackPressed() {
         endEvent();
     }
-
 }

@@ -59,28 +59,30 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
         rootView = new FrameLayout(container.getContext());
 
-        info = new CollabifierPlaylistInfo(container.getContext());
-        info.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-
-        rootView.addView(new CollabifierPlaylistInfo(container.getContext()), new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-
         rootView.addView(listFragment, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
 
-        info.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, info.getMeasuredHeight(), 0, 0);
-        listFragment.setLayoutParams(params);
+        if (!mAppManager.getUser().getRole().isDJ()) {
+            info = new CollabifierPlaylistInfo(container.getContext());
+            info.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
 
-        rootView.bringChildToFront(info);
+            rootView.addView(new CollabifierPlaylistInfo(container.getContext()), new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+
+            info.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, info.getMeasuredHeight(), 0, 0);
+            listFragment.setLayoutParams(params);
+
+            rootView.bringChildToFront(info);
+        }
 
         return rootView;
     }
@@ -104,6 +106,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 initiateRefresh();
             }
         });
+        initiateRefresh();
     }
 
     /**
