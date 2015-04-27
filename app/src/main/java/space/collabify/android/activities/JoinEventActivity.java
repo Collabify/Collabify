@@ -77,7 +77,12 @@ public class JoinEventActivity extends CollabifyActivity {
         }else {
             //TODO: get join event fragment reference from savedInstanceState?
         }
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mLocationReceiver);
     }
 
     //check it out here: http://stackoverflow.com/questions/843675/how-do-i-find-out-if-the-gps-of-an-android-device-is-enabled
@@ -112,7 +117,7 @@ public class JoinEventActivity extends CollabifyActivity {
             @Override
             public void run() {
                 if(mJoinEventListFragment != null)
-                    mJoinEventListFragment.initializeList(null);
+                    mJoinEventListFragment.initializeList();
             }
         }, 10);
     }
@@ -195,7 +200,7 @@ public class JoinEventActivity extends CollabifyActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getBundleExtra(LocationService.BUNDLE_EXTRA);
             Location location = bundle.getParcelable(LocationService.PARCEL_LOCATION);
-            mJoinEventListFragment.initializeList(location);
+            mJoinEventListFragment.initializeList();
         }
     };
 

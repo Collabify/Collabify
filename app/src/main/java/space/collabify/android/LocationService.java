@@ -80,6 +80,7 @@ public class LocationService extends Service implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, request, this);
 
         if (lastLocation != null) {
+            AppManager.getInstance().updateLocation(lastLocation);
             broadcastMessage(lastLocation);
         }
     }
@@ -97,6 +98,7 @@ public class LocationService extends Service implements
     @Override
     public void onLocationChanged(Location location) {
         //update location
+        AppManager.getInstance().updateLocation(location);
         broadcastMessage(location);
     }
 

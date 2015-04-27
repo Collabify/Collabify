@@ -167,6 +167,9 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
         Log.i(TAG, "initiate event list refresh");
         final Activity activity = getActivity();
 
+        if(AppManager.getInstance().getLastKnownLocation() != null){
+            mLastKnownLocation = AppManager.getInstance().getLastKnownLocation();
+        }
         // load the events
         if(mLastKnownLocation != null){
             AppManager.getInstance().loadEvents(Double.toString(mLastKnownLocation.getLatitude()),
@@ -225,10 +228,7 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     /**
      * Displays the refresh circle and gets the events around the user
      */
-    public void initializeList(Location location) {
-        if(location != null){
-            mLastKnownLocation = location;
-        }
+    public void initializeList() {
         if(!isRefreshing()){
             setRefreshing(true);
             initiateRefresh();
