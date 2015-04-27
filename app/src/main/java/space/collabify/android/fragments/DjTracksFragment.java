@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -59,6 +60,17 @@ public class DjTracksFragment extends ListFragment {
         mDjPlaylistsListAdapter = new DjPlaylistsListAdapter(mParentActivity.getApplicationContext(), emptyPlaylist, mParentActivity.getCurrentUser(), this);
         mDjTracksListAdapter = new DjTracksListAdapter(mParentActivity.getApplicationContext(), emptySonglist, mParentActivity.getCurrentUser(), this);
         setListAdapter(mDjPlaylistsListAdapter);
+
+        backButton = (ImageButton) view.findViewById(R.id.djBackButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageButton button = (ImageButton) v;
+                button.setClickable(false);
+                button.setVisibility(View.INVISIBLE);
+            }
+        });
 
         mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
     }
