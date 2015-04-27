@@ -163,6 +163,32 @@ public interface CollabifyService {
     public void getEventPlaylist(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<Playlist> callback);
 
     /**
+     * Reorder an event's playlist
+     *
+     * @param eventId
+     * @param oldIndex
+     * @param newIndex
+     * @return
+     */
+    @PUT(PLAYLIST_SONGS_URL)
+    public Playlist reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Header(OLD_INDEX_HEADER) int oldIndex, @Header(NEW_INDEX_HEADER) int newIndex);
+
+    /**
+     * Reorder an event's playlist
+     *
+     * @param eventId
+     * @param oldIndex
+     * @param newIndex
+     * @param callback
+     */
+    @PUT(PLAYLIST_SONGS_URL)
+    public void reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Header(OLD_INDEX_HEADER) int oldIndex, @Header(NEW_INDEX_HEADER) int newIndex, Callback<Playlist> callback);
+
+    /*--------------------------------------------------------------------------------------------*
+     * Songs ------------------------------------------------------------------------------ Songs *
+     *--------------------------------------------------------------------------------------------*/
+
+    /**
      * Add a song to an event's playlist
      *
      * @param currentUserId
@@ -185,28 +211,6 @@ public interface CollabifyService {
     public void addSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Body SongRequestDO song, Callback<Playlist> callback);
 
     /**
-     * Reorder an event's playlist
-     *
-     * @param eventId
-     * @param oldIndex
-     * @param newIndex
-     * @return
-     */
-    @PUT(PLAYLIST_SONGS_URL)
-    public Playlist reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Header(OLD_INDEX_HEADER) int oldIndex, @Header(NEW_INDEX_HEADER) int newIndex);
-
-    /**
-     * Reorder an event's playlist
-     *
-     * @param eventId
-     * @param oldIndex
-     * @param newIndex
-     * @param callback
-     */
-    @PUT(PLAYLIST_SONGS_URL)
-    public void reorderPlaylist(@Path(EVENT_PATHVAL) String eventId, @Header(OLD_INDEX_HEADER) int oldIndex, @Header(NEW_INDEX_HEADER) int newIndex, Callback<Playlist> callback);
-
-    /**
      * Remove a song from an event's playlist
      *
      * @param currentUserId
@@ -226,6 +230,29 @@ public interface CollabifyService {
      */
     @DELETE(SONG_URL)
     public void removeSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, @Path(SONG_PATHVAL) String songId, ResponseCallback callback);
+
+    /**
+     * End the current song and advance the queue to the next song (which is already on deck) and
+     * get the updated playlist
+     *
+     * @param currentUserId
+     * @param eventId
+     * @return
+     */
+    @DELETE(PLAYLIST_CURRENT_SONG_URL)
+    public Playlist endCurrentSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId);
+
+    /**
+     * End the current song and advance the queue to the next song (which is already on deck) and
+     * get the updated playlist
+     *
+     * @param currentUserId
+     * @param eventId
+     * @param callback
+     * @return
+     */
+    @DELETE(PLAYLIST_CURRENT_SONG_URL)
+    public void endCurrentSong(@Header(USER_HEADER) String currentUserId, @Path(EVENT_PATHVAL) String eventId, Callback<Playlist> callback);
 
     /*--------------------------------------------------------------------------------------------*
      * Event ------------------------------------------------------------------------------ Event *

@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import space.collabify.android.R;
+
 /**
  * Subclass of ListFragment which provides automatic support for
  * providing the 'swipe-to-refresh' UX gesture by wrapping the the content view in a SwipeRefreshLayout
@@ -40,6 +42,7 @@ public class SwipeRefreshListFragment extends ListFragment {
 
         // Create the list fragment's content view by calling the super method
         final View listFragmentView = super.onCreateView(inflater, container, savedInstanceState);
+        listFragmentView.setId(R.id.list_fragment_view);
 
         // Now create a SwipeRefreshLayout to wrap the fragment's content view
         mSwipeRefreshLayout = new ListFragmentSwipeRefreshLayout(container.getContext());
@@ -118,7 +121,7 @@ public class SwipeRefreshListFragment extends ListFragment {
      * override the default behavior and properly signal when a gesture is possible. This is done by
      * overriding {@link #canChildScrollUp()}.
      */
-    private class ListFragmentSwipeRefreshLayout extends SwipeRefreshLayout {
+    protected class ListFragmentSwipeRefreshLayout extends SwipeRefreshLayout {
 
         public ListFragmentSwipeRefreshLayout(Context context) {
             super(context);

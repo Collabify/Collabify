@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,14 +17,13 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.base.CollabifierPlaylistInfo;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
-import space.collabify.android.models.Playlist;
 import space.collabify.android.models.Song;
-import space.collabify.android.models.User;
 
 
 /**
@@ -42,11 +43,48 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     protected PlaylistListAdapter mAdapter;
 
     private AppManager mAppManager;
+    private FrameLayout rootView;
+    private View listFragment;
+    private CollabifierPlaylistInfo info;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAppManager = AppManager.getInstance();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        listFragment =  super.onCreateView(inflater, container, savedInstanceState);
+
+        rootView = new FrameLayout(container.getContext());
+
+        rootView.addView(listFragment, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
+        if (!mAppManager.getUser().getRole().isDJ()) {
+            info = new CollabifierPlaylistInfo(container.getContext());
+            info.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+
+            rootView.addView(new CollabifierPlaylistInfo(container.getContext()), new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+
+            info.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, info.getMeasuredHeight(), 0, 0);
+            listFragment.setLayoutParams(params);
+
+            rootView.bringChildToFront(info);
+        }
+
+        return rootView;
     }
 
     @Override
@@ -58,7 +96,6 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
         temp.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
-        User user = mParentActivity.getCurrentUser();
         mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
 
@@ -69,6 +106,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 initiateRefresh();
             }
         });
+        initiateRefresh();
     }
 
     /**
