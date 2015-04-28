@@ -63,7 +63,9 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
         if(!"".equals(songItem.getId())){
             //use picasso to load album art
-            Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
+            if(songItem.getArtwork() != null && !songItem.getArtwork().isEmpty()) {
+                Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
+            }
 
             //initialize button states
             upvoteButton.setChecked(songItem.isUpvoted());

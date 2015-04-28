@@ -247,7 +247,9 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
             mSongArtist.setText(mCurrentSong.getAlbum() + "\n" + mCurrentSong.getArtist());
             mPlayPauseBtn.enable();
             mNextSongBtn.setImageResource(R.drawable.ic_fast_forward_white_48dp);
-            Picasso.with(getActivity()).load(mCurrentSong.getArtwork()).into(mAlbumImage);
+            if(mCurrentSong.getArtwork() != null && !mCurrentSong.getArtwork().isEmpty()) {
+                Picasso.with(getActivity()).load(mCurrentSong.getArtwork()).into(mAlbumImage);
+            }
         }
         // Nothing to play
         else {
