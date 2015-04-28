@@ -8,15 +8,11 @@
     <string name="DJ_settings_EndEvent">End Event</string>
     <string name="DJ_settings_about_button">About</string>
     <string name="DJ_settings_log_out_button">Log Out</string>
+    <string name="update_event_button">Apply Settings</string>
+    <string name="DJ_event_name">Event Name</string>
 
 
-    <!--
-    <string name="create_eusernamevent_button">Create Event</string>
-    <string name="restrict_nearby_checkbox">Restrict to Nearby Users?</string>
-    <string name="allow_feedback_button">Allow User Feedback?</string>
-    <string name="password">Password</string>
-    <string name="password_protected_checkbox">Password Protected?</string>
-    <string name="event_name">Event Name</string>
-    -->
+
+
 
 </resources>
