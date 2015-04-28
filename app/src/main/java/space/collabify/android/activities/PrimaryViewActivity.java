@@ -59,6 +59,8 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
 
                 imm.hideSoftInputFromWindow(mySearchView.getWindowToken(), 0);
 
+                mySearchView.clearFocus();
+
                 return handleQuery(query);
             }
 

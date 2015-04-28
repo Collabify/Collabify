@@ -159,6 +159,17 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
             final List<Song> songs = new ArrayList<>();
 
+            if(tracks.isEmpty()) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.dismiss();
+                        Toast.makeText(getBaseContext(), "No tracks found...", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                });
+            }
+
             for(Track track : tracks){
 
                 String url = "";
