@@ -5,6 +5,7 @@ import android.support.v4.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,8 @@ public class DjTracksFragment extends ListFragment {
         }
     }
 
+
+
     private class populatePlaylistList extends SpotifyCallback<kaaes.spotify.webapi.android.models.Pager<kaaes.spotify.webapi.android.models.Playlist>>{
         @Override
         public void failure(SpotifyError spotifyError) {
@@ -128,38 +131,12 @@ public class DjTracksFragment extends ListFragment {
         }
     }
 
-    public void setupViewPlaylistTracksDialog(final String playlistName, final Playlist playlist) {
-        // prompt to add song
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this.getmParentActivity());
-        builder.setTitle(getString(R.string.populate_playlist_tracks_title));
-        builder.setMessage(playlistName);
-        builder.setPositiveButton(getString(R.string.populate_playlist_tracks_positive_text),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO: send song to server
 
-                        dialog.cancel();
-
-                        populateListWithTracks(playlist);
-                    }
-                });
-        builder.setNegativeButton(getString(R.string.populate_playlist_tracks_negative_text),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        builder.show();
-    }
-
-
-    private void populateListWithTracks(Playlist playlist){
+    public void populateListWithTracks(String playlistId){
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 
-        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(mParentActivity.getAppManager().getEvent().getEventId(), playlist.getId(), new afterFetchTracks());
+        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(mParentActivity.getAppManager().getEvent().getEventId(), playlistId, new afterFetchTracks());
     }
 
     private class afterFetchTracks extends SpotifyCallback<kaaes.spotify.webapi.android.models.Pager<kaaes.spotify.webapi.android.models.PlaylistTrack>>{
@@ -215,7 +192,6 @@ public class DjTracksFragment extends ListFragment {
 
                         mDjTracksListAdapter.add(newSong);
                     }
-
 
                     djHeaderText.setText("DJ Tracks");
                     enableBackButton();
