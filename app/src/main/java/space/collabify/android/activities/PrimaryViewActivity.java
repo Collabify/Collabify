@@ -55,11 +55,9 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-
         getMenuInflater().inflate(R.menu.menu_song_search, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
-
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -75,15 +73,12 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query){
-
                 SearchView mySearchView = (SearchView) findViewById(R.id.action_search);
 
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-
                 imm.hideSoftInputFromWindow(mySearchView.getWindowToken(), 0);
 
                 mySearchView.clearFocus();
-
                 return handleQuery(query);
             }
 
@@ -102,13 +97,9 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
      * @param query
      */
     public boolean handleQuery(String query) {
-
         Intent intent = new Intent(PrimaryViewActivity.this, DetailedSearchActivity.class);
-
         intent.putExtra("query", query);
-
         startActivity(intent);
-
         return true;
     }
 
