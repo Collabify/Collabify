@@ -149,7 +149,13 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
         @Override
         public void failure(SpotifyError spotifyError) {
-
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.dismiss();
+                    Toast.makeText(getBaseContext(), "Error searching for tracks", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
@@ -174,8 +180,8 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
                 String url = "";
 
-                if(track.album.images.size() >=3){
-                    url = track.album.images.get(2).url;
+                if(track.album.images.size() > 0) {
+                    url = track.album.images.get(0).url;
                 }
 
                   String artists = track.artists.get(0).name;
