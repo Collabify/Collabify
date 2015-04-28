@@ -119,6 +119,9 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
             populateListWithTracks(currentPlaylistId);
         }
         else{
+
+            progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Playlists", "Fetching playlists...", true);
+
             mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
         }
     }
@@ -128,7 +131,11 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         public void failure(SpotifyError spotifyError) {
             mParentActivity.runOnUiThread(new Runnable() {
                 public void run() {
-                    setRefreshing(false);
+                    if(isRefreshing()) {
+
+                        progress.dismiss();
+                        setRefreshing(false);
+                    }
                     Toast.makeText(mParentActivity.getBaseContext(), "Error populating list with dj playlists", Toast.LENGTH_LONG).show();
                 }
             });
@@ -140,11 +147,21 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
             mParentActivity.runOnUiThread(new Runnable() {
                 public void run() {
 
-                    setRefreshing(false);
-
                     mDjPlaylistsListAdapter.clear();
 
                     List<kaaes.spotify.webapi.android.models.Playlist> playlists = playlistPager.items;
+
+                    if(isRefreshing()) {
+
+                        setRefreshing(false);
+
+                        if (playlists.isEmpty()) {
+
+                            progress.dismiss();
+                            Toast.makeText(mParentActivity.getBaseContext(), "No dj playlists found", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
 
                     for(kaaes.spotify.webapi.android.models.Playlist playlist : playlists){
 
