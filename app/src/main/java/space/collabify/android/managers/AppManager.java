@@ -339,7 +339,7 @@ public class AppManager {
      * @param eventID
      * @param callback
      */
-    public void joinEvent(String eventID, final CollabifyCallback<space.collabify.android.models.Event> callback) {
+    public void joinEvent(final String eventID, final CollabifyCallback<space.collabify.android.models.Event> callback) {
 
         mEventUpdating = true;
         try {
@@ -350,6 +350,7 @@ public class AppManager {
                     mEvent = new Event();
                     mEvent.setEventId(event.getEventId());
                     mEvent.setUserIds(event.getUserIds());
+                    mEvent.setName(event.getName());
                     mEventUpdating = false;
                     mUser.setRole(Role.COLLABIFIER);
                     mPlaylist = event.getPlaylist();
