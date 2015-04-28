@@ -73,10 +73,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
 
-            rootView.addView(new CollabifierPlaylistInfo(container.getContext()), new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
+            rootView.addView(info);
 
             info.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
