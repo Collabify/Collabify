@@ -52,6 +52,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         }
         if (eventType.equals(EventType.TRACK_END)) {
             currSongDidStart = false;
+            //TODO: figure out button stuff, probably have to get next song
             /*
             if (mPlayPauseBtn != null && mPlayPauseBtn.isChecked()) {
                 mPlayPauseBtn.setChecked(false);
