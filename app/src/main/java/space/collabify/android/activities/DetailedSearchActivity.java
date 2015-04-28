@@ -149,7 +149,13 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
         @Override
         public void failure(SpotifyError spotifyError) {
-
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.dismiss();
+                    Toast.makeText(getBaseContext(), "Error searching for tracks", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
