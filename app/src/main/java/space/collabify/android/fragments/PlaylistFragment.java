@@ -139,7 +139,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         }
 
 
-        info.updateSong(playlist.getCurrentSong(), getActivity());
+        if (info != null && playlist.getCurrentSong() != null) {
+          info.updateSong(playlist.getCurrentSong(), getActivity());
+        }
     }
 
     /**
