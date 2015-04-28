@@ -22,6 +22,7 @@ import space.collabify.android.collabify.models.domain.Event;
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Location;
 import space.collabify.android.collabify.models.domain.UserSettings;
+import space.collabify.android.collabify.models.domain.Vote;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
 import space.collabify.android.collabify.models.network.RoleDO;
@@ -529,32 +530,6 @@ public class AppManager {
      */
 
     /**
-     * Adds the user's upvote to the song on the server
-     *
-     * @param song
-     * @param callback
-     */
-    public void upvoteSong(Song song, CollabifyResponseCallback callback) {
-        if (song != null) {
-            // do server stuff here and on callback do this
-            song.upvote();
-        }
-    }
-
-    /**
-     * Adds the user's downvote to the song on the server
-     *
-     * @param song
-     * @param callback
-     */
-    public void downvoteSong(Song song, CollabifyResponseCallback callback) {
-        if (song != null) {
-            // do server stuff here and on callback do this
-            song.downvote();
-        }
-    }
-
-    /**
      * Moves a song down in the playlist on the server
      *
      * @param song
@@ -608,13 +583,80 @@ public class AppManager {
      * @param song
      * @param callback
      */
-    public void clearSongVote(Song song, CollabifyResponseCallback callback) {
+    public void clearSongVote(final Song song, final CollabifyResponseCallback callback) {
         if (song != null) {
-            // do server stuff here and on callback do this
-            song.clearVote();
+            Vote vote = new Vote();
+            vote.setDownvoted(false);
+            vote.setUpvoted(false);
+            voteOnSong(song, vote, callback);
+        }
+    }
+    /**
+     * Adds the user's upvote to the song on the server
+     *
+     * @param song
+     * @param callback
+     */
+    public void upvoteSong(Song song, CollabifyResponseCallback callback) {
+        if (song != null) {
+            Vote vote = new Vote();
+            vote.setDownvoted(false);
+            vote.setUpvoted(true);
+            voteOnSong(song, vote, callback);
         }
     }
 
+    /**
+     * Adds the user's downvote to the song on the server
+     *
+     * @param song
+     * @param callback
+     */
+    public void downvoteSong(Song song, CollabifyResponseCallback callback) {
+        if (song != null) {
+            Vote vote = new Vote();
+            vote.setDownvoted(true);
+            vote.setUpvoted(false);
+            voteOnSong(song, vote, callback);
+        }
+    }
+
+
+    private void voteOnSong(final Song song, Vote vote,final CollabifyResponseCallback callback){
+        try{
+            mCollabifyApi.voteOnSong(mEvent.getEventId(), song.getId(), vote, new Callback<Vote>() {
+                @Override
+                public void success(Vote vote, Response response) {
+                    updateSongVote(song, vote);
+                    if(callback != null){
+                        callback.success(response);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    if(callback != null){
+                        callback.failure(error);
+                    }
+                }
+            });
+        }catch (CollabifyApiException ex){
+            if(callback != null){
+                callback.exception(ex);
+            }
+            ex.printStackTrace();
+        }
+    }
+
+    private void updateSongVote(Song song, Vote vote){
+        if(vote.isUpvoted()){
+            song.upvote();
+        }else if(vote.isDownvoted()){
+            song.downvote();
+        }else {
+            song.clearVote();
+        }
+    }
 
     /*
      * Playlist
