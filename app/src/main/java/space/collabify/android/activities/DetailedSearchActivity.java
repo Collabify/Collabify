@@ -159,7 +159,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
             final List<Song> songs = new ArrayList<>();
 
-            if(tracks.isEmpty()){
+            if(tracks.isEmpty()) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -168,6 +168,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                         return;
                     }
                 });
+            }
 
                 for(Track track : tracks){
 
