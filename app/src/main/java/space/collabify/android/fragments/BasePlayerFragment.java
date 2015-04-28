@@ -247,6 +247,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     public void onResume() {
         super.onResume();
         //updateSong();
+        updatePlayerView();
     }
 
 
