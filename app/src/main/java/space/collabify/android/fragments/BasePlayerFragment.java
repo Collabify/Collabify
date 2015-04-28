@@ -316,6 +316,12 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     @Override
+    public void onPause() {
+      super.onPause();
+      isRecording = false;
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             // play song

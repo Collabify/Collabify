@@ -75,8 +75,8 @@
       app:uncheckedSrc="@drawable/ic_microphone_unchecked"
       android:background="@null"
       android:layout_alignBottom="@+id/player_play_pause"
-      android:layout_alignLeft="@+id/player_song_album"
-      android:layout_alignStart="@+id/player_song_album"
+      android:layout_alignLeft="@+id/player_song_album_art"
+      android:layout_alignStart="@+id/player_song_album_art"
       android:layout_marginBottom="23dp"/>
 
 </RelativeLayout>
