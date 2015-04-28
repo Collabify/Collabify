@@ -125,7 +125,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         PlaylistListAdapter adapter = (PlaylistListAdapter) getListAdapter();
         adapter.clear();
 
-        List<Song> songs = Converter.toSongs(playlist.getSongs());
+        List<Song> songs = Converter.toPlaylist(playlist);
 
         if (songs.size() != 0) {
             for (Song song : songs) {
