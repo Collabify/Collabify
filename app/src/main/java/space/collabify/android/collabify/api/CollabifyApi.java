@@ -252,7 +252,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.voteOnSong(mCurrentUserId, eventId, songId, vote);
+        return mCollabifyService.voteOnSong(eventId, songId, mCurrentUserId,vote);
     }
 
     /**
@@ -268,7 +268,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.voteOnSong(mCurrentUserId, eventId, songId, vote, callback);
+        mCollabifyService.voteOnSong(eventId, songId, mCurrentUserId, vote, callback);
     }
 
     /**
