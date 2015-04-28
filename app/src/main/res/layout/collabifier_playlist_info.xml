@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#232323">
 
     <ImageView
         android:layout_width="75dp"
@@ -22,10 +23,10 @@
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_currently_playing"
-        android:layout_alignTop="@+id/song_album_art"
-        android:layout_toRightOf="@+id/song_album_art"
-        android:layout_toEndOf="@+id/song_album_art"
+        android:text="@string/label_currently_song"
+        android:layout_alignTop="@id/song_album_art"
+        android:layout_toRightOf="@id/song_album_art"
+        android:layout_toEndOf="@id/song_album_art"
         android:layout_marginTop="5dp"/>
     <ImageView
         android:layout_width="20dp"
@@ -42,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_below="@+id/playlist_status"
+        android:layout_below="@id/playlist_status"
         android:layout_alignLeft="@+id/playlist_status"
         android:layout_alignStart="@+id/playlist_status"
         android:layout_marginTop="2dp" />
