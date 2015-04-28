@@ -1,8 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content" >
-
-  <RelativeLayout
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
       android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
       android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,9 +8,9 @@
       <EditText
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:id="@+id/playlist_name_field"
+          android:id="@+id/event_name_field"
           android:width="200dp"
-          android:layout_toRightOf="@+id/playlist_name"
+          android:layout_toRightOf="@+id/DJ_event_name"
           android:inputType="none"
           android:singleLine="true"
           android:imeOptions="actionDone"/>
@@ -23,8 +19,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textAppearance="?android:attr/textAppearanceLarge"
-          android:text="@string/playlist_name"
-          android:id="@+id/playlist_name"
+          android:text="@string/DJ_event_name"
+          android:id="@+id/DJ_event_name"
           android:layout_alignParentTop="true"
           android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
@@ -39,7 +35,7 @@
           android:button="@null"
           android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
           android:textSize="20dp"
-          android:layout_below="@+id/playlist_name"
+          android:layout_below="@+id/DJ_event_name"
           android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_margin="15dp"/>
@@ -102,18 +98,6 @@
           android:layout_marginTop="23dp"
           android:id="@+id/DJ_settings_line"/>
 
-      <!--
-      <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/DJ_settings_EndEvent"
-          android:id="@+id/DJ_settings_EndEvent_button"
-          android:layout_below="@+id/DJ_settings_line"
-          android:layout_centerHorizontal="true"
-          android:layout_marginTop="23dp"
-          android:onClick="endEvent"/>
--->
-
       <Button
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -124,19 +108,19 @@
           android:layout_marginTop="10dp"
           android:onClick="toAbout" />
 
-
-      <!--
       <Button
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/DJ_settings_log_out_button"
-          android:id="@+id/DJ_settings_log_out_button"
-          android:layout_below="@+id/DJ_settings_about_button"
-          android:layout_centerHorizontal="true"
-          android:layout_marginTop="10dp"
-          android:onClick="toLogOut" />
--->
+          android:text="@string/update_event_button"
+          android:id="@+id/update_event_button"
+          android:textSize="22dp"
+          android:padding="20dp"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentEnd="true"
+          android:layout_alignParentBottom="true"
+          android:onClick="updateDJEvent"/>
+
 
   </RelativeLayout>
-
-</ScrollView>
