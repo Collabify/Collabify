@@ -34,7 +34,7 @@ import space.collabify.android.R;
  */
 public class SwipeRefreshListFragment extends ListFragment {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
