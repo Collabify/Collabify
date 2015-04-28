@@ -6,6 +6,15 @@ package space.collabify.android.collabify.models.domain;
 public class Vote {
   private boolean isUpvoted;
   private boolean isDownvoted;
+  private String userId;
+
+  public void setUserId(String userId){
+    this.userId = userId;
+  }
+
+  public String getUserId(){
+    return userId;
+  }
 
   public boolean isUpvoted() {
     return isUpvoted;

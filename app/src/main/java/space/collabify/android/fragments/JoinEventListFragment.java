@@ -42,6 +42,8 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
     private static final String NO_EVENTS = "No events found.\nStart your own by hitting the + below!";
     public boolean isGpsEnabled = false;
 
+    private Location mLastKnownLocation;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,13 +165,15 @@ public class JoinEventListFragment extends SwipeRefreshListFragment {
      */
     private void initiateRefresh() {
         Log.i(TAG, "initiate event list refresh");
-        android.location.Location userLocation = AppManager.getInstance().getLocation();
         final Activity activity = getActivity();
 
+        if(AppManager.getInstance().getLastKnownLocation() != null){
+            mLastKnownLocation = AppManager.getInstance().getLastKnownLocation();
+        }
         // load the events
-        if(userLocation != null){
-            AppManager.getInstance().loadEvents(Double.toString(userLocation.getLatitude()),
-                    Double.toString(userLocation.getLongitude()), new Callback<List<Event>>() {
+        if(mLastKnownLocation != null){
+            AppManager.getInstance().loadEvents(Double.toString(mLastKnownLocation.getLatitude()),
+                    Double.toString(mLastKnownLocation.getLongitude()), new Callback<List<Event>>() {
                 @Override
                 public void success(final List<Event> events, Response response) {
                     if(activity != null){

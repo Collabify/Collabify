@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import space.collabify.android.R;
@@ -52,10 +54,24 @@ public class CollabifierPlaylistInfo extends RelativeLayout {
         mSongStatusIcon = (ImageView) v.findViewById(R.id.playlist_status_icon);
         mSongName = (TextView) v.findViewById(R.id.currently_playing_song_title);
         mSongArtist = (TextView) v.findViewById(R.id.currently_playing_song_artist);
+
+        mSongStatusIcon.setVisibility(INVISIBLE);
     }
 
-    public void updateSong(Song song) {
+    public void updateSong(Song song, Context context) {
 
+        if (song != null && context != null) {
+            Picasso.with(context).load(song.getArtworkUrl()).into(mAlbumArt);
+            mSongStatus.setText(R.string.label_currently_song);
+            mSongName.setText(song.getTitle());
+            mSongArtist.setText(song.getArtist());
+        }
+        else {
+            mAlbumArt.setImageResource(R.drawable.ic_album);
+            mSongStatus.setText(R.string.label_nothing_to_play);
+            mSongName.setText("");
+            mSongArtist.setText("");
+        }
     }
 
     public void songPaused() {
@@ -67,6 +83,6 @@ public class CollabifierPlaylistInfo extends RelativeLayout {
     }
 
     public void playlistEmpty() {
-
+        updateSong(null, null);
     }
 }

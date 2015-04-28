@@ -3,6 +3,7 @@ package space.collabify.android.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -29,6 +30,28 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
     protected ViewPager mViewPager;
     protected TabsPagerAdapter mAdapter;
     protected ActionBar mActionBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String eventName = AppManager.getInstance().getEvent().getName();
+        setTitle(eventName);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("Title", AppManager.getInstance().getEvent().getName());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if(savedInstanceState != null){
+            setTitle(savedInstanceState.getString("Title"));
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -58,6 +81,8 @@ public class PrimaryViewActivity extends CollabifyActivity implements ActionBar.
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
                 imm.hideSoftInputFromWindow(mySearchView.getWindowToken(), 0);
+
+                mySearchView.clearFocus();
 
                 return handleQuery(query);
             }

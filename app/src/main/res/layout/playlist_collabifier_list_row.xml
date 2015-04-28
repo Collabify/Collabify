@@ -16,7 +16,7 @@
     <ImageView android:id="@+id/playlist_collabifier_album_art"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/test_album_art"
+        android:src="@drawable/ic_album"
         android:layout_margin="5dp"/>
 
     <TextView android:id="@+id/playlist_collabifier_song_description"

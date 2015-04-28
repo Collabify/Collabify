@@ -26,6 +26,7 @@ import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
+import space.collabify.android.models.Event;
 
 /**
  * This file was born on March 11 at 13:57
@@ -94,7 +95,10 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                             public void success(String eventId, Response response) {
 
                                 Intent i = null;
-
+                                if(eventId != null){
+                                    //needed in order to get the event name, but can't because incorrectly sets user role to COLLABIFIER
+                                    //mAppManager.joinEvent(eventId, null);
+                                }
                                 // the user is already at an event
                                 if (!mAppManager.getUser().getRole().isNoRole() && eventId != null) {
 
@@ -111,6 +115,8 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                                 else {
                                     i = new Intent(mainContext, JoinEventActivity.class);
                                 }
+
+
 
                                 progress.dismiss();
                                 finish();
@@ -141,6 +147,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                                 });
                             }
                         });
+
                     }
 
                     break;

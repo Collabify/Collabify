@@ -52,7 +52,6 @@ public class DjPlaylistsListAdapter extends ArrayAdapter<Playlist> {
             // add new views to viewholder
             viewHolder.rowTitle = (TextView) convertView.findViewById(R.id.dj_playlist_title);
             viewHolder.playlistArt = (ImageView) convertView.findViewById(R.id.dj_playlist_art);
-            viewHolder.addButton = (ImageButton) convertView.findViewById(R.id.dj_playlist_tracks_add);
 
             // attach to actual view
             convertView.setTag(viewHolder);
@@ -72,20 +71,12 @@ public class DjPlaylistsListAdapter extends ArrayAdapter<Playlist> {
         // add row title
         viewHolder.rowTitle.setText(playlist.getName());
 
-        // bind add button
-        /*viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               mDjTracksFragment.setupViewPlaylistTracksDialog(playlist.getName(), playlist);
-            }
-        });*/
-
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mDjTracksFragment.setupViewPlaylistTracksDialog(playlist.getName(), playlist);
+                mDjTracksFragment.populateListWithTracks(playlist.getId());
             }
         });
 
@@ -96,6 +87,5 @@ public class DjPlaylistsListAdapter extends ArrayAdapter<Playlist> {
     private static class ViewHolder {
         TextView rowTitle;
         ImageView playlistArt;
-        ImageButton addButton;
     }
 }
