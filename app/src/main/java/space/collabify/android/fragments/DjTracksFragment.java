@@ -99,7 +99,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
             }
         });
 
-        initiateRefresh();
+        mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
     }
 
     @Override
@@ -154,10 +154,9 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
                     if(isRefreshing()) {
 
                         setRefreshing(false);
+                        progress.dismiss();
 
                         if (playlists.isEmpty()) {
-
-                            progress.dismiss();
                             Toast.makeText(mParentActivity.getBaseContext(), "No dj playlists found", Toast.LENGTH_LONG).show();
                             return;
                         }

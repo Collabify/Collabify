@@ -170,7 +170,7 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                 });
             }
 
-                for(Track track : tracks){
+            for(Track track : tracks){
 
                 String url = "";
 
