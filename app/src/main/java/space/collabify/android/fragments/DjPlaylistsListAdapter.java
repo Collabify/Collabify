@@ -76,7 +76,7 @@ public class DjPlaylistsListAdapter extends ArrayAdapter<Playlist> {
             @Override
             public void onClick(View v) {
 
-                mDjTracksFragment.populateListWithTracks(playlist.getId());
+                mDjTracksFragment.populateListWithTracks(playlist.getId(), playlist.getOwner());
             }
         });
 
