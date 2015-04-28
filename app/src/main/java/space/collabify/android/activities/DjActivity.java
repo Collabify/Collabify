@@ -14,19 +14,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.spotify.sdk.android.player.Player;
+
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.*;
+import space.collabify.android.fragments.BasePlayerFragment;
 import space.collabify.android.managers.CollabifyResponseCallback;
 
 /**
  * This file was born on March 11 at 14:02
  */
-public class DjActivity extends PrimaryViewActivity {
+public class DjActivity extends PrimaryViewActivity implements BasePlayerFragment.PlayerFragmentListener{
     private static final String TAG = DjActivity.class.getSimpleName();
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks", "User List"};
     private int[] icons = {R.drawable.ic_player, R.drawable.ic_playlist, R.drawable.ic_dj, R.drawable.ic_users};
+
+    private PlayerHandler mPlayerHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,8 @@ public class DjActivity extends PrimaryViewActivity {
         SHOW_SETTINGS = true;
         SHOW_END = true;
         SHOW_LOGOUT = true;
+
+        mPlayerHandler = new PlayerHandler(this);
 
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.djPager);
@@ -80,13 +87,27 @@ public class DjActivity extends PrimaryViewActivity {
         }
 
         mViewPager.setCurrentItem(1);
+    }
 
+    @Override
+    protected void onDestroy() {
+        mPlayerHandler.onDestroy();
+        super.onDestroy();
+    }
 
+    @Override
+    public Player getPlayer() {
+        return mPlayerHandler.getPlayer();
+    }
 
+    @Override
+    public boolean didCurrentSongStart() {
+        return mPlayerHandler.getCurrSongDidStart();
     }
 
     @Override
     public void onBackPressed() {
         endEvent();
     }
+
 }

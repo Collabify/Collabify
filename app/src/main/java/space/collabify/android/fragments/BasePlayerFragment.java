@@ -1,11 +1,13 @@
 package space.collabify.android.fragments;
 
+import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +43,7 @@ import space.collabify.android.models.Song;
 /**
  * This file was born on March 11 at 14:11
  */
-public class BasePlayerFragment extends Fragment implements ConnectionStateCallback, PlayerNotificationCallback, CompoundButton.OnCheckedChangeListener {
+public class BasePlayerFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
     private AppManager mAppManager;
@@ -61,21 +63,40 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     private Thread rThread;
 
     private boolean isDJ;
-    private boolean currSongDidStart = false;
+    private boolean mWasDestroyed = false;
+    private boolean mViewRestored = false;
+
+    private PlayerFragmentListener mListener;
+
+    public interface PlayerFragmentListener{
+        public Player getPlayer();
+        public boolean didCurrentSongStart();
+    }
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         isDJ = AppManager.getInstance().getUser().getRole().isDJ();
         mAppManager = AppManager.getInstance();
-        if (isDJ) {
-            setUpPlayer();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (PlayerFragmentListener) activity;
+        }catch(ClassCastException ex){
+            throw new ClassCastException(activity.toString() + " must implement PlayerFragmentListener");
         }
+
+        mPlayer = mListener.getPlayer();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_base_player, container, false);
+
+        mViewRestored = false;
 
         mSongTitle = (TextView) rootView.findViewById(R.id.player_song_title);
         mSongArtist = (TextView) rootView.findViewById(R.id.player_song_artist);
@@ -166,46 +187,8 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
         });
     }
 
-    private void setUpPlayer() {
-        mAppManager.loadEventPlaylist(new CollabifyCallback<Playlist>() {
-            @Override
-            public void exception(Exception e) {
-
-            }
-
-            @Override
-            public void success(Playlist playlist, Response response) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-            }
-        });
-
-        String clientID = getResources().getString(R.string.client_id);
-        Config mPlayerConfig = new Config(getActivity().getApplicationContext(),
-                AppManager.getInstance().getUser().getAccessToken(),
-                clientID);
-        mPlayer = Spotify.getPlayer(mPlayerConfig, this, new Player.InitializationObserver() {
-
-            @Override
-            public void onInitialized(Player player) {
-                mPlayer.addConnectionStateCallback(BasePlayerFragment.this);
-                mPlayer.addPlayerNotificationCallback(BasePlayerFragment.this);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.message_player_init_error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     private void updateSong() {
-
-        if (currSongDidStart) {
+        if (mListener == null || mListener.didCurrentSongStart()) {
             return;
         }
 
@@ -218,7 +201,6 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
 
                 @Override
                 public void success(Song song, Response response) {
-
                     if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
                         mCurrentSong = song;
                     }
@@ -264,84 +246,48 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     @Override
     public void onResume() {
         super.onResume();
-        updateSong();
+        //updateSong();
     }
 
-    @Override
-    public void onLoggedIn() {
-//        Toast.makeText(getActivity().getApplicationContext(), "Logged In cb from Player", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onLoggedOut() {
-//        Toast.makeText(getActivity().getApplicationContext(), "Logged out cb from Player", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onLoginFailed(Throwable throwable) {
-//        Toast.makeText(getActivity().getApplicationContext(), "Login failed cb from Player", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onTemporaryError() {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.message_player_temporary_error, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onConnectionMessage(String s) {
-        Log.d(TAG, "Connection message from Player: " + s);
-    }
-
-    @Override
-    public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
-        if (eventType.equals(EventType.PLAY)) {
-            currSongDidStart = true;
-        }
-        if (eventType.equals(EventType.TRACK_END)) {
-            if (mPlayPauseBtn != null && mPlayPauseBtn.isChecked()) {
-                mPlayPauseBtn.setChecked(false);
-                currSongDidStart = false;
-            }
-        }
-    }
-
-    @Override
-    public void onPlaybackError(ErrorType errorType, String s) {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.message_player_playback_error, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        Spotify.destroyPlayer(this);
-        super.onDestroy();
-    }
 
     @Override
     public void onPause() {
       super.onPause();
       mMicrophoneBtn.setChecked(false);
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        mViewRestored = true;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            // play song
-            if (currSongDidStart) {
-                mPlayer.resume();
-            }
-            else {
-                if(mPlayer != null && mCurrentSong != null) {
-                    mPlayer.play("spotify:track:" + mCurrentSong.getId());
-                }else {
-                    Log.w(TAG, "Either player or currentSong was NULL, couldn't start playback");
+        if(mViewRestored){
+            if (isChecked) {
+                // play song
+                if (mListener.didCurrentSongStart()) {
+                    mPlayer.resume();
+                }
+                else {
+                    if(mPlayer != null && mCurrentSong != null) {
+                        mPlayer.play("spotify:track:" + mCurrentSong.getId());
+                    }else {
+                        Log.w(TAG, "Either player or currentSong was NULL, couldn't start playback");
+                    }
                 }
             }
-        }
-        else {
-            //pause song
-            mPlayer.pause();
+            else {
+                //pause song
+                mPlayer.pause();
+            }
         }
     }
 }
