@@ -10,19 +10,14 @@
         android:layout_height="50dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:src="@drawable/test_album_art"
+        android:src="@drawable/ic_album"
+        android:background="#ff444444"
         android:layout_margin="5dp"/>
 
     <TextView android:id="@+id/dj_playlist_title"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:scrollHorizontally="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:clickable="true"
 
         android:text="title"
         android:layout_alignTop="@+id/dj_playlist_art"
@@ -32,11 +27,11 @@
         android:layout_toLeftOf="@+id/dj_playlist_tracks_add"
         android:layout_alignBottom="@+id/dj_playlist_tracks_add" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/dj_playlist_tracks_add"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_chevron_right"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:background="#00ffffff"

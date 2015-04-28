@@ -5,6 +5,7 @@ import android.support.v4.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import space.collabify.android.models.User;
 /**
  * This file was born on March 11, at 15:53
  */
-public class DjTracksFragment extends ListFragment {
+public class DjTracksFragment extends SwipeRefreshListFragment {
 
     protected PrimaryViewActivity mParentActivity;
     protected DjPlaylistsListAdapter mDjPlaylistsListAdapter;
@@ -42,14 +43,21 @@ public class DjTracksFragment extends ListFragment {
     protected ImageButton backButton;
     protected TextView djHeaderText;
 
+    private String currentPlaylistId = "";
+    private boolean displayingTracks = false;
+
     private ProgressDialog progress;
 
     private List<Playlist> currentPlaylists = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View listFragment = inflater.inflate(R.layout.fragment_dj_tracks, container, false);
-        return listFragment;
+
+        mSwipeRefreshLayout = new ListFragmentSwipeRefreshLayout(container.getContext());
+
+        mSwipeRefreshLayout.addView(inflater.inflate(R.layout.fragment_dj_tracks, container, false));
+
+        return mSwipeRefreshLayout;
     }
 
     @Override
@@ -79,10 +87,19 @@ public class DjTracksFragment extends ListFragment {
 
                 // GO BACK TO PLAYLIST VIEW HERE
                 setListAdapter(mDjPlaylistsListAdapter);
+                displayingTracks = false;
             }
         });
 
-        mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
+        //set action for pull down refreshes
+        setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initiateRefresh();
+            }
+        });
+
+        initiateRefresh();
     }
 
     @Override
@@ -94,10 +111,27 @@ public class DjTracksFragment extends ListFragment {
         }
     }
 
+    private void initiateRefresh(){
+
+        setRefreshing(true);
+
+        if(displayingTracks){
+            populateListWithTracks(currentPlaylistId);
+        }
+        else{
+            mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
+        }
+    }
+
     private class populatePlaylistList extends SpotifyCallback<kaaes.spotify.webapi.android.models.Pager<kaaes.spotify.webapi.android.models.Playlist>>{
         @Override
         public void failure(SpotifyError spotifyError) {
-
+            mParentActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    setRefreshing(false);
+                    Toast.makeText(mParentActivity.getBaseContext(), "Error populating list with dj playlists", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
@@ -105,6 +139,9 @@ public class DjTracksFragment extends ListFragment {
 
             mParentActivity.runOnUiThread(new Runnable() {
                 public void run() {
+
+                    setRefreshing(false);
+
                     mDjPlaylistsListAdapter.clear();
 
                     List<kaaes.spotify.webapi.android.models.Playlist> playlists = playlistPager.items;
@@ -128,38 +165,14 @@ public class DjTracksFragment extends ListFragment {
         }
     }
 
-    public void setupViewPlaylistTracksDialog(final String playlistName, final Playlist playlist) {
-        // prompt to add song
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this.getmParentActivity());
-        builder.setTitle(getString(R.string.populate_playlist_tracks_title));
-        builder.setMessage(playlistName);
-        builder.setPositiveButton(getString(R.string.populate_playlist_tracks_positive_text),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO: send song to server
 
-                        dialog.cancel();
+    public void populateListWithTracks(String playlistId){
 
-                        populateListWithTracks(playlist);
-                    }
-                });
-        builder.setNegativeButton(getString(R.string.populate_playlist_tracks_negative_text),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-        builder.show();
-    }
-
-
-    private void populateListWithTracks(Playlist playlist){
+        currentPlaylistId = playlistId;
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 
-        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(mParentActivity.getAppManager().getEvent().getEventId(), playlist.getId(), new afterFetchTracks());
+        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(mParentActivity.getAppManager().getEvent().getEventId(), playlistId, new afterFetchTracks());
     }
 
     private class afterFetchTracks extends SpotifyCallback<kaaes.spotify.webapi.android.models.Pager<kaaes.spotify.webapi.android.models.PlaylistTrack>>{
@@ -168,6 +181,8 @@ public class DjTracksFragment extends ListFragment {
         public void failure(SpotifyError spotifyError) {
             mParentActivity.runOnUiThread(new Runnable() {
                 public void run() {
+                    setRefreshing(false);
+                    currentPlaylistId = "";
                     progress.dismiss();
                     Toast.makeText(mParentActivity.getBaseContext(), "Error populating list with dj tracks", Toast.LENGTH_LONG).show();
                 }
@@ -180,6 +195,7 @@ public class DjTracksFragment extends ListFragment {
 
             mParentActivity.runOnUiThread(new Runnable() {
                 public void run() {
+                    setRefreshing(false);
                     // TODO: switch out adapters
                     List<kaaes.spotify.webapi.android.models.PlaylistTrack> playlistTracks = playlistTrackPager.items;
 
@@ -216,7 +232,7 @@ public class DjTracksFragment extends ListFragment {
                         mDjTracksListAdapter.add(newSong);
                     }
 
-
+                    displayingTracks = true;
                     djHeaderText.setText("DJ Tracks");
                     enableBackButton();
                     progress.dismiss();

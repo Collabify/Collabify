@@ -19,8 +19,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.collabify.api.CollabifyApi;
+import space.collabify.android.collabify.api.CollabifyApiException;
+import space.collabify.android.collabify.models.Converter;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.requests.UsersRequest;
@@ -174,45 +178,85 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-      final User u = userlist.get(position);
-
       final String[] roles = {Role.PROMOTED, Role.COLLABIFIER, Role.BLACKLISTED};
       final Integer[] icons = {R.drawable.ic_promoted, R.drawable.ic_collabifier, R.drawable.ic_blacklisted};
 
-      int rolePos = -1;
-      switch(u.getRole().getRole()) {
-        case Role.PROMOTED:
-          rolePos = 0;
-          break;
-        case Role.COLLABIFIER:
-          rolePos = 1;
-          break;
-        case Role.BLACKLISTED:
-          rolePos = 2;
-          break;
-      }
+      if (userlist.size() != 0) {
+        final User u = userlist.get(position);
 
-      if (rolePos != -1) {
-        roles[rolePos] += " (Current)";
-      }
+        int rolePos = -1;
+        switch(u.getRole().getRole()) {
+          case Role.PROMOTED:
+            rolePos = 0;
+            break;
+          case Role.COLLABIFIER:
+            rolePos = 1;
+            break;
+          case Role.BLACKLISTED:
+            rolePos = 2;
+            break;
+        }
 
-      if (AppManager.getInstance().isUsersUpdating()) {
+        if (rolePos != -1) {
+          roles[rolePos] += " (Current)";
+        }
 
-        ListAdapter ladapter = new ArrayAdapterWithIcon(getActivity(), roles, icons);
+        if (!AppManager.getInstance().isUsersUpdating()) {
 
-        new AlertDialog.Builder(getActivity()).setTitle("Change User Role")
-          .setAdapter(ladapter, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item ) {
-              // Do something with the selection if not same as current role
-              String current = u.getRole().getRole() + " (Current)";
-              if (!current.equals(roles[item])) {
-                Toast.makeText(getActivity(), u.getName() + " changed to " + roles[item], Toast.LENGTH_SHORT).show();
-                u.getRole().setRole(roles[item]);
-                adapter.notifyDataSetChanged();
+          ListAdapter ladapter = new ArrayAdapterWithIcon(getActivity(), roles, icons);
+
+          new AlertDialog.Builder(getActivity()).setTitle("Change User Role")
+            .setAdapter(ladapter, new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection if not same as current role
+                final String newrole = roles[item];
+                String current = u.getRole().getRole() + " (Current)";
+                AppManager.getInstance().changeUserRole(u, newrole, new CollabifyCallback<space.collabify.android.collabify.models.domain.Role>() {
+                  @Override
+                  public void success(space.collabify.android.collabify.models.domain.Role role, Response response) {
+                    u.setRole(role.getRole());
+                    getActivity().runOnUiThread(new Runnable() {
+                      public void run() {
+                        Toast.makeText(getActivity(), u.getName() + " changed to " + newrole, Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
+                      }
+                    });
+                  }
+
+                    @Override
+                    public void failure (RetrofitError retrofitError){
+                      retrofitError.printStackTrace();
+                      getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                          Toast.makeText(getActivity(), "Error changing " + u.getName() + "'s role", Toast.LENGTH_SHORT).show();
+                        }
+                      });
+
+                    }
+
+                    @Override
+                    public void exception (Exception e){
+                      e.printStackTrace();
+                      getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                          Toast.makeText(getActivity(), "Error changing " + u.getName() + "'s role", Toast.LENGTH_SHORT).show();
+                        }
+                      });
+                    }
+                  }
+
+                  );
+                }
               }
-            }
-          }).setNegativeButton(android.R.string.cancel, null).show();
 
-      }
+              ).
+
+              setNegativeButton(android.R.string.cancel, null)
+
+              .
+
+              show();
+            }
+        }
     }
 }

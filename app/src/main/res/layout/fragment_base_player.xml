@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/player_song_album_art"
         android:layout_marginTop="35dp"
-        android:src="@drawable/ic_album_grey600_48dp"
+        android:src="@drawable/ic_album"
         android:background="#ff444444" />
 
     <TextView
@@ -42,12 +42,14 @@
         android:scaleType="fitXY"
         android:textOn=""
         android:textOff=""
+        android:background="@null"
         app:checkedSrc="@drawable/ic_pause_circle_outline_white_48dp"
         app:uncheckedSrc="@drawable/ic_play_circle_outline_white_48dp"
         app:disabledSrc="@drawable/ic_play_circle_outline_grey600_48dp"
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
     <ImageButton
         android:id="@+id/player_skip_next"
         android:layout_width="48dp"
@@ -61,5 +63,20 @@
         android:layout_alignRight="@id/player_song_album_art"
         android:layout_alignEnd="@id/player_song_album_art"
         android:layout_marginBottom="23dp"/>
+
+    <space.collabify.android.controls.ImageToggleButton
+      android:id="@+id/player_microphone"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:scaleType="fitXY"
+      android:textOn=""
+      android:textOff=""
+      app:checkedSrc="@drawable/ic_microphone_checked"
+      app:uncheckedSrc="@drawable/ic_microphone_unchecked"
+      android:background="@null"
+      android:layout_alignBottom="@+id/player_play_pause"
+      android:layout_alignLeft="@+id/player_song_album"
+      android:layout_alignStart="@+id/player_song_album"
+      android:layout_marginBottom="23dp"/>
 
 </RelativeLayout>

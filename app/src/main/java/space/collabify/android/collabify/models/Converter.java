@@ -7,6 +7,7 @@ import java.util.Map;
 
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Location;
+import space.collabify.android.collabify.models.domain.Role;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
@@ -153,6 +154,12 @@ public class Converter {
         return users;
     }
 
+    public static Role toRole(String role) {
+      Role temp = new Role();
+      temp.setRole(role);
+      return temp;
+    }
+    
     public static void updateUser(User currUser, space.collabify.android.collabify.models.domain.User newUser) {
         currUser.setRole(newUser.getRole());
     }

@@ -19,8 +19,10 @@ import space.collabify.android.collabify.models.domain.Role;
 import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.collabify.models.domain.User;
 import space.collabify.android.collabify.models.domain.UserSettings;
+import space.collabify.android.collabify.models.domain.Vote;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.RoleDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.network.UserRequestDO;
@@ -236,6 +238,38 @@ public class CollabifyApi {
     /*--------------------------------------------------------------------------------------------*
      * Songs ------------------------------------------------------------------------------ Songs *
      *--------------------------------------------------------------------------------------------*/
+
+    /**
+     * Place a vote on a song.
+     * @param eventId
+     * @param songId
+     * @param vote
+     * @return
+     * @throws CollabifyApiException
+     */
+    public Vote voteOnSong(String eventId, String songId, Vote vote) throws CollabifyApiException {
+        if(mCurrentUserId == null || "".equals(mCurrentUserId)){
+            throw new CollabifyApiException();
+        }
+
+        return mCollabifyService.voteOnSong(eventId, songId, mCurrentUserId,vote);
+    }
+
+    /**
+     * Place a vote on a song.
+     * @param eventId
+     * @param songId
+     * @param vote
+     * @return
+     * @throws CollabifyApiException
+     */
+    public void voteOnSong(String eventId, String songId, Vote vote, Callback<Vote> callback) throws CollabifyApiException {
+        if(mCurrentUserId == null || "".equals(mCurrentUserId)){
+            throw new CollabifyApiException();
+        }
+
+        mCollabifyService.voteOnSong(eventId, songId, mCurrentUserId, vote, callback);
+    }
 
     /**
      * Add a song to an event's playlist
@@ -599,7 +633,7 @@ public class CollabifyApi {
      * @param callback
      * @throws CollabifyApiException
      */
-    public void changeUserRole(String eventId, String userId, String role, Callback<Role> callback) throws CollabifyApiException {
+    public void changeUserRole(String eventId, String userId, RoleDO role, Callback<Role> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }

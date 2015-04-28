@@ -67,7 +67,7 @@ public class CollabifierPlaylistInfo extends RelativeLayout {
             mSongArtist.setText(song.getArtist());
         }
         else {
-            mAlbumArt.setImageResource(R.drawable.ic_album_grey600_48dp);
+            mAlbumArt.setImageResource(R.drawable.ic_album);
             mSongStatus.setText(R.string.label_nothing_to_play);
             mSongName.setText("");
             mSongArtist.setText("");

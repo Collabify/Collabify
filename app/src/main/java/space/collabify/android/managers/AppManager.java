@@ -22,8 +22,10 @@ import space.collabify.android.collabify.models.domain.Event;
 import space.collabify.android.collabify.models.domain.EventSettings;
 import space.collabify.android.collabify.models.domain.Location;
 import space.collabify.android.collabify.models.domain.UserSettings;
+import space.collabify.android.collabify.models.domain.Vote;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
+import space.collabify.android.collabify.models.network.RoleDO;
 import space.collabify.android.collabify.models.network.SongRequestDO;
 import space.collabify.android.collabify.models.network.UserDO;
 import space.collabify.android.collabify.models.network.UserRequestDO;
@@ -94,16 +96,20 @@ public class AppManager {
         return mPlaylistUpdating;
     }
 
-    public void updateLocation(android.location.Location location){
-        mLastUserLocation = location;
-    }
-
-    public android.location.Location getLocation() {
-        return mLastUserLocation;
-    }
 
     public SpotifyService getSpotifyService(){
         return mSpotifyService;
+    }
+
+
+    public android.location.Location getLastKnownLocation() {
+        return mLastUserLocation;
+    }
+
+    public void updateLocation(android.location.Location location){
+        if(location != null){
+            mLastUserLocation = location;
+        }
     }
 
     /*
@@ -259,7 +265,7 @@ public class AppManager {
 
                     List<String> userIds = new ArrayList<String>();
 
-                    for (UserDO userDO: userDOs) {
+                    for (UserDO userDO : userDOs) {
                         userIds.add(userDO.getUserId());
                     }
 
@@ -524,32 +530,6 @@ public class AppManager {
      */
 
     /**
-     * Adds the user's upvote to the song on the server
-     *
-     * @param song
-     * @param callback
-     */
-    public void upvoteSong(Song song, CollabifyResponseCallback callback) {
-        if (song != null) {
-            // do server stuff here and on callback do this
-            song.upvote();
-        }
-    }
-
-    /**
-     * Adds the user's downvote to the song on the server
-     *
-     * @param song
-     * @param callback
-     */
-    public void downvoteSong(Song song, CollabifyResponseCallback callback) {
-        if (song != null) {
-            // do server stuff here and on callback do this
-            song.downvote();
-        }
-    }
-
-    /**
      * Moves a song down in the playlist on the server
      *
      * @param song
@@ -603,13 +583,80 @@ public class AppManager {
      * @param song
      * @param callback
      */
-    public void clearSongVote(Song song, CollabifyResponseCallback callback) {
+    public void clearSongVote(final Song song, final CollabifyResponseCallback callback) {
         if (song != null) {
-            // do server stuff here and on callback do this
-            song.clearVote();
+            Vote vote = new Vote();
+            vote.setDownvoted(false);
+            vote.setUpvoted(false);
+            voteOnSong(song, vote, callback);
+        }
+    }
+    /**
+     * Adds the user's upvote to the song on the server
+     *
+     * @param song
+     * @param callback
+     */
+    public void upvoteSong(Song song, CollabifyResponseCallback callback) {
+        if (song != null) {
+            Vote vote = new Vote();
+            vote.setDownvoted(false);
+            vote.setUpvoted(true);
+            voteOnSong(song, vote, callback);
         }
     }
 
+    /**
+     * Adds the user's downvote to the song on the server
+     *
+     * @param song
+     * @param callback
+     */
+    public void downvoteSong(Song song, CollabifyResponseCallback callback) {
+        if (song != null) {
+            Vote vote = new Vote();
+            vote.setDownvoted(true);
+            vote.setUpvoted(false);
+            voteOnSong(song, vote, callback);
+        }
+    }
+
+
+    private void voteOnSong(final Song song, Vote vote,final CollabifyResponseCallback callback){
+        try{
+            mCollabifyApi.voteOnSong(mEvent.getEventId(), song.getId(), vote, new Callback<Vote>() {
+                @Override
+                public void success(Vote vote, Response response) {
+                    updateSongVote(song, vote);
+                    if(callback != null){
+                        callback.success(response);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    if(callback != null){
+                        callback.failure(error);
+                    }
+                }
+            });
+        }catch (CollabifyApiException ex){
+            if(callback != null){
+                callback.exception(ex);
+            }
+            ex.printStackTrace();
+        }
+    }
+
+    private void updateSongVote(Song song, Vote vote){
+        if(vote.isUpvoted()){
+            song.upvote();
+        }else if(vote.isDownvoted()){
+            song.downvote();
+        }else {
+            song.clearVote();
+        }
+    }
 
     /*
      * Playlist
@@ -826,5 +873,38 @@ public class AppManager {
             }
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Handles changing a user's role at an event
+     *
+     * @param callback
+     */
+    public void changeUserRole(User user, String role, final CollabifyCallback callback) {
+      try {
+        RoleDO newRole = new RoleDO();
+        newRole.setRole(role);
+        mCollabifyApi.changeUserRole(mEvent.getEventId(), user.getId(), newRole, new Callback<space.collabify.android.collabify.models.domain.Role>() {
+          @Override
+          public void success(space.collabify.android.collabify.models.domain.Role newrole, Response response) {
+            if (callback != null) {
+              callback.success(newrole, response);
+            }
+          }
+
+          @Override
+          public void failure(RetrofitError retrofitError) {
+            // call callback failure
+            if (callback != null) {
+              callback.failure(retrofitError);
+            }
+          }
+        });
+      } catch (CollabifyApiException e) {
+        if (callback != null) {
+          callback.exception(e);
+        }
+        e.printStackTrace();
+      }
     }
 }

@@ -5,6 +5,7 @@ import retrofit.client.Response;
 import space.collabify.android.*;
 import space.collabify.android.activities.CollabifierSettingsActivity;
 import space.collabify.android.activities.DjSettingsActivity;
+import space.collabify.android.activities.JoinEventActivity;
 import space.collabify.android.activities.LoginScreenActivity;
 import space.collabify.android.activities.SettingsActivity;
 import space.collabify.android.managers.AppManager;
@@ -132,12 +133,12 @@ public class CollabifyActivity extends ActionBarActivity {
 
                     @Override
                     public void failure(RetrofitError retrofitError) {
-
+                        Log.e(TAG, "Retrofit error on logout: " + retrofitError.toString());
                     }
 
                     @Override
                     public void exception(Exception e) {
-
+                        Log.e(TAG, "Exception on logout: " + e.toString());
                     }
                 });
 
@@ -210,6 +211,10 @@ public class CollabifyActivity extends ActionBarActivity {
                     @Override
                     public void success(Response response) {
                         finish();
+                        //return to join event activity
+                        Intent intent = new Intent(getBaseContext(), JoinEventActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK );
+                        startActivity(intent);
                     }
 
                     @Override
@@ -258,6 +263,10 @@ public class CollabifyActivity extends ActionBarActivity {
                             @Override
                             public void success(Response response) {
                                 finish();
+                                //return to join event activity
+                                Intent intent = new Intent(getBaseContext(), JoinEventActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK );
+                                startActivity(intent);
                             }
 
                             @Override
