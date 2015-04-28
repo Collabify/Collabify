@@ -56,6 +56,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         if (AppManager.getInstance().getUser().getRole().isDJ()) {
           upvoteButton.setVisibility(View.INVISIBLE);
           downvoteButton.setVisibility(View.INVISIBLE);
+          if (position == 0) {
+            upButton.setVisibility(View.INVISIBLE);
+            downButton.setVisibility(View.INVISIBLE);
+          }
         } else {
           upButton.setVisibility(View.INVISIBLE);
           downButton.setVisibility(View.INVISIBLE);
@@ -121,7 +125,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             songDescriptionTextView.setText(newSongDescription);
             songIdView.setText(songItem.getId());
 
-            int visibility = isDeleteVisible(songItem) ? View.VISIBLE : View.INVISIBLE;
+            int visibility = (isDeleteVisible(songItem) && position != 0) ? View.VISIBLE : View.INVISIBLE;
             deleteButton.setVisibility(visibility);
         }
         else {

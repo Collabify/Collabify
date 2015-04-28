@@ -72,6 +72,11 @@ public class Converter {
       space.collabify.android.collabify.models.domain.Song currentSong = current.getCurrentSong();
       space.collabify.android.collabify.models.domain.Song nextSong = current.getNextSong();
 
+      if (nextSong != null) {
+        nextSong.setTitle("Up Next - " + nextSong.getTitle());
+        temp.add(0, nextSong);
+      }
+
       return toSongs(temp);
     }
 
