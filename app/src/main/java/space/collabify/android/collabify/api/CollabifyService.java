@@ -14,6 +14,7 @@ import retrofit.http.Path;
 import space.collabify.android.collabify.models.domain.Event;
 import space.collabify.android.collabify.models.domain.Role;
 import space.collabify.android.collabify.models.domain.UserSettings;
+import space.collabify.android.collabify.models.domain.Vote;
 import space.collabify.android.collabify.models.network.EventDO;
 import space.collabify.android.collabify.models.network.EventRequestDO;
 import space.collabify.android.collabify.models.network.RoleDO;
@@ -24,6 +25,7 @@ import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.collabify.models.domain.Song;
 import space.collabify.android.collabify.models.domain.User;
 import space.collabify.android.collabify.models.network.UserRequestDO;
+import space.collabify.android.managers.CollabifyResponseCallback;
 
 /**
  * Holds all the Collabify endpoints and uses Retrofit to return objects
@@ -57,6 +59,7 @@ public interface CollabifyService {
     public static final String SONG_PATHVAL = "songId";
     public static final String SONG_URL = PLAYLIST_SONGS_URL + "{" + SONG_PATHVAL + "}/";
     public static final String SONG_VOTE_URL = SONG_URL + "votes/{" + USER_PATHVAL + "}/";
+
 
     /*--------------------------------------------------------------------------------------------*
      * User -------------------------------------------------------------------------------- User *
@@ -188,6 +191,27 @@ public interface CollabifyService {
     /*--------------------------------------------------------------------------------------------*
      * Songs ------------------------------------------------------------------------------ Songs *
      *--------------------------------------------------------------------------------------------*/
+
+    /**
+     * Place vote on a song.
+     * @param mCurrentUserId
+     * @param eventId
+     * @param songId
+     * @return
+     */
+    @PUT(SONG_VOTE_URL)
+    public Vote voteOnSong(@Path(EVENT_PATHVAL) String eventId,@Path(SONG_PATHVAL) String songId, @Path(USER_PATHVAL) String mCurrentUserId, @Body Vote vote );
+
+
+    /**
+     * Place vote on a song.
+     * @param mCurrentUserId
+     * @param eventId
+     * @param songId
+     * @return
+     */
+    @PUT(SONG_VOTE_URL)
+    public void voteOnSong(@Path(EVENT_PATHVAL) String eventId,@Path(SONG_PATHVAL) String songId, @Path(USER_PATHVAL) String mCurrentUserId, @Body Vote vote, Callback<Vote> callback);
 
     /**
      * Add a song to an event's playlist
@@ -437,4 +461,5 @@ public interface CollabifyService {
      */
     @PUT(EVENT_USER_ROLE_URL)
     public void changeUserRole(@Path(EVENT_PATHVAL) String eventId, @Path(USER_PATHVAL) String userId, @Body RoleDO role, Callback<Role> callback);
+
 }
