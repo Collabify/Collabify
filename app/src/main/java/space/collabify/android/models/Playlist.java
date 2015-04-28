@@ -10,6 +10,7 @@ public class Playlist {
     private String mId;
     private String mArtUrl;
     private ArrayList<Song> mList;
+    private String mOwner;
 
     public Playlist(String mName, String mId, String mArtUrl, ArrayList<Song> mList) {
         this.mName = mName;
@@ -32,6 +33,14 @@ public class Playlist {
 
     public void setId(String mId) {
         this.mId = mId;
+    }
+
+    public String getOwner() {
+      return mOwner;
+    }
+
+    public void setOwner(String mOwner) {
+      this.mOwner = mOwner;
     }
 
     public String getArtUrl(){

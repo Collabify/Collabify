@@ -318,7 +318,8 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     @Override
     public void onPause() {
       super.onPause();
-      isRecording = false;
+      mMicrophoneBtn.setChecked(false);
+
     }
 
     @Override
