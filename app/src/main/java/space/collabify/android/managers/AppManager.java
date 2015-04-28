@@ -537,7 +537,7 @@ public class AppManager {
      * @param updated
      * @param callback
      */
-    public void moveSong(Song song, int postion, int updated, final CollabifyCallback<List<Song>> callback) {
+    public void moveSong(Song song, int postion, int updated, final CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> callback) {
       if (song != null) {
         // do server stuff here and on callback do this
         if (postion >= 0 && postion < mPlaylist.getSongs().size() && updated >= 0 && updated < mPlaylist.getSongs().size()) {
@@ -552,7 +552,7 @@ public class AppManager {
 
                 // call callback success
                 if (callback != null) {
-                  callback.success(Converter.toPlaylist(playlist), response);
+                  callback.success(playlist, response);
                 }
               }
 
@@ -682,7 +682,7 @@ public class AppManager {
      *
      * @param callback
      */
-    public void loadEventPlaylist(final CollabifyCallback<List<Song>> callback) {
+    public void loadEventPlaylist(final CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> callback) {
 
         mPlaylistUpdating = true;
         try {
@@ -694,7 +694,7 @@ public class AppManager {
 
                     // call callback success
                     if (callback != null) {
-                        callback.success(Converter.toPlaylist(playlist), response);
+                        callback.success(playlist, response);
                     }
                 }
 
@@ -808,29 +808,71 @@ public class AppManager {
         }
     }
 
-    public void nextSong() {
+    public void nextSong(final CollabifyResponseCallback callback) {
+        mPlaylist.setNextSong(mPlaylist.getNextSong());
         try {
             mCollabifyApi.endCurrentSong(mEvent.getEventId(), new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
                 @Override
                 public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
                     mPlaylist = playlist;
+
+                    if (callback != null) {
+                        callback.success(response);
+                    }
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
 
+                    if (callback != null) {
+                        callback.failure(error);
+                    }
                 }
             });
         } catch (CollabifyApiException e) {
+            if (callback != null) {
+                callback.exception(e);
+            }
             e.printStackTrace();
         }
     }
 
-    public Song getCurrentSong() {
-        if (mPlaylist == null) {
-            return null;
+    public void getCurrentSong(final CollabifyCallback<Song> callback) {
+
+        if (mPlaylist != null) {
+            callback.success(Converter.toSong(mPlaylist.getCurrentSong()), null);
+            return;
         }
-        return Converter.toSong(mPlaylist.getCurrentSong());
+
+        try {
+            mPlaylistUpdating = true;
+            mCollabifyApi.getEventPlaylist(mEvent.getEventId(), new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
+                @Override
+                public void success(space.collabify.android.collabify.models.domain.Playlist playlist, Response response) {
+                    mPlaylist = playlist;
+                    mPlaylistUpdating = false;
+
+                    // call callback success
+                    if (callback != null) {
+                        callback.success(Converter.toSong(mPlaylist.getCurrentSong()), response);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    mPlaylistUpdating = false;
+                    if (callback != null) {
+                        callback.failure(error);
+                    }
+                }
+            });
+        } catch (CollabifyApiException e) {
+            mPlaylistUpdating = false;
+            if (callback != null) {
+                callback.exception(e);
+            }
+            e.printStackTrace();
+        }
     }
 
     /**

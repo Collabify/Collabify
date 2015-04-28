@@ -29,7 +29,6 @@
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_currently_playing"
         android:layout_alignTop="@+id/song_album_art"
         android:layout_toRightOf="@+id/song_album_art"
         android:layout_toEndOf="@+id/song_album_art"

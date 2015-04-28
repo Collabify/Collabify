@@ -19,6 +19,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.base.CollabifierPlaylistInfo;
 import space.collabify.android.base.CollabifyActivity;
+import space.collabify.android.collabify.models.Converter;
+import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
@@ -119,12 +121,14 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     /**
      * Updates the list of songs visible. Must be called by parent activity for anything interesting to happen
      *
-     * @param songs the new playlist to be shown
+     * @param playlist the new playlist to be shown
      */
-    private void updatePlaylist(List<Song> songs) {
+    private void updatePlaylist(Playlist playlist) {
         // Remove all items from the ListAdapter, and then replace them with the new items
         PlaylistListAdapter adapter = (PlaylistListAdapter) getListAdapter();
         adapter.clear();
+
+        List<Song> songs = Converter.toSongs(playlist.getSongs());
 
         if (songs.size() != 0) {
             for (Song song : songs) {
@@ -133,6 +137,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         } else {
             adapter.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
         }
+
+
+        info.updateSong(playlist.getCurrentSong(), getActivity());
     }
 
     /**
@@ -234,13 +241,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
       Song song = getSongFromLayout(rowViewGroup);
 
 
-      mAppManager.moveSong(song, position, updated, new CollabifyCallback<List<Song>>() {
+      mAppManager.moveSong(song, position, updated, new CollabifyCallback<Playlist>() {
 
         @Override
-        public void success(final List<Song> songs, Response response) {
+        public void success(final Playlist playlist, Response response) {
           getActivity().runOnUiThread(new Runnable() {
             public void run() {
-              updatePlaylist(songs);
+              updatePlaylist(playlist);
             }
           });
         }
@@ -285,14 +292,14 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
         mAppManager.loadEventPlaylist(new LoadPlaylistCallback());
     }
 
-    private class LoadPlaylistCallback implements CollabifyCallback<List<Song>> {
+    private class LoadPlaylistCallback implements CollabifyCallback<Playlist> {
         @Override
-        public void success(final List<Song> songs, Response response) {
+        public void success(final Playlist playlist, Response response) {
             getActivity().runOnUiThread(new Runnable() {
               @Override
               public void run() {
                 setRefreshing(false);
-                updatePlaylist(songs);
+                updatePlaylist(playlist);
               }
             });
         }

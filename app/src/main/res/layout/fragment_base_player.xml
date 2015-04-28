@@ -9,7 +9,7 @@
         android:layout_height="240dp"
         android:scaleType="fitCenter"
         android:layout_centerHorizontal="true"
-        android:id="@+id/player_song_album"
+        android:id="@+id/player_song_album_art"
         android:layout_marginTop="35dp"
         android:src="@drawable/ic_album"
         android:background="#ff444444" />
@@ -21,7 +21,19 @@
         android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/player_song_title"
-        android:layout_below="@+id/player_song_album" />
+        android:gravity="center"
+        android:layout_below="@id/player_song_album_art" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/player_song_artist"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_below="@id/player_song_title" />
 
     <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/player_play_pause"
@@ -48,8 +60,8 @@
         android:src="@drawable/ic_skip_next_grey600_48dp"
         android:background="@null"
         android:layout_alignBottom="@+id/player_play_pause"
-        android:layout_alignRight="@+id/player_song_album"
-        android:layout_alignEnd="@+id/player_song_album"
+        android:layout_alignRight="@id/player_song_album_art"
+        android:layout_alignEnd="@id/player_song_album_art"
         android:layout_marginBottom="23dp"/>
 
     <space.collabify.android.controls.ImageToggleButton
