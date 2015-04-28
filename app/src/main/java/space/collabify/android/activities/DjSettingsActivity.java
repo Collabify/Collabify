@@ -79,18 +79,20 @@ public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivi
 
             EventSettings settings = mEvent.getSettings();
 
-            if (!password.equals("")) {
+            // not sure if mEvent's settings are being populated
+            if (settings != null) {
                 settings.setPassword(password);
+
+                settings.setAllowVoting(allowFeedback);
+                settings.setLocationRestricted(passwordProtected);
+
+                mEvent.setSettings(settings);
+
+                mAppManager.updateEvent(settings, null);
+
             }
-
-            settings.setAllowVoting(allowFeedback);
-            settings.setLocationRestricted(passwordProtected);
-
-            mEvent.setSettings(settings);
-
-            mAppManager.updateEvent(settings, null);
-
-
+            // exit settings page after applying settings
+            finish();
         }
     }
 
