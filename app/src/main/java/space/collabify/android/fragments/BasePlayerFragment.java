@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,10 +31,11 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
 
+import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
-import space.collabify.android.models.Playlist;
+import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.Song;
 
 /**
@@ -43,8 +47,12 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     private AppManager mAppManager;
     private Player mPlayer;
     private Song mCurrentSong;
+
     private TextView mSongTitle;
+    private TextView mSongArtist;
+    private ImageView mAlbumImage;
     private ImageToggleButton mPlayPauseBtn;
+    private ImageButton mNextSongBtn;
 
     private ImageToggleButton mMicrophoneBtn;
     private boolean isRecording;
@@ -68,14 +76,20 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_base_player, container, false);
+
         mSongTitle = (TextView) rootView.findViewById(R.id.player_song_title);
-        updateSong();
+        mSongArtist = (TextView) rootView.findViewById(R.id.player_song_artist);
+        mAlbumImage = (ImageView) rootView.findViewById(R.id.player_song_album_art);
+        mNextSongBtn = (ImageButton) rootView.findViewById(R.id.player_skip_next);
+
         if (isDJ) {
             setUpForDJ(rootView);
         }
         else {
             setUpForCollabifier(rootView);
         }
+
+        updateSong();
 
         return rootView;
     }
@@ -89,6 +103,28 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
         mPlayPauseBtn = (ImageToggleButton) rootView.findViewById(R.id.player_play_pause);
         mPlayPauseBtn.setOnCheckedChangeListener(this);
 
+        mNextSongBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAppManager.nextSong(new CollabifyResponseCallback() {
+                    @Override
+                    public void exception(Exception e) {
+                        updateSong();
+                    }
+
+                    @Override
+                    public void success(Response response) {
+                        updateSong();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        updateSong();
+                    }
+                });
+
+            }
+        });
         mMicrophoneBtn = (ImageToggleButton) rootView.findViewById(R.id.player_microphone);
         mMicrophoneBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
           @Override
@@ -131,14 +167,14 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     private void setUpPlayer() {
-        mAppManager.loadEventPlaylist(new CollabifyCallback<List<Song>>() {
+        mAppManager.loadEventPlaylist(new CollabifyCallback<Playlist>() {
             @Override
             public void exception(Exception e) {
 
             }
 
             @Override
-            public void success(List<Song> songs, Response response) {
+            public void success(Playlist playlist, Response response) {
 
             }
 
@@ -168,14 +204,58 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
     }
 
     private void updateSong() {
+
+        if (currSongDidStart) {
+            return;
+        }
+
         if (mSongTitle != null) {
-            mCurrentSong = mAppManager.getCurrentSong();
-            if (mCurrentSong != null) {
-                mSongTitle.setText(mCurrentSong.getTitle());
-            }
-            else {
-                mSongTitle.setText(getText(R.string.label_nothing_to_play));
-            }
+            mAppManager.getCurrentSong(new CollabifyCallback<Song>() {
+                @Override
+                public void exception(Exception e) {
+
+                }
+
+                @Override
+                public void success(Song song, Response response) {
+
+                    if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
+                        mCurrentSong = song;
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updatePlayerView();
+                        }
+                    });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+        }
+    }
+
+    private void updatePlayerView() {
+        // Song on queue
+        if (mCurrentSong != null) {
+            mSongTitle.setText(mCurrentSong.getTitle());
+            mSongArtist.setText(mCurrentSong.getAlbum() + "\n" + mCurrentSong.getArtist());
+            mPlayPauseBtn.enable();
+            mNextSongBtn.setImageResource(R.drawable.ic_fast_forward_white_48dp);
+            Picasso.with(getActivity()).load(mCurrentSong.getArtwork()).into(mAlbumImage);
+        }
+        // Nothing to play
+        else {
+            mSongTitle.setText(getText(R.string.label_nothing_to_play));
+            mSongArtist.setText("");
+            mAlbumImage.setImageResource(R.drawable.ic_album);
+            mPlayPauseBtn.disable();
+            mNextSongBtn.setImageResource(R.drawable.ic_fast_forward_grey600_48dp);
         }
     }
 
@@ -187,17 +267,17 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
 
     @Override
     public void onLoggedIn() {
-        Toast.makeText(getActivity().getApplicationContext(), "Logged In cb from Player", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity().getApplicationContext(), "Logged In cb from Player", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onLoggedOut() {
-        Toast.makeText(getActivity().getApplicationContext(), "Logged out cb from Player", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity().getApplicationContext(), "Logged out cb from Player", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onLoginFailed(Throwable throwable) {
-        Toast.makeText(getActivity().getApplicationContext(), "Login failed cb from Player", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity().getApplicationContext(), "Login failed cb from Player", Toast.LENGTH_LONG).show();
 
     }
 
@@ -213,6 +293,9 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
 
     @Override
     public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
+        if (eventType.equals(EventType.PLAY)) {
+            currSongDidStart = true;
+        }
         if (eventType.equals(EventType.TRACK_END)) {
             if (mPlayPauseBtn != null && mPlayPauseBtn.isChecked()) {
                 mPlayPauseBtn.setChecked(false);
@@ -242,7 +325,6 @@ public class BasePlayerFragment extends Fragment implements ConnectionStateCallb
             else {
                 if(mPlayer != null && mCurrentSong != null) {
                     mPlayer.play("spotify:track:" + mCurrentSong.getId());
-                    currSongDidStart = true;
                 }else {
                     Log.w(TAG, "Either player or currentSong was NULL, couldn't start playback");
                 }

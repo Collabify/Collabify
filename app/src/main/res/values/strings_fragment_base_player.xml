@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="label_collabifier_player">Currently Playing</string>
-    <string name="label_currently_playing">Currently Playing</string>
+    <string name="label_currently_song">Current Song</string>
     <string name="label_nothing_to_play">Nothing to play</string>
 </resources>
