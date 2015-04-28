@@ -44,6 +44,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
     protected TextView djHeaderText;
 
     private String currentPlaylistId = "";
+    private String currentPlaylistOwner = "";
     private boolean displayingTracks = false;
 
     private ProgressDialog progress;
@@ -116,7 +117,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         setRefreshing(true);
 
         if(displayingTracks){
-            populateListWithTracks(currentPlaylistId);
+            populateListWithTracks(currentPlaylistId, currentPlaylistOwner);
         }
         else{
 
@@ -166,11 +167,14 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
                         String artUrl = "";
 
-                        if(playlist.images.size() >= 3){
+                        if(playlist.images.size() >= 3) {
                             artUrl = playlist.images.get(2).url;
+                        } else if (playlist.images.size() > 0) {
+                            artUrl = playlist.images.get(0).url;
                         }
 
                         Playlist newPlaylist = new Playlist(playlist.name, playlist.id, artUrl, new ArrayList<Song>());
+                        newPlaylist.setOwner(playlist.owner.id);
 
                         currentPlaylists.add(newPlaylist);
                         mDjPlaylistsListAdapter.add(newPlaylist);
@@ -182,13 +186,14 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
     }
 
 
-    public void populateListWithTracks(String playlistId){
+    public void populateListWithTracks(String playlistId, String ownerId){
 
         currentPlaylistId = playlistId;
+        currentPlaylistOwner = ownerId;
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 
-        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(mParentActivity.getAppManager().getEvent().getEventId(), playlistId, new afterFetchTracks());
+        mParentActivity.getAppManager().getSpotifyService().getPlaylistTracks(ownerId, playlistId, new afterFetchTracks());
     }
 
     private class afterFetchTracks extends SpotifyCallback<kaaes.spotify.webapi.android.models.Pager<kaaes.spotify.webapi.android.models.PlaylistTrack>>{
