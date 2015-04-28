@@ -167,9 +167,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
                         String artUrl = "";
 
-                        if(playlist.images.size() >= 3) {
-                            artUrl = playlist.images.get(2).url;
-                        } else if (playlist.images.size() > 0) {
+                        if (playlist.images.size() > 0) {
                             artUrl = playlist.images.get(0).url;
                         }
 
@@ -237,8 +235,8 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
                         String url = "";
 
-                        if(track.album.images.size() >=3){
-                            url = track.album.images.get(2).url;
+                        if(track.album.images.size() > 0){
+                            url = track.album.images.get(0).url;
                         }
 
                         String artists = track.artists.get(0).name;

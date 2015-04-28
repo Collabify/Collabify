@@ -174,8 +174,8 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
                 String url = "";
 
-                if(track.album.images.size() >=3){
-                    url = track.album.images.get(2).url;
+                if(track.album.images.size() > 0) {
+                    url = track.album.images.get(0).url;
                 }
 
                   String artists = track.artists.get(0).name;
