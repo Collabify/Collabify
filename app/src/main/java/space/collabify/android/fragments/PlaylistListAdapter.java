@@ -63,6 +63,11 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         } else {
           upButton.setVisibility(View.INVISIBLE);
           downButton.setVisibility(View.INVISIBLE);
+
+          if (AppManager.getInstance().getUser().getRole().isBlacklisted() || position == 0) {
+            upvoteButton.setVisibility(View.INVISIBLE);
+            downvoteButton.setVisibility(View.INVISIBLE);
+          }
         }
 
         if(!"".equals(songItem.getId())){

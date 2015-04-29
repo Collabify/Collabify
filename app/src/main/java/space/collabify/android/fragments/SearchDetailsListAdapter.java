@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import space.collabify.android.R;
+import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Song;
 import space.collabify.android.models.User;
 
@@ -41,6 +42,10 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
         TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
         ImageView albumArt = (ImageView) customView.findViewById(R.id.song_details_album_art);
         ImageButton addButton = (ImageButton) customView.findViewById(R.id.song_row_add);
+
+        if (AppManager.getInstance().getUser().getRole().isBlacklisted()) {
+          addButton.setVisibility(View.INVISIBLE);
+        }
 
         if(!"".equals(song.getId()) && song.getArtwork() != null && !song.getArtwork().isEmpty()) {
             //use picasso to load album art
