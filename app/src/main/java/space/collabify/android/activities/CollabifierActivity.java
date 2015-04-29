@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,7 @@ import retrofit.client.Response;
 import space.collabify.android.*;
 import space.collabify.android.collabify.models.domain.User;
 import space.collabify.android.managers.CollabifyResponseCallback;
+import space.collabify.android.models.Role;
 
 /**
  * This file was born on March 11 at 14:02
@@ -41,6 +43,24 @@ public class CollabifierActivity extends PrimaryViewActivity {
         SHOW_SETTINGS = true;
         SHOW_LEAVE = true;
         SHOW_LOGOUT = true;
+
+
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        int icon;
+        switch (mAppManager.getUser().getRole().getRole()) {
+          case Role.BLACKLISTED:
+            icon = R.drawable.ic_actionbar_blacklisted;
+            break;
+          case Role.PROMOTED:
+            icon = R.drawable.ic_actionbar_promoted;
+            break;
+          default:
+            icon = R.drawable.ic_actionbar_collabifier;
+        }
+
+        ab.setLogo(icon);
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
 
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.collabifierPager);
