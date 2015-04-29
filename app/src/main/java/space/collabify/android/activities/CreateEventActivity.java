@@ -43,7 +43,12 @@ public class CreateEventActivity extends CollabifyActivity {
         SHOW_LOGOUT = true;
 
         EditText mName = (EditText) findViewById(R.id.event_field);
-        mName.setText("Test123");
+
+        if (mAppManager.getUser().getName().equals("")) {
+          mName.setText(mAppManager.getUser().getId() + "'s Event");
+        } else {
+          mName.setText(mAppManager.getUser().getName() + "'s Event");
+        }
 
         mPasswordProtected = (CheckBox) findViewById(R.id.password_protected_checkbox);
         mPasswordLabel = (TextView) findViewById(R.id.password);
