@@ -70,7 +70,7 @@ public class CreateEventActivity extends CollabifyActivity {
         EditText mPassword = (EditText) findViewById(R.id.password_field);
         CheckBox mPasswordProtected = (CheckBox) findViewById(R.id.password_protected_checkbox);
         CheckBox mAllowFeedback = (CheckBox) findViewById(R.id.allow_feedback_checkbox);
-        CheckBox mRestrictNearby = (CheckBox) findViewById(R.id.restrict_nearby_checkbox);
+//        CheckBox mRestrictNearby = (CheckBox) findViewById(R.id.restrict_nearby_checkbox);
 
         String name = mName.getText().toString();
         String password = mPassword.getText().toString();
