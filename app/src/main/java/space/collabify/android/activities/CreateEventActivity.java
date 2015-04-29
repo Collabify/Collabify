@@ -44,7 +44,7 @@ public class CreateEventActivity extends CollabifyActivity {
 
         EditText mName = (EditText) findViewById(R.id.event_field);
 
-        if (mAppManager.getUser().getName().equals("")) {
+        if (mAppManager.getUser().getName() == null) {
           mName.setText(mAppManager.getUser().getId() + "'s Event");
         } else {
           mName.setText(mAppManager.getUser().getName() + "'s Event");
