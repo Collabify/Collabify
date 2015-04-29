@@ -44,6 +44,12 @@ public class DjActivity extends PrimaryViewActivity implements BasePlayerFragmen
 
         mPlayerHandler = new PlayerHandler(this);
 
+
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ab.setLogo(R.drawable.ic_dj);
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
+
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.djPager);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

@@ -29,9 +29,9 @@
       <CheckBox
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/DJ_settings_password_protected_checkbox"
-          android:id="@+id/DJ_settings_password_protected_checkbox"
-          android:checked="false"
+          android:text="@string/DJ_settings_allow_feedback_button"
+          android:id="@+id/DJ_settings_allow_feedback_button"
+          android:checked="true"
           android:button="@null"
           android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
           android:textSize="20dp"
@@ -40,7 +40,22 @@
           android:layout_alignParentStart="true"
           android:layout_margin="15dp"/>
 
-      <TextView
+      <CheckBox
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/DJ_settings_password_protected_checkbox"
+          android:id="@+id/DJ_settings_password_protected_checkbox"
+          android:checked="false"
+          android:button="@null"
+          android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+          android:textSize="20dp"
+          android:layout_below="@+id/DJ_settings_allow_feedback_button"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:layout_margin="15dp"/>
+
+
+    <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textAppearance="?android:attr/textAppearanceLarge"
@@ -49,7 +64,8 @@
           android:layout_below="@+id/DJ_settings_password_protected_checkbox"
           android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
-          android:layout_margin="15dp"/>
+          android:layout_margin="15dp"
+          android:visibility="invisible"/>
 
       <EditText
           android:layout_width="wrap_content"
@@ -61,38 +77,26 @@
           android:width="200dp"
           android:inputType="none"
           android:singleLine="true"
-          android:imeOptions="actionDone"/>
+          android:imeOptions="actionDone"
+          android:visibility="invisible"/>
 
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/DJ_settings_allow_feedback_button"
-          android:id="@+id/DJ_settings_allow_feedback_button"
-          android:checked="true"
-          android:button="@null"
-          android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-          android:textSize="20dp"
-          android:layout_below="@+id/DJ_settings_password"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_margin="15dp"/>
 
-      <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/DJ_settings_restrict_nearby_checkbox"
-          android:id="@+id/restrict_nearby_checkbox"
-          android:checked="false"
-          android:button="@null"
-          android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-          android:textSize="20dp"
-          android:layout_below="@+id/DJ_settings_allow_feedback_button"
-          android:layout_margin="15dp"/>
+      <!--<CheckBox-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:text="@string/DJ_settings_restrict_nearby_checkbox"-->
+          <!--android:id="@+id/restrict_nearby_checkbox"-->
+          <!--android:checked="false"-->
+          <!--android:button="@null"-->
+          <!--android:drawableRight="?android:attr/listChoiceIndicatorMultiple"-->
+          <!--android:textSize="20dp"-->
+          <!--android:layout_below="@+id/DJ_settings_allow_feedback_button"-->
+          <!--android:layout_margin="15dp"/>-->
 
       <View android:layout_width="fill_parent"
           android:layout_height="1dp"
           android:background="#FFFFFF"
-          android:layout_below="@+id/restrict_nearby_checkbox"
+          android:layout_below="@+id/DJ_settings_password"
           android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_marginTop="23dp"

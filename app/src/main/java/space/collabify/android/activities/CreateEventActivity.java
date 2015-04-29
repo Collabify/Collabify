@@ -29,6 +29,10 @@ public class CreateEventActivity extends CollabifyActivity {
     private static final String TAG = CreateEventActivity.class.getSimpleName();
     private static ProgressDialog progress;
 
+    private static CheckBox mPasswordProtected;
+    private static TextView mPasswordLabel;
+    private static EditText mPasswordField;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,29 @@ public class CreateEventActivity extends CollabifyActivity {
         SHOW_LOGOUT = true;
 
         EditText mName = (EditText) findViewById(R.id.event_field);
-        mName.setText("Test123");
+
+        if (mAppManager.getUser().getName() == null) {
+          mName.setText(mAppManager.getUser().getId() + "'s Event");
+        } else {
+          mName.setText(mAppManager.getUser().getName() + "'s Event");
+        }
+
+        mPasswordProtected = (CheckBox) findViewById(R.id.password_protected_checkbox);
+        mPasswordLabel = (TextView) findViewById(R.id.password);
+        mPasswordField = (EditText) findViewById(R.id.password_field);
+
+        mPasswordProtected.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (((CheckBox) v).isChecked()) {
+              mPasswordLabel.setVisibility(View.VISIBLE);
+              mPasswordField.setVisibility(View.VISIBLE);
+            } else {
+              mPasswordLabel.setVisibility(View.INVISIBLE);
+              mPasswordField.setVisibility(View.INVISIBLE);
+            }
+          }
+        });
     }
 
     public void toDj(View view) {
@@ -49,7 +75,7 @@ public class CreateEventActivity extends CollabifyActivity {
         EditText mPassword = (EditText) findViewById(R.id.password_field);
         CheckBox mPasswordProtected = (CheckBox) findViewById(R.id.password_protected_checkbox);
         CheckBox mAllowFeedback = (CheckBox) findViewById(R.id.allow_feedback_checkbox);
-        CheckBox mRestrictNearby = (CheckBox) findViewById(R.id.restrict_nearby_checkbox);
+//        CheckBox mRestrictNearby = (CheckBox) findViewById(R.id.restrict_nearby_checkbox);
 
         String name = mName.getText().toString();
         String password = mPassword.getText().toString();
