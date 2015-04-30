@@ -45,6 +45,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
     private String currentPlaylistId = "";
     private String currentPlaylistOwner = "";
+    private String currentPlaylistName = "";
     private boolean displayingTracks = false;
 
     private ProgressDialog progress;
@@ -117,7 +118,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         setRefreshing(true);
 
         if(displayingTracks){
-            populateListWithTracks(currentPlaylistId, currentPlaylistOwner);
+            populateListWithTracks(currentPlaylistId, currentPlaylistOwner, currentPlaylistName);
         }
         else{
 
@@ -184,10 +185,11 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
     }
 
 
-    public void populateListWithTracks(String playlistId, String ownerId){
+    public void populateListWithTracks(String playlistId, String ownerId, String playlistName){
 
         currentPlaylistId = playlistId;
         currentPlaylistOwner = ownerId;
+        currentPlaylistName = playlistName;
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 
@@ -252,7 +254,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
                     }
 
                     displayingTracks = true;
-                    djHeaderText.setText("DJ Tracks");
+                    djHeaderText.setText(currentPlaylistName);
                     enableBackButton();
                     progress.dismiss();
                 }
