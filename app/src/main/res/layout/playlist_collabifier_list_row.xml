@@ -19,20 +19,60 @@
         android:src="@drawable/ic_album"
         android:layout_margin="5dp"/>
 
-    <TextView android:id="@+id/playlist_collabifier_song_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
+  <TextView android:id="@+id/song_row_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
 
-        android:text="collabifier list row"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/playlist_collabifier_album_art"
-        android:layout_toLeftOf="@+id/playlist_collabifier_upvote_button"
-        android:layout_toStartOf="@+id/playlist_collabifier_upvote_button"
-        android:layout_alignBottom="@+id/playlist_collabifier_album_art"
-        android:layout_margin="3dp"/>
+            android:text="title"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/playlist_collabifier_album_art"
+            android:layout_toLeftOf="@+id/playlist_dj_up_button"
+            android:layout_toStartOf="@+id/playlist_dj_up_button"
+            android:layout_marginTop="2dp"/>
+
+  <TextView android:id="@+id/song_row_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+
+            android:text="artist"
+            android:layout_below="@+id/song_row_title"
+            android:layout_alignLeft="@+id/song_row_title"
+            android:layout_alignStart="@+id/song_row_title"
+            android:layout_toLeftOf="@+id/playlist_dj_up_button"
+            android:layout_toStartOf="@+id/playlist_dj_up_button"/>
+
+  <TextView android:id="@+id/song_row_added_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+
+            android:text="added by"
+            android:layout_below="@+id/song_row_artist"
+            android:layout_alignLeft="@+id/song_row_artist"
+            android:layout_alignStart="@+id/song_row_artist"
+            android:layout_toLeftOf="@+id/playlist_dj_up_button"
+            android:layout_toStartOf="@+id/playlist_dj_up_button"
+    />
 
   <ImageButton
     android:id="@+id/playlist_dj_up_button"
@@ -44,7 +84,7 @@
     android:layout_below="@+id/playlist_row_song_id"
     android:layout_toLeftOf="@+id/playlist_collabifier_downvote_button"
     android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
-    android:layout_marginTop="12dp"
+    android:layout_marginTop="20dp"
     android:background="#00ffffff"
     android:layout_marginRight="12dp"
     android:src="@drawable/ic_up_arrow_white"/>
@@ -75,7 +115,7 @@
         android:layout_below="@+id/playlist_row_song_id"
         android:layout_toLeftOf="@+id/playlist_collabifier_downvote_button"
         android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:background="#00ffffff"
         android:layout_marginRight="12dp"
         android:checked="false"/>

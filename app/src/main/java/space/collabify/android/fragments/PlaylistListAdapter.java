@@ -45,8 +45,11 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         this.position = position - 1;
 
         ImageView albumArt = (ImageView) customView.findViewById(R.id.playlist_collabifier_album_art);
-        TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
         TextView songIdView = (TextView) customView.findViewById(R.id.playlist_row_song_id);
+
+        TextView rowTitle = (TextView) customView.findViewById(R.id.song_row_title);
+        TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
+        TextView rowAddedBy = (TextView) customView.findViewById(R.id.song_row_added_by);
 
         ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
@@ -126,7 +129,6 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             });
 
             String artist = songItem.getArtist();
-            artist = artist.substring(0, Math.min(artist.length(), 30));
 
             if (!artist.equals("")) {
                 artist = "(" + artist + ")";
@@ -136,8 +138,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             String title = songItem.getTitle();
             title = title.substring(0, Math.min(title.length(), 30));
 
-            String newSongDescription = title + "\n" + artist;
-            songDescriptionTextView.setText(newSongDescription);
+            rowTitle.setText(songItem.getTitle());
+            rowArtist.setText(songItem.getArtist());
+            rowAddedBy.setText("Added by: " + songItem.getUserId());
+
             songIdView.setText(songItem.getId());
 
             int visibility = (isDeleteVisible(songItem) && position != 0) ? View.VISIBLE : View.INVISIBLE;
@@ -148,9 +152,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
             //set up the row elements
             String title = songItem.getTitle();
-            title = title.substring(0, Math.min(title.length(), 30));
-
-            songDescriptionTextView.setText(title);
+            rowTitle.setText(title);
 
             deleteButton.setVisibility(View.INVISIBLE);
             upvoteButton.setVisibility(View.INVISIBLE);
