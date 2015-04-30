@@ -92,6 +92,11 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         if (getCurrentFragment() != object) {
             mCurrentFragment = ((Fragment) object);
+
+            if(mCurrentFragment instanceof BasePlayerFragment){
+                ((BasePlayerFragment)mCurrentFragment).updateSong();
+                ((BasePlayerFragment)mCurrentFragment).updatePlayerView();
+            }
         }
         super.setPrimaryItem(container, position, object);
     }
