@@ -130,11 +130,28 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
         public void failure(RetrofitError error) {
           progress.dismiss();
 
-          runOnUiThread(new Runnable() {
-            public void run() {
-              Toast.makeText(getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+            int e = error.getResponse().getStatus();
+            if (e == 403) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getBaseContext(), "Too late! Song already on playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
-          });
+            else if (e == 401){
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getBaseContext(), "You are Blacklisted! You cannot add songs", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else{
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
 
         }
 
