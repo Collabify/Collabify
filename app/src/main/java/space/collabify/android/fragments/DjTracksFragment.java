@@ -82,14 +82,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backButton.setClickable(false);
-                backButton.setVisibility(View.INVISIBLE);
-
-                djHeaderText.setText("DJ Playlists");
-
-                // GO BACK TO PLAYLIST VIEW HERE
-                setListAdapter(mDjPlaylistsListAdapter);
-                displayingTracks = false;
+                back();
             }
         });
 
@@ -102,6 +95,17 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         });
 
         mParentActivity.getAppManager().getSpotifyService().getPlaylists(mParentActivity.getAppManager().getEvent().getEventId(), new populatePlaylistList());
+    }
+
+    public void back() {
+      backButton.setClickable(false);
+      backButton.setVisibility(View.INVISIBLE);
+
+      djHeaderText.setText("DJ Playlists");
+
+      // GO BACK TO PLAYLIST VIEW HERE
+      setListAdapter(mDjPlaylistsListAdapter);
+      displayingTracks = false;
     }
 
     @Override
@@ -169,7 +173,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
                         String artUrl = "";
 
                         if (playlist.images.size() > 0) {
-                            artUrl = playlist.images.get(0).url;
+                            artUrl = playlist.images.get(playlist.images.size() - 1).url;
                         }
 
                         Playlist newPlaylist = new Playlist(playlist.name, playlist.id, artUrl, new ArrayList<Song>());
@@ -235,11 +239,13 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
                         Track track = playlistTrack.track;
 
-                        String url = "";
+                      String highUrl = "";
+                      String lowUrl = "";
 
-                        if(track.album.images.size() > 0){
-                            url = track.album.images.get(0).url;
-                        }
+                      if(track.album.images.size() > 0) {
+                        highUrl = track.album.images.get(0).url;
+                        lowUrl = track.album.images.get(track.album.images.size() - 1).url;
+                      }
 
                         String artists = track.artists.get(0).name;
                         if (track.artists.size() > 1) {
@@ -248,7 +254,8 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
                             }
                         }
 
-                        Song newSong = new Song(track.name, artists, track.album.name, 9999, track.id, url, mParentActivity.getAppManager().getUser().getId());
+                        Song newSong = new Song(track.name, artists, track.album.name, 9999, track.id, highUrl, mParentActivity.getAppManager().getUser().getId());
+                        newSong.setLowArtwork(lowUrl);
 
                         mDjTracksListAdapter.add(newSong);
                     }

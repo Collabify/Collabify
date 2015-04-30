@@ -47,9 +47,9 @@ public class SearchDetailsListAdapter extends ArrayAdapter<Song> {
           addButton.setVisibility(View.INVISIBLE);
         }
 
-        if(!"".equals(song.getId()) && song.getArtwork() != null && !song.getArtwork().isEmpty()) {
+        if(!"".equals(song.getId()) && song.getLowArtwork() != null && !song.getLowArtwork().isEmpty()) {
             //use picasso to load album art
-            Picasso.with(getContext()).load(song.getArtwork()).into(albumArt);
+            Picasso.with(getContext()).load(song.getLowArtwork()).into(albumArt);
         }
 
         final String newSongDescription = song.getTitle() + "\n(" + song.getArtist() + ")";

@@ -18,8 +18,8 @@ public class Song {
     private boolean mIsUpvoted;
     private boolean mIsDownvoted;
 
-    // TODO: Probably want to cache artwork somehow
     private String mArtwork;
+    private String mLowArtwork;
 
     public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, String mUserId) {
         this.mTitle = mTitle;
@@ -93,6 +93,17 @@ public class Song {
         this.mArtwork = mArtwork;
     }
 
+    public String getLowArtwork() {
+      if (mLowArtwork != "" && mLowArtwork != null) {
+        return mLowArtwork;
+      } else {
+        return mArtwork;
+      }
+    }
+
+    public void setLowArtwork(String mLowArtwork) {
+      this.mLowArtwork = mLowArtwork;
+    }
 
     public boolean isDownvoted() {
         return mIsDownvoted;

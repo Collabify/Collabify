@@ -178,10 +178,12 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
 
             for(Track track : tracks){
 
-                String url = "";
+                String highUrl = "";
+                String lowUrl = "";
 
                 if(track.album.images.size() > 0) {
-                    url = track.album.images.get(0).url;
+                    highUrl = track.album.images.get(0).url;
+                    lowUrl = track.album.images.get(track.album.images.size() - 1).url;
                 }
 
                   String artists = track.artists.get(0).name;
@@ -191,7 +193,8 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     }
                   }
 
-                 Song song = new Song(track.name, artists, track.album.name, 9999, track.id, url, mAppManager.getUser().getId());
+                Song song = new Song(track.name, artists, track.album.name, 9999, track.id, highUrl, mAppManager.getUser().getId());
+                song.setLowArtwork(lowUrl);
 
                 songs.add(song);
             }

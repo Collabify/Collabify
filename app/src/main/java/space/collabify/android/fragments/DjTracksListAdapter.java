@@ -63,7 +63,7 @@ public class DjTracksListAdapter extends ArrayAdapter<Song> {
 
         if(!"".equals(song.getId()) && song.getArtwork() != null && !song.getArtwork().isEmpty()){
             //use picasso to load album art
-            Picasso.with(getContext()).load(song.getArtwork()).into(viewHolder.albumArt);
+            Picasso.with(getContext()).load(song.getLowArtwork()).into(viewHolder.albumArt);
         }
 
         final String newSongDescription = song.getTitle() + "\n(" + song.getArtist() + ")";
