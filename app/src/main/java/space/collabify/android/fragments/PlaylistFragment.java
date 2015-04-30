@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -112,7 +113,36 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
      * Starts a background task to get playlist updates
      */
     private void initiateRefresh() {
-        callLoadPlaylist();
+
+        setRefreshing(true);
+
+        mAppManager.getEventSettings(new CollabifyResponseCallback() {
+            @Override
+            public void exception(Exception e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Error refreshing playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void success(Response response) {
+
+                callLoadPlaylist();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Could not refresh playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -190,9 +220,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
             if (isChecked) {
                 downvoteButton.setChecked(false);
-                mAppManager.upvoteSong(song, null);
+                mAppManager.upvoteSong(song, new afterVoteClick());
             } else if (!downvoteButton.isChecked()) {
-                mAppManager.clearSongVote(song, null);
+                mAppManager.clearSongVote(song, new afterVoteClick());
             }
         }
     }
@@ -214,9 +244,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 //TODO: warning, causes onDownvoteClick to be called, resulting in
                 //two calls to the server when only one may be necessary...
                 upvoteButton.setChecked(false);
-                mAppManager.downvoteSong(song, null);
+                mAppManager.downvoteSong(song, new afterVoteClick());
             } else if (!upvoteButton.isChecked()) {
-                mAppManager.clearSongVote(song, null);
+                mAppManager.clearSongVote(song, new afterVoteClick());
             }
         }
     }
@@ -269,7 +299,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
             public void success(Response response) {
                 getActivity().runOnUiThread(new Runnable() {
                   public void run() {
-                    callLoadPlaylist();
+                    initiateRefresh();
                   }
                 });
             }
@@ -287,9 +317,35 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     }
 
     private void callLoadPlaylist() {
-        setRefreshing(true);
         mAppManager.loadEventPlaylist(new LoadPlaylistCallback());
     }
+
+    private class afterVoteClick extends CollabifyResponseCallback {
+
+        @Override
+        public void exception(Exception e) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "Error sending vote...", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void success(Response response) {
+
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+
+            initiateRefresh();
+        }
+    }
+
+
+
 
     private class LoadPlaylistCallback implements CollabifyCallback<Playlist> {
         @Override
