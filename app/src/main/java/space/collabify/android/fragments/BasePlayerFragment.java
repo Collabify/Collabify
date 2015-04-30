@@ -137,6 +137,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
                                 updatePlayerView();
                             }
                         });
+                        
                     }
 
                     @Override
