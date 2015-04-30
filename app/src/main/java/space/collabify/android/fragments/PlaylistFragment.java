@@ -236,9 +236,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     }
 
     public void moveSong(View view, int position, int updated) {
+      Log.d("MOVE", "Moving from " + position + " to " + updated);
       ViewGroup rowViewGroup = (ViewGroup) view.getParent();
       Song song = getSongFromLayout(rowViewGroup);
-
 
       mAppManager.moveSong(song, position, updated, new CollabifyCallback<Playlist>() {
 

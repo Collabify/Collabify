@@ -47,7 +47,7 @@
     android:layout_marginTop="12dp"
     android:background="#00ffffff"
     android:layout_marginRight="12dp"
-    android:src="@drawable/ic_up_arrow"/>
+    android:src="@drawable/ic_up_arrow_white"/>
 
   <ImageButton
     android:id="@+id/playlist_dj_down_button"
@@ -61,7 +61,7 @@
     android:layout_toStartOf="@+id/playlist_collabifier_delete_button"
     android:background="#00ffffff"
     android:layout_marginRight="12dp"
-    android:src="@drawable/ic_down_arrow"/>
+    android:src="@drawable/ic_down_arrow_white"/>
 
     <space.collabify.android.controls.ImageToggleButton
         android:id="@+id/playlist_collabifier_upvote_button"
