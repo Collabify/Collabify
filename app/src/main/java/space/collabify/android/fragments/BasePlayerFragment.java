@@ -31,6 +31,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.PlayerHandler;
 import space.collabify.android.R;
 
 import space.collabify.android.collabify.models.domain.Playlist;
@@ -47,8 +48,6 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
     private AppManager mAppManager;
-    private Player mPlayer;
-    private Song mCurrentSong;
 
     private TextView mSongTitle;
     private TextView mSongArtist;
@@ -63,14 +62,12 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     private Thread rThread;
 
     private boolean isDJ;
-    private boolean mWasDestroyed = false;
     private boolean mViewRestored = false;
 
     private PlayerFragmentListener mListener;
 
     public interface PlayerFragmentListener{
-        public Player getPlayer();
-        public boolean didCurrentSongStart();
+        public PlayerHandler getPlayerHandler();
     }
 
     @Override
@@ -88,8 +85,6 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         }catch(ClassCastException ex){
             throw new ClassCastException(activity.toString() + " must implement PlayerFragmentListener");
         }
-
-        mPlayer = mListener.getPlayer();
     }
 
     @Override
@@ -110,7 +105,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
             setUpForCollabifier(rootView);
         }
 
-        updateSong();
+        mListener.getPlayerHandler().updateSong();
 
         return rootView;
     }
@@ -130,17 +125,23 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
                 mAppManager.nextSong(new CollabifyResponseCallback() {
                     @Override
                     public void exception(Exception e) {
-                        updateSong();
+                        mListener.getPlayerHandler().updateSong();
                     }
 
                     @Override
                     public void success(Response response) {
-                        updateSong();
+                        mListener.getPlayerHandler().updateSong();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updatePlayerView();
+                            }
+                        });
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        updateSong();
+                        mListener.getPlayerHandler().updateSong();
                     }
                 });
 
@@ -187,50 +188,16 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         });
     }
 
-    public void updateSong() {
-        if (mListener == null || mListener.didCurrentSongStart()) {
-            return;
-        }
-
-        if (mSongTitle != null) {
-            mAppManager.getCurrentSong(new CollabifyCallback<Song>() {
-                @Override
-                public void exception(Exception e) {
-
-                }
-
-                @Override
-                public void success(Song song, Response response) {
-                    if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
-                        mCurrentSong = song;
-                    }
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            updatePlayerView();
-                        }
-                    });
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                }
-            });
-
-        }
-    }
-
     public void updatePlayerView() {
         // Song on queue
-        if (mCurrentSong != null) {
-            mSongTitle.setText(mCurrentSong.getTitle());
-            mSongArtist.setText(mCurrentSong.getAlbum() + "\n" + mCurrentSong.getArtist());
+        Song currentSong = mListener.getPlayerHandler().getCurrentSong();
+        if (currentSong != null) {
+            mSongTitle.setText(currentSong.getTitle());
+            mSongArtist.setText(currentSong.getAlbum() + "\n" + currentSong.getArtist());
             mPlayPauseBtn.enable();
             mNextSongBtn.setImageResource(R.drawable.ic_fast_forward_white_48dp);
-            if(mCurrentSong.getArtwork() != null && !mCurrentSong.getArtwork().isEmpty()) {
-                Picasso.with(getActivity()).load(mCurrentSong.getArtwork()).into(mAlbumImage);
+            if(currentSong.getArtwork() != null && !currentSong.getArtwork().isEmpty()) {
+                Picasso.with(getActivity()).load(currentSong.getArtwork()).into(mAlbumImage);
             }
         }
         // Nothing to play
@@ -274,22 +241,19 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(mViewRestored){
+            Player player = mListener.getPlayerHandler().getPlayer();
             if (isChecked) {
                 // play song
-                if (mListener.didCurrentSongStart()) {
-                    mPlayer.resume();
+                if (mListener.getPlayerHandler().getCurrSongDidStart()) {
+                    player.resume();
                 }
                 else {
-                    if(mPlayer != null && mCurrentSong != null) {
-                        mPlayer.play("spotify:track:" + mCurrentSong.getId());
-                    }else {
-                        Log.w(TAG, "Either player or currentSong was NULL, couldn't start playback");
-                    }
+                    mListener.getPlayerHandler().playCurrentSong();
                 }
             }
             else {
                 //pause song
-                mPlayer.pause();
+                player.pause();
             }
         }
     }

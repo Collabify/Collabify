@@ -94,7 +94,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             mCurrentFragment = ((Fragment) object);
 
             if(mCurrentFragment instanceof BasePlayerFragment){
-                ((BasePlayerFragment)mCurrentFragment).updateSong();
                 ((BasePlayerFragment)mCurrentFragment).updatePlayerView();
             }
         }
