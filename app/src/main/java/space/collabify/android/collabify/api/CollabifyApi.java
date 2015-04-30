@@ -376,28 +376,27 @@ public class CollabifyApi {
      * @return
      * @throws CollabifyApiException
      */
-    public EventSettings getEventInfo(String eventId) throws CollabifyApiException {
+    public EventDO getEvent(String eventId) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.getEventInfo(eventId);
+        return mCollabifyService.getEvent(eventId, mCurrentUserId);
     }
 
     /**
      * Get information on an event
      *
-     * @param currentUserId
      * @param eventId
      * @param callback
      * @throws CollabifyApiException
      */
-    public void getEventInfo(String currentUserId, String eventId, Callback<EventSettings> callback) throws CollabifyApiException {
+    public void getEvent(String eventId, Callback<EventDO> callback) throws CollabifyApiException {
         if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
             throw new CollabifyApiException();
         }
 
-        mCollabifyService.getEventInfo(eventId, callback);
+        mCollabifyService.getEvent(eventId, mCurrentUserId, callback);
     }
 
     /**
