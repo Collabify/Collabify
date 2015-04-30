@@ -94,42 +94,61 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                             @Override
                             public void success(String eventId, Response response) {
 
-                                Intent i = null;
                                 if(eventId != null){
                                     //needed in order to get the event name, but can't because incorrectly sets user role to COLLABIFIER
                                     //mAppManager.joinEvent(eventId, null);
                                 }
                                 // the user is already at an event
                                 if (!mAppManager.getUser().getRole().isNoRole() && eventId != null) {
+                                    mAppManager.getEventSettings(new CollabifyResponseCallback() {
 
-                                    // the user is aj
-                                    if (mAppManager.getUser().getRole().isDJ()) {
-                                        i = new Intent(mainContext, DjActivity.class);
-                                    }
-                                    // the user is a collabifier
-                                    else {
-                                        i = new Intent(mainContext, CollabifierActivity.class);
-                                    }
+                                      @Override
+                                      public void success(Response response) {
+                                        Intent i;
+                                        if (mAppManager.getUser().getRole().isDJ()) {
+                                          i = new Intent(mainContext, DjActivity.class);
+                                        }
+                                        // the user is a collabifier
+                                        else {
+                                          i = new Intent(mainContext, CollabifierActivity.class);
+                                        }
+                                        progress.dismiss();
+                                        finish();
+                                        startActivity(i);
+                                      }
+
+                                      @Override
+                                      public void failure(RetrofitError error) {
+                                        error.printStackTrace();
+                                        progress.dismiss();
+                                      }
+
+                                      @Override
+                                      public void exception(Exception e) {
+                                        e.printStackTrace();
+                                        progress.dismiss();
+                                      }
+                                    });
+                                    // the user is a dj
+
                                 }
                                 // the user will need to join an event
                                 else {
-                                    i = new Intent(mainContext, JoinEventActivity.class);
+                                    Intent i = new Intent(mainContext, JoinEventActivity.class);
+                                    progress.dismiss();
+                                    finish();
+                                    startActivity(i);
                                 }
-
-
-
-                                progress.dismiss();
-                                finish();
-                                startActivity(i);
                             }
 
                             @Override
-                            public void failure(RetrofitError retrofitError) {
+                            public void failure(final RetrofitError retrofitError) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         progress.dismiss();
                                         clearAppData();
+                                        retrofitError.printStackTrace();
                                         Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -137,6 +156,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
 
                             @Override
                             public void exception(Exception e) {
+                                e.printStackTrace();
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
