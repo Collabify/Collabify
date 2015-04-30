@@ -207,16 +207,17 @@ public class AppManager {
 
     public void getEventSettings(final CollabifyResponseCallback callback) {
       try {
-        mCollabifyApi.getEventInfo(mUser.getId(), mEvent.getEventId(), new Callback<EventSettings>() {
+        mCollabifyApi.getEvent(mEvent.getEventId(), new Callback<EventDO>() {
           @Override
-          public void success(EventSettings settings, Response response) {
+          public void success(EventDO event, Response response) {
             if (mEvent.getSettings() == null) {
               mEvent.setSettings(new EventSettings());
             }
 
-            mEvent.getSettings().setAllowVoting(settings.isAllowVoting());
-            mEvent.getSettings().setPassword(settings.getPassword());
-            mEvent.getSettings().setLocationRestricted(settings.isLocationRestricted());
+            mEvent.setName(event.getName());
+            mEvent.getSettings().setAllowVoting(event.getSettings().isAllowVoting());
+            mEvent.getSettings().setPassword(event.getSettings().getPassword());
+            mEvent.getSettings().setLocationRestricted(event.getSettings().isLocationRestricted());
 
             if (callback != null) {
               callback.success(response);
