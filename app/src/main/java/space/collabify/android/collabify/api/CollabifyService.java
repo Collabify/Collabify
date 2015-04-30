@@ -301,6 +301,25 @@ public interface CollabifyService {
     @GET(EVENT_SETTINGS_URL)
     public void getEventInfo(@Path(EVENT_PATHVAL) String eventId, Callback<EventSettings> callback);
 
+
+    /**
+     * Get an event
+     *
+     * @param eventId
+     * @return
+     */
+    @GET(EVENT_URL)
+    public EventDO getEvent(@Path(EVENT_PATHVAL) String eventId, @Header(USER_HEADER) String currentUserId);
+
+    /**
+     * Get an event
+     *
+     * @param eventId
+     * @param callback
+     */
+    @GET(EVENT_URL)
+    public void getEvent(@Path(EVENT_PATHVAL) String eventId, @Header(USER_HEADER) String currentUserId, Callback<EventDO> callback);
+
     /**
      * Get nearby events
      *

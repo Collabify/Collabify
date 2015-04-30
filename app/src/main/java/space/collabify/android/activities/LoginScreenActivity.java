@@ -118,15 +118,29 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                                       }
 
                                       @Override
-                                      public void failure(RetrofitError error) {
-                                        error.printStackTrace();
-                                        progress.dismiss();
+                                      public void failure(final RetrofitError error) {
+                                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                            progress.dismiss();
+                                            clearAppData();
+                                            error.printStackTrace();
+                                            Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                                          }
+                                        });
                                       }
 
                                       @Override
-                                      public void exception(Exception e) {
-                                        e.printStackTrace();
-                                        progress.dismiss();
+                                      public void exception(final Exception e) {
+                                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                            progress.dismiss();
+                                            clearAppData();
+                                            e.printStackTrace();
+                                            Toast.makeText(mainContext, "login error occured", Toast.LENGTH_LONG).show();
+                                          }
+                                        });
                                       }
                                     });
                                     // the user is a dj
