@@ -1,30 +1,19 @@
 package space.collabify.android.activities;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.R;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.collabify.models.domain.EventSettings;
-import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
-//import space.collabify.android.models.Event;
 import space.collabify.android.collabify.models.domain.Event;
-import space.collabify.android.models.Role;
-//import space.collabify.android.collabify.api;
-
 
 public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivity
 
@@ -41,15 +30,28 @@ public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivi
         SHOW_LEAVE = false;
         SHOW_LOGOUT = false;
 
-        //auto fill correct event name
+        // auto fill settings
         EditText mName = (EditText) findViewById(R.id.event_name_field);
         Event mEvent = mAppManager.getEvent();
         String eventName = mEvent.getName();
         mName.setText(eventName);
 
+        CheckBox mAllowUserFeedback = (CheckBox) findViewById(R.id.DJ_settings_allow_feedback_button);
         mPasswordProtected = (CheckBox) findViewById(R.id.DJ_settings_password_protected_checkbox);
         mPasswordLabel = (TextView) findViewById(R.id.DJ_settings_password);
         mPasswordField = (EditText) findViewById(R.id.password_field);
+
+        if (mEvent.getSettings() != null) {
+          mAllowUserFeedback.setChecked(mEvent.getSettings().isAllowVoting());
+          boolean hasPass = !mEvent.getSettings().getPassword().equals("");
+
+          if (hasPass) {
+            mPasswordProtected.setChecked(hasPass);
+            mPasswordField.setText(mEvent.getSettings().getPassword());
+            mPasswordLabel.setVisibility(View.VISIBLE);
+            mPasswordField.setVisibility(View.VISIBLE);
+          }
+        }
 
         mPasswordProtected.setOnClickListener(new View.OnClickListener() {
           @Override

@@ -205,6 +205,41 @@ public class AppManager {
         }
     }
 
+    public void getEventSettings(final CollabifyResponseCallback callback) {
+      try {
+        mCollabifyApi.getEventInfo(mUser.getId(), mEvent.getEventId(), new Callback<EventSettings>() {
+          @Override
+          public void success(EventSettings settings, Response response) {
+            if (mEvent.getSettings() == null) {
+              mEvent.setSettings(new EventSettings());
+            }
+
+            mEvent.getSettings().setAllowVoting(settings.isAllowVoting());
+            mEvent.getSettings().setPassword(settings.getPassword());
+            mEvent.getSettings().setLocationRestricted(settings.isLocationRestricted());
+
+            if (callback != null) {
+              callback.success(response);
+            }
+          }
+
+          @Override
+          public void failure(RetrofitError retrofitError) {
+            // handle failure
+            if (callback != null) {
+              callback.failure(retrofitError);
+            }
+          }
+
+        });
+      } catch (CollabifyApiException e) {
+        if (callback != null) {
+          callback.exception(e);
+        }
+        e.printStackTrace();
+      }
+    }
+
     /**
      * Handles logging the user out of our server
      *
