@@ -187,7 +187,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         });
     }
 
-    private void updateSong() {
+    public void updateSong() {
         if (mListener == null || mListener.didCurrentSongStart()) {
             return;
         }
@@ -222,7 +222,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         }
     }
 
-    private void updatePlayerView() {
+    public void updatePlayerView() {
         // Song on queue
         if (mCurrentSong != null) {
             mSongTitle.setText(mCurrentSong.getTitle());
@@ -242,6 +242,8 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
             mNextSongBtn.setImageResource(R.drawable.ic_fast_forward_grey600_48dp);
         }
     }
+
+
 
     @Override
     public void onResume() {

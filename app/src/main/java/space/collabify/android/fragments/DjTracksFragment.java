@@ -45,6 +45,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
     private String currentPlaylistId = "";
     private String currentPlaylistOwner = "";
+    private String currentPlaylistName = "";
     private boolean displayingTracks = false;
 
     private ProgressDialog progress;
@@ -117,7 +118,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         setRefreshing(true);
 
         if(displayingTracks){
-            populateListWithTracks(currentPlaylistId, currentPlaylistOwner);
+            populateListWithTracks(currentPlaylistId, currentPlaylistOwner, currentPlaylistName);
         }
         else{
 
@@ -184,10 +185,11 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
     }
 
 
-    public void populateListWithTracks(String playlistId, String ownerId){
+    public void populateListWithTracks(String playlistId, String ownerId, String playlistName){
 
         currentPlaylistId = playlistId;
         currentPlaylistOwner = ownerId;
+        currentPlaylistName = playlistName;
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 
@@ -252,7 +254,7 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
                     }
 
                     displayingTracks = true;
-                    djHeaderText.setText("DJ Tracks");
+                    djHeaderText.setText(currentPlaylistName);
                     enableBackButton();
                     progress.dismiss();
                 }
@@ -305,12 +307,28 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         @Override
         public void failure(RetrofitError error) {
             progress.dismiss();
-
-            mParentActivity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
-                }
-            });
+            int e = error.getResponse().getStatus();
+            if (e == 403) {
+                mParentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mParentActivity.getBaseContext(), "Too Late! Song is already on the playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else if (e == 401){
+                mParentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mParentActivity.getBaseContext(), "You are Blacklisted! You cannot add songs", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else{
+                mParentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
 
         }
 

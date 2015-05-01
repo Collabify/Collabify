@@ -29,9 +29,11 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
     protected PlaylistFragment mPlaylistFragment;
     protected int position;
     protected boolean isAllowVoting = true;
+    protected List<Song> songs;
 
     public PlaylistListAdapter(Context context, List<Song> songs, User user, PlaylistFragment fragment){
         super(context,  R.layout.playlist_collabifier_list_row, songs);
+        this.songs = songs;
         this.mPlaylistFragment = fragment;
         this.mUser = user;
     }
@@ -41,12 +43,12 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.playlist_collabifier_list_row, parent, false);
         Song songItem = getItem(position);
-        this.position = position;
+        this.position = position - 1;
 
         ImageView albumArt = (ImageView) customView.findViewById(R.id.playlist_collabifier_album_art);
         TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
         TextView songIdView = (TextView) customView.findViewById(R.id.playlist_row_song_id);
-        //TODO: set upvote_icon,downvote_icon button image backgrounds depending on user vote?
+
         ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
         ImageToggleButton downvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_downvote_button);
@@ -60,6 +62,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
           if (position == 0) {
             upButton.setVisibility(View.INVISIBLE);
             downButton.setVisibility(View.INVISIBLE);
+          } else if (position == 1) {
+            upButton.setImageResource(R.drawable.ic_up_arrow_grey);
+          } else if (position == songs.size() - 1) {
+            downButton.setImageResource(R.drawable.ic_down_arrow_grey);
           }
         } else {
             upButton.setVisibility(View.INVISIBLE);
@@ -109,14 +115,18 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             upButton.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                mPlaylistFragment.moveSong(v, position, position-1);
+                if (position != 1) {
+                  mPlaylistFragment.moveSong(v, position - 1, position - 2);
+                }
               }
             });
 
             downButton.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
-                mPlaylistFragment.moveSong(v, position, position+1);
+                if (position != songs.size() - 1) {
+                  mPlaylistFragment.moveSong(v, position - 1, position);
+                }
               }
             });
 
