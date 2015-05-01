@@ -57,10 +57,11 @@ public class CollabifierActivity extends PrimaryViewActivity {
           default:
             icon = R.drawable.ic_actionbar_collabifier;
         }
-
+        Log.d(TAG, "role:" + mAppManager.getUser().getRole().getRole());
         ab.setLogo(icon);
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
+        
 
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.collabifierPager);
@@ -108,5 +109,38 @@ public class CollabifierActivity extends PrimaryViewActivity {
     @Override
     public void onBackPressed () {
         leaveEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String eventName = mAppManager.getEvent().getName();
+        setTitle(eventName);
+
+        mAppManager.getUserDetails(null);
+
+        String role = mAppManager.getUser().getRole().getRole();
+        Log.d(TAG, "on resume role:" + role);
+        /*android.support.v7.app.ActionBar ab = getSupportActionBar();
+
+        //ab.setDisplayUseLogoEnabled(false);
+        //ab.setDisplayShowHomeEnabled(false);
+
+        int icon;
+        switch (mAppManager.getUser().getRole().getRole()) {
+            case Role.BLACKLISTED:
+                icon = R.drawable.ic_actionbar_blacklisted;
+                break;
+            case Role.PROMOTED:
+                icon = R.drawable.ic_actionbar_promoted;
+                break;
+            default:
+                icon = R.drawable.ic_actionbar_collabifier;
+        }
+
+        ab.setIcon(icon);
+        ab.setDisplayUseLogoEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
+        */
     }
 }
