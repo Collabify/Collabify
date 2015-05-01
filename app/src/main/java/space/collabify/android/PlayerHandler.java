@@ -12,6 +12,8 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.Spotify;
 
+import java.util.List;
+
 import kaaes.spotify.webapi.android.SpotifyApi;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -23,7 +25,7 @@ import space.collabify.android.models.Song;
 /**
  * This file was born on April 28, at 10:47
  */
-public class PlayerHandler implements PlayerNotificationCallback, ConnectionStateCallback {
+public class PlayerHandler implements PlayerNotificationCallback, ConnectionStateCallback, AppManager.OnSongAddListener {
     private static final String TAG = PlayerHandler.class.getSimpleName();
 
     private Song mCurrentSong;
@@ -34,6 +36,10 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
 
     private boolean currSongDidStart = false;
     private boolean mHasCurrentSongChanged = false;
+    private boolean mSkippingSong = false;
+
+    //shouldn't need this, but sometimes queuing same song multiple times in a row
+    private String mLastQueuedSongId;
 
     public PlayerHandler(Activity callingActivity, PlayerHandlerListener listener){
         this.mListener = listener;
@@ -73,8 +79,13 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         if (eventType.equals(EventType.PLAY)) {
             currSongDidStart = true;
         }
+        if(eventType.equals(EventType.SKIP_NEXT)){
+            mSkippingSong = true;
+        }
+
         if (eventType.equals(EventType.TRACK_END)) {
             currSongDidStart = false;
+            updateSong();
             queueNextSong();
             mListener.startNextSong();
         }
@@ -117,8 +128,13 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
 
         updateSong();
 
+        //if the playlist already has songs in it, should re queue existing
         queueCurrentSong();
         queueNextSong();
+
+        //register to get called when songs are added, so that if there are
+        //no songs on the list, the 1st/2nd song can get queued so they don't get skipped over
+        AppManager.getInstance().registerSongAddListener(this);
     }
 
     /**
@@ -128,7 +144,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         AppManager.getInstance().getCurrentSong(new CollabifyCallback<Song>() {
             @Override
             public void exception(Exception e) {
-                Log.w(TAG, "Couldn't getCurrentSong: "+ e.toString());
+                Log.w(TAG, "Couldn't getCurrentSong: " + e.toString());
             }
 
             @Override
@@ -165,27 +181,44 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
      */
     public void nextSong(){
         currSongDidStart = false;
-        updateSong();
         mPlayer.skipToNext();
-        queueNextSong();
     }
 
     public void queueCurrentSong() {
-        if(mCurrentSong != null) {
-            mPlayer.queue("spotify:track:" + mCurrentSong.getId());
-        }else {
-            Log.w(TAG, "Current song was null, couldn't queue");
-        }
+        queueSong(mCurrentSong);
     }
 
 
     public void queueNextSong(){
         Song nextSong = AppManager.getInstance().getOnDeckSong();
-        if(nextSong == null){
-            Log.w(TAG, "Next song is null, can't queue it");
+        queueSong(nextSong);
+    }
+
+    private void queueSong(Song song){
+        if(song == null || song.getId() == null){
+            Log.w(TAG, "song or id is null, can't queue it");
             return;
         }
-        mPlayer.queue("spotify:track:" + nextSong.getId());
+        if(mLastQueuedSongId != null && mLastQueuedSongId.equals(song.getId())){
+            Log.w(TAG, "can't queue same song twice in a row");
+            return;
+        }
+        if(!mPlayer.isShutdown() && mPlayer.isInitialized()){
+            mPlayer.queue("spotify:track:" + song.getId());
+        }else{
+            Log.w(TAG, "Player is shutdown or not initialized yet...");
+        }
+    }
+
+
+    @Override
+    public void onSongAdded(Song song) {
+        //if there is only a currently playing song (next song is null), then we should queue this song?
+        List<Song> nextSongs = AppManager.getInstance().getCurrentSongList();
+
+        if(nextSongs == null || nextSongs.size() <= 2) {
+            queueSong(song);
+        }
     }
 
 

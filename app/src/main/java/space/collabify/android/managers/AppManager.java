@@ -67,6 +67,9 @@ public class AppManager {
 
     private android.location.Location mLastUserLocation;
 
+    //song add listeners
+    private ArrayList<OnSongAddListener> listeners;
+
     /**
      * Private constructor
      */
@@ -208,29 +211,29 @@ public class AppManager {
     public void getEventSettings(final CollabifyResponseCallback callback) {
       try {
         mCollabifyApi.getEvent(mEvent.getEventId(), new Callback<EventDO>() {
-          @Override
-          public void success(EventDO event, Response response) {
-            if (mEvent.getSettings() == null) {
-              mEvent.setSettings(new EventSettings());
+            @Override
+            public void success(EventDO event, Response response) {
+                if (mEvent.getSettings() == null) {
+                    mEvent.setSettings(new EventSettings());
+                }
+
+                mEvent.setName(event.getName());
+                mEvent.getSettings().setAllowVoting(event.getSettings().isAllowVoting());
+                mEvent.getSettings().setPassword(event.getSettings().getPassword());
+                mEvent.getSettings().setLocationRestricted(event.getSettings().isLocationRestricted());
+
+                if (callback != null) {
+                    callback.success(response);
+                }
             }
 
-            mEvent.setName(event.getName());
-            mEvent.getSettings().setAllowVoting(event.getSettings().isAllowVoting());
-            mEvent.getSettings().setPassword(event.getSettings().getPassword());
-            mEvent.getSettings().setLocationRestricted(event.getSettings().isLocationRestricted());
-
-            if (callback != null) {
-              callback.success(response);
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // handle failure
+                if (callback != null) {
+                    callback.failure(retrofitError);
+                }
             }
-          }
-
-          @Override
-          public void failure(RetrofitError retrofitError) {
-            // handle failure
-            if (callback != null) {
-              callback.failure(retrofitError);
-            }
-          }
 
         });
       } catch (CollabifyApiException e) {
@@ -831,14 +834,17 @@ public class AppManager {
         return Converter.toSong(mPlaylist.getNextSong());
     }
 
+    public List<Song> getCurrentSongList(){
+        return Converter.toPlaylist(mPlaylist);
+    }
+
     /**
      * Adds a song to the event playlist and updates the playlist
      *
      * @param song
      * @param callback
      */
-    public void addSong(Song song, final CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> callback) {
-
+    public void addSong(final Song song, final CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> callback) {
         if (song == null) {
             return;
         }
@@ -864,6 +870,8 @@ public class AppManager {
                     if (callback != null) {
                         callback.success(playlist, response);
                     }
+
+                    callSongAddListeners(song);
                 }
 
                 @Override
@@ -883,6 +891,25 @@ public class AppManager {
             mPlaylistUpdating = false;
         }
     }
+
+    public interface OnSongAddListener{
+        void onSongAdded(Song song);
+    }
+
+    public void registerSongAddListener(OnSongAddListener listener){
+        if(listeners == null){
+            listeners = new ArrayList<>();
+        }
+        listeners.add(listener);
+    }
+
+    private void callSongAddListeners(Song songAdded){
+        for(OnSongAddListener listener : listeners){
+            listener.onSongAdded(songAdded);
+        }
+    }
+
+
 
     /**
      * Removes a song from the event playlist

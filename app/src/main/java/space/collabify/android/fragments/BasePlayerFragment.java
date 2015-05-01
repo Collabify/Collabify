@@ -201,15 +201,12 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         }
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
         //updateSong();
         updatePlayerView();
     }
-
 
     @Override
     public void onPause() {
