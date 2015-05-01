@@ -33,6 +33,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
     private PlayerHandlerListener mListener;
 
     private boolean currSongDidStart = false;
+    private boolean mHasCurrentSongChanged = false;
 
     public PlayerHandler(Activity callingActivity, PlayerHandlerListener listener){
         this.mListener = listener;
@@ -43,6 +44,10 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
     }
 
     public Song getCurrentSong() {
+        if(mCurrentSong == null){
+            updateSong();
+        }
+
         return mCurrentSong;
     }
 
@@ -112,34 +117,30 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         });
     }
 
-
+    /**
+     * Fetches the current song from the server, and updates mCurrentsong
+     */
     public void updateSong() {
-        if (mCurrentSong != null && mCurrentSong.getTitle() != null) {
-            AppManager.getInstance().getCurrentSong(new CollabifyCallback<Song>() {
-                @Override
-                public void exception(Exception e) {
-                    Log.w(TAG, "Couldn't getCurrentSong: "+ e.toString());
-                }
+        AppManager.getInstance().getCurrentSong(new CollabifyCallback<Song>() {
+            @Override
+            public void exception(Exception e) {
+                Log.w(TAG, "Couldn't getCurrentSong: "+ e.toString());
+            }
 
-                @Override
-                public void success(Song song, Response response) {
-                    boolean songChanged = false;
-                    if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
-                        songChanged = true;
-                        mCurrentSong = song;
-                    }
-                    if(songChanged){
-                        mPlayer.play("spotify:track:" + mCurrentSong.getId());
-                    }
+            @Override
+            public void success(Song song, Response response) {
+                mHasCurrentSongChanged = false;
+                if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
+                    mHasCurrentSongChanged = true;
+                    mCurrentSong = song;
                 }
+            }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.w(TAG, "Failed to get current song: " + error.toString());
-                }
-            });
-
-        }
+            @Override
+            public void failure(RetrofitError error) {
+                Log.w(TAG, "Failed to get current song: " + error.toString());
+            }
+        });
     }
 
 
