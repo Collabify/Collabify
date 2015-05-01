@@ -17,27 +17,17 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.spotify.sdk.android.player.Config;
-import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerNotificationCallback;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.Spotify;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import space.collabify.android.PlayerHandler;
 import space.collabify.android.R;
 
-import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.Song;
 
@@ -125,12 +115,12 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
                 mAppManager.nextSong(new CollabifyResponseCallback() {
                     @Override
                     public void exception(Exception e) {
-                        mListener.getPlayerHandler().updateSong();
+                        Log.w(TAG, "Couldn't skip to next song: " + e.toString());
                     }
 
                     @Override
                     public void success(Response response) {
-                        mListener.getPlayerHandler().updateSong();
+                        mListener.getPlayerHandler().nextSong();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -142,7 +132,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
 
                     @Override
                     public void failure(RetrofitError error) {
-                        mListener.getPlayerHandler().updateSong();
+                        Log.w(TAG, "Couldn't skip to next song: " + error.toString());
                     }
                 });
 

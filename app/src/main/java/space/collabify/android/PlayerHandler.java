@@ -53,7 +53,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
 
 
     public interface PlayerHandlerListener{
-        public void startNextSong();
+        void startNextSong();
     }
 
     public void attachListener(PlayerHandlerListener listener){
@@ -75,7 +75,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         }
         if (eventType.equals(EventType.TRACK_END)) {
             currSongDidStart = false;
-            mPlayer.pause();
+            queueNextSong();
             mListener.startNextSong();
         }
     }
@@ -103,7 +103,6 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
                 AppManager.getInstance().getUser().getAccessToken(),
                 clientID);
         mPlayer = Spotify.getPlayer(mPlayerConfig, this, new Player.InitializationObserver() {
-
             @Override
             public void onInitialized(Player player) {
                 mPlayer.addConnectionStateCallback(PlayerHandler.this);
@@ -115,6 +114,11 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
                 Toast.makeText(mCallerActivity.getApplicationContext(), R.string.message_player_init_error, Toast.LENGTH_LONG).show();
             }
         });
+
+        updateSong();
+
+        queueCurrentSong();
+        queueNextSong();
     }
 
     /**
@@ -144,6 +148,9 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
     }
 
 
+    /**
+     * Plays the current song in the playlist via spotify player.
+     */
     public void playCurrentSong(){
         if(mCurrentSong != null) {
             mPlayer.play("spotify:track:" + mCurrentSong.getId());
@@ -151,6 +158,37 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
             Log.w(TAG, "Current song was null, couldn't play");
         }
     }
+
+    /**
+     * Stops the current song playback, gets the next and starts playback.
+     * Call after the 'next' button is hit
+     */
+    public void nextSong(){
+        currSongDidStart = false;
+        updateSong();
+        mPlayer.skipToNext();
+        queueNextSong();
+    }
+
+    public void queueCurrentSong() {
+        if(mCurrentSong != null) {
+            mPlayer.queue("spotify:track:" + mCurrentSong.getId());
+        }else {
+            Log.w(TAG, "Current song was null, couldn't queue");
+        }
+    }
+
+
+    public void queueNextSong(){
+        Song nextSong = AppManager.getInstance().getOnDeckSong();
+        if(nextSong == null){
+            Log.w(TAG, "Next song is null, can't queue it");
+            return;
+        }
+        mPlayer.queue("spotify:track:" + nextSong.getId());
+    }
+
+
 
     @Override
     public void onPlaybackError(ErrorType errorType, String s) {

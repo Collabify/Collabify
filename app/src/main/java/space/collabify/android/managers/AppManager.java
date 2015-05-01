@@ -250,9 +250,7 @@ public class AppManager {
      * @param callback  post logout callback
      */
     public void logout(Context context, final CollabifyResponseCallback callback) {
-
         AuthenticationClient.logout(context);
-
         try {
             mCollabifyApi.logoutUser(mUser.getId(), new ResponseCallback() {
                 @Override
@@ -791,7 +789,6 @@ public class AppManager {
      * @param callback
      */
     public void loadEventPlaylist(final CollabifyCallback<space.collabify.android.collabify.models.domain.Playlist> callback) {
-
         mPlaylistUpdating = true;
         try {
             mCollabifyApi.getEventPlaylist(mEvent.getEventId(), new Callback<space.collabify.android.collabify.models.domain.Playlist>() {
@@ -823,6 +820,15 @@ public class AppManager {
             mPlaylistUpdating = false;
             e.printStackTrace();
         }
+    }
+
+    public Song getOnDeckSong(){
+        if(mPlaylist == null){
+            Log.w(TAG, "No playlist, can't get next song");
+            return null;
+        }
+
+        return Converter.toSong(mPlaylist.getNextSong());
     }
 
     /**
@@ -885,7 +891,6 @@ public class AppManager {
      * @param callback
      */
     public void removeSong(String songId, final CollabifyResponseCallback callback) {
-
         if (songId == null) {
             return;
         }
@@ -894,7 +899,6 @@ public class AppManager {
             mCollabifyApi.removeSong(mEvent.getEventId(), songId, new ResponseCallback() {
                 @Override
                 public void success(Response response) {
-
                     if (callback != null) {
                         callback.success(response);
                     }
@@ -902,7 +906,6 @@ public class AppManager {
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
-
                     if (callback != null) {
                         callback.failure(retrofitError);
                     }
@@ -931,7 +934,6 @@ public class AppManager {
 
                 @Override
                 public void failure(RetrofitError error) {
-
                     if (callback != null) {
                         callback.failure(error);
                     }
@@ -946,7 +948,6 @@ public class AppManager {
     }
 
     public void getCurrentSong(final CollabifyCallback<Song> callback) {
-
         if (mPlaylist != null) {
             callback.success(Converter.toSong(mPlaylist.getCurrentSong()), null);
             return;

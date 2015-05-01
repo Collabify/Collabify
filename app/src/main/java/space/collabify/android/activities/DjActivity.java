@@ -120,7 +120,9 @@ public class DjActivity extends PrimaryViewActivity implements
 
         if(playerFragment == null){
             Log.w(TAG, "Couldn't access player fragment to start next song");
+            return;
         }
+        playerFragment.updatePlayerView();
 
     }
     @Override
