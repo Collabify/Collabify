@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +47,11 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         this.position = position - 1;
 
         ImageView albumArt = (ImageView) customView.findViewById(R.id.playlist_collabifier_album_art);
-        TextView songDescriptionTextView = (TextView) customView.findViewById(R.id.playlist_collabifier_song_description);
         TextView songIdView = (TextView) customView.findViewById(R.id.playlist_row_song_id);
+
+        TextView rowTitle = (TextView) customView.findViewById(R.id.song_row_title);
+        TextView rowArtist = (TextView) customView.findViewById(R.id.song_row_artist);
+        TextView rowAddedBy = (TextView) customView.findViewById(R.id.song_row_added_by);
 
         ImageButton deleteButton = (ImageButton) customView.findViewById(R.id.playlist_collabifier_delete_button);
         ImageToggleButton upvoteButton = (ImageToggleButton) customView.findViewById(R.id.playlist_collabifier_upvote_button);
@@ -62,6 +66,29 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
           if (position == 0) {
             upButton.setVisibility(View.INVISIBLE);
             downButton.setVisibility(View.INVISIBLE);
+
+
+            // Below makes title, artist, added by wrap to end of line because of hidden icons
+            RelativeLayout.LayoutParams paramsTitle = (RelativeLayout.LayoutParams) rowTitle.getLayoutParams();
+            paramsTitle.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsTitle.addRule(RelativeLayout.ALIGN_PARENT_END);
+            paramsTitle.addRule(RelativeLayout.LEFT_OF, 0);
+            paramsTitle.addRule(RelativeLayout.START_OF, 0);
+            rowTitle.setLayoutParams(paramsTitle);
+
+            RelativeLayout.LayoutParams paramsArtist = (RelativeLayout.LayoutParams) rowArtist.getLayoutParams();
+            paramsArtist.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsArtist.addRule(RelativeLayout.ALIGN_PARENT_END);
+            paramsArtist.addRule(RelativeLayout.LEFT_OF, 0);
+            paramsArtist.addRule(RelativeLayout.START_OF, 0);
+            rowArtist.setLayoutParams(paramsArtist);
+
+            RelativeLayout.LayoutParams paramsAddedBy = (RelativeLayout.LayoutParams) rowAddedBy.getLayoutParams();
+            paramsAddedBy.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsAddedBy.addRule(RelativeLayout.ALIGN_PARENT_END);
+            paramsAddedBy.addRule(RelativeLayout.LEFT_OF, 0);
+            paramsAddedBy.addRule(RelativeLayout.START_OF, 0);
+            rowAddedBy.setLayoutParams(paramsAddedBy);
           } else if (position == 1) {
             upButton.setImageResource(R.drawable.ic_up_arrow_grey);
           } else if (position == songs.size() - 1) {
@@ -83,8 +110,8 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
         if(!"".equals(songItem.getId())){
             //use picasso to load album art
-            if(songItem.getArtwork() != null && !songItem.getArtwork().isEmpty()) {
-                Picasso.with(getContext()).load(songItem.getArtwork()).into(albumArt);
+            if(songItem.getLowArtwork() != null && !songItem.getLowArtwork().isEmpty()) {
+                Picasso.with(getContext()).load(songItem.getLowArtwork()).into(albumArt);
             }
 
             //initialize button states
@@ -131,7 +158,6 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             });
 
             String artist = songItem.getArtist();
-            artist = artist.substring(0, Math.min(artist.length(), 30));
 
             if (!artist.equals("")) {
                 artist = "(" + artist + ")";
@@ -141,8 +167,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             String title = songItem.getTitle();
             title = title.substring(0, Math.min(title.length(), 30));
 
-            String newSongDescription = title + "\n" + artist;
-            songDescriptionTextView.setText(newSongDescription);
+            rowTitle.setText(songItem.getTitle());
+            rowArtist.setText(songItem.getArtist());
+            rowAddedBy.setText("Added by: " + songItem.getUserName());
+
             songIdView.setText(songItem.getId());
 
             int visibility = (isDeleteVisible(songItem) && position != 0) ? View.VISIBLE : View.INVISIBLE;
@@ -153,9 +181,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
             //set up the row elements
             String title = songItem.getTitle();
-            title = title.substring(0, Math.min(title.length(), 30));
-
-            songDescriptionTextView.setText(title);
+            rowTitle.setText(title);
 
             deleteButton.setVisibility(View.INVISIBLE);
             upvoteButton.setVisibility(View.INVISIBLE);

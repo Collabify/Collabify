@@ -34,13 +34,16 @@ public class Converter {
 
         // convert the domain songs to model songs
         for (space.collabify.android.collabify.models.domain.Song song: updated) {
-            converted.add(new Song(song.getTitle(),
-                    song.getArtist(),
-                    song.getAlbum(),
-                    song.getYear(),
-                    song.getSongId(),
-                    song.getArtworkUrl(),
-                    song.getUserId()));
+            converted.add(new Song(
+                song.getTitle(),
+                song.getArtist(),
+                song.getAlbum(),
+                song.getYear(),
+                song.getSongId(),
+                song.getArtworkUrl(),
+                song.getUserId(),
+                song.getUserId())
+            );
         }
 
         // if original is not null we are creating an updated playlist
@@ -96,7 +99,7 @@ public class Converter {
         }
 
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
-                song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId());
+                song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId(), song.getUserId());
 
         if (song.getVote().isDownvoted()) {
             appSong.downvote();

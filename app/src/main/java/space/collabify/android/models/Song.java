@@ -13,15 +13,16 @@ public class Song {
     private int mYear;
     private String mId;
     private String mUserId;
+    private String mUserName;
 
 
     private boolean mIsUpvoted;
     private boolean mIsDownvoted;
 
-    // TODO: Probably want to cache artwork somehow
     private String mArtwork;
+    private String mLowArtwork;
 
-    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, String mUserId) {
+    public Song(String mTitle, String mArtist, String mAlbum, int mYear, String mId, String mArtwork, String mUserId, String mUserName) {
         this.mTitle = mTitle;
         this.mArtist = mArtist;
         this.mAlbum = mAlbum;
@@ -29,6 +30,7 @@ public class Song {
         this.mId = mId;
         this.mArtwork = mArtwork;
         this.mUserId = mUserId;
+        this.mUserName = mUserName;
         this.mIsUpvoted = false;
         this.mIsDownvoted = false;
     }
@@ -43,6 +45,14 @@ public class Song {
 
     public void setUserId(String mUserId) {
       this.mUserId = mUserId;
+    }
+
+    public String getUserName() {
+      return mUserName;
+    }
+
+    public void setUserName(String name) {
+      this.mUserName = name;
     }
 
     public String getTitle() {
@@ -93,6 +103,17 @@ public class Song {
         this.mArtwork = mArtwork;
     }
 
+    public String getLowArtwork() {
+      if (mLowArtwork != "" && mLowArtwork != null) {
+        return mLowArtwork;
+      } else {
+        return mArtwork;
+      }
+    }
+
+    public void setLowArtwork(String mLowArtwork) {
+      this.mLowArtwork = mLowArtwork;
+    }
 
     public boolean isDownvoted() {
         return mIsDownvoted;
