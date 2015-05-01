@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,29 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
           if (position == 0) {
             upButton.setVisibility(View.INVISIBLE);
             downButton.setVisibility(View.INVISIBLE);
+
+
+            // Below makes title, artist, added by wrap to end of line because of hidden icons
+            RelativeLayout.LayoutParams paramsTitle = (RelativeLayout.LayoutParams) rowTitle.getLayoutParams();
+            paramsTitle.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsTitle.addRule(RelativeLayout.ALIGN_PARENT_END);
+            paramsTitle.addRule(RelativeLayout.LEFT_OF, 0);
+            paramsTitle.addRule(RelativeLayout.START_OF, 0);
+            rowTitle.setLayoutParams(paramsTitle);
+
+            RelativeLayout.LayoutParams paramsArtist = (RelativeLayout.LayoutParams) rowArtist.getLayoutParams();
+            paramsArtist.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsArtist.addRule(RelativeLayout.ALIGN_PARENT_END);
+            paramsArtist.addRule(RelativeLayout.LEFT_OF, 0);
+            paramsArtist.addRule(RelativeLayout.START_OF, 0);
+            rowArtist.setLayoutParams(paramsArtist);
+
+            RelativeLayout.LayoutParams paramsAddedBy = (RelativeLayout.LayoutParams) rowAddedBy.getLayoutParams();
+            paramsAddedBy.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsAddedBy.addRule(RelativeLayout.ALIGN_PARENT_END);
+            paramsAddedBy.addRule(RelativeLayout.LEFT_OF, 0);
+            paramsAddedBy.addRule(RelativeLayout.START_OF, 0);
+            rowAddedBy.setLayoutParams(paramsAddedBy);
           } else if (position == 1) {
             upButton.setImageResource(R.drawable.ic_up_arrow_grey);
           } else if (position == songs.size() - 1) {
@@ -145,7 +169,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
 
             rowTitle.setText(songItem.getTitle());
             rowArtist.setText(songItem.getArtist());
-            rowAddedBy.setText("Added by: " + songItem.getUserId());
+            rowAddedBy.setText("Added by: " + songItem.getUserName());
 
             songIdView.setText(songItem.getId());
 
