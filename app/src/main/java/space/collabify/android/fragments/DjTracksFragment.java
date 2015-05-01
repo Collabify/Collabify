@@ -314,12 +314,28 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
         @Override
         public void failure(RetrofitError error) {
             progress.dismiss();
-
-            mParentActivity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
-                }
-            });
+            int e = error.getResponse().getStatus();
+            if (e == 403) {
+                mParentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mParentActivity.getBaseContext(), "Too Late! Song is already on the playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else if (e == 401){
+                mParentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mParentActivity.getBaseContext(), "You are Blacklisted! You cannot add songs", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else{
+                mParentActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(mParentActivity.getBaseContext(), "Error adding song to playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
 
         }
 

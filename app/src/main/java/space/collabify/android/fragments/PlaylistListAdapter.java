@@ -28,6 +28,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
     protected User mUser;
     protected PlaylistFragment mPlaylistFragment;
     protected int position;
+    protected boolean isAllowVoting = true;
     protected List<Song> songs;
 
     public PlaylistListAdapter(Context context, List<Song> songs, User user, PlaylistFragment fragment){
@@ -70,13 +71,17 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
             downButton.setImageResource(R.drawable.ic_down_arrow_grey);
           }
         } else {
-          upButton.setVisibility(View.INVISIBLE);
-          downButton.setVisibility(View.INVISIBLE);
+            upButton.setVisibility(View.INVISIBLE);
+            downButton.setVisibility(View.INVISIBLE);
 
-          if (AppManager.getInstance().getUser().getRole().isBlacklisted() || position == 0) {
-            upvoteButton.setVisibility(View.INVISIBLE);
-            downvoteButton.setVisibility(View.INVISIBLE);
-          }
+            if (AppManager.getInstance().getUser().getRole().isBlacklisted()
+                  || (AppManager.getInstance().getEvent().getSettings() != null
+                        && !AppManager.getInstance().getEvent().getSettings().isAllowVoting())
+                  || position == 0) {
+
+                upvoteButton.setVisibility(View.INVISIBLE);
+                downvoteButton.setVisibility(View.INVISIBLE);
+            }
         }
 
         if(!"".equals(songItem.getId())){

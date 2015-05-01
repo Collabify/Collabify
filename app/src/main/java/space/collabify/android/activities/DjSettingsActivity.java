@@ -99,7 +99,9 @@ public class DjSettingsActivity extends CollabifyActivity { //BaseSettingsActivi
             mPassword.setError(null);
             mName.setError(null);
 
+            //Update event name
             mEvent.setName(name);
+            mAppManager.updateEventName(name, null);
 
             EventSettings settings = mEvent.getSettings();
 

@@ -62,6 +62,7 @@ public class CollabifierActivity extends PrimaryViewActivity {
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+
         // Initilization
         mViewPager = (ViewPager) findViewById(R.id.collabifierPager);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -108,5 +109,15 @@ public class CollabifierActivity extends PrimaryViewActivity {
     @Override
     public void onBackPressed () {
         leaveEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String eventName = mAppManager.getEvent().getName();
+        setTitle(eventName);
+
+        //mAppManager.getUserDetails(null);
+
     }
 }
