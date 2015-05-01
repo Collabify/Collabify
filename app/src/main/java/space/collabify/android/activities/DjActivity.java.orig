@@ -107,22 +107,17 @@ public class DjActivity extends PrimaryViewActivity implements
     @Override
     public PlayerHandler getPlayerHandler() {
         return mPlayerHandler;
+<<<<<<< HEAD
     }
 
     @Override
     public void onBackPressed() {
         endEvent();
+=======
+>>>>>>> c4ad3a7159c8435f7f355ef1b5fae3cdbe2f47b9
     }
 
     @Override
-<<<<<<< HEAD
-    protected void onResume() {
-        super.onResume();
-        String eventName = mAppManager.getEvent().getName();
-        setTitle(eventName);
-    }
-
-=======
     public void startNextSong() {
         BasePlayerFragment playerFragment = (BasePlayerFragment) mAdapter.getRegisteredFragment(0);
 
@@ -131,5 +126,20 @@ public class DjActivity extends PrimaryViewActivity implements
         }
 
     }
->>>>>>> trying to move more song stuff into playerHandler, but broke stuff
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String eventName = mAppManager.getEvent().getName();
+        setTitle(eventName);
+    }
+
+    @Override
+    public void startNextSong() {
+        BasePlayerFragment playerFragment = (BasePlayerFragment) mAdapter.getRegisteredFragment(0);
+
+        if(playerFragment == null){
+            Log.w(TAG, "Couldn't access player fragment to start next song");
+        }
+
+    }
 }
