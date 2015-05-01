@@ -381,6 +381,26 @@ public interface CollabifyService {
     public void updateEvent(@Path(EVENT_PATHVAL) String eventId, @Body EventSettings eventInfo, Callback<EventSettings> callback);
 
     /**
+     * Update an events name
+     *
+     * @param eventId
+     * @param name
+     * @return
+     */
+    @PUT(EVENT_URL)
+    public EventSettings updateEventName(@Path(EVENT_PATHVAL) String eventId, @Body EventRequestDO name);
+
+    /**
+     * Update an events name
+     *
+     * @param eventId
+     * @param name
+     * @param callback
+     */
+    @PUT(EVENT_URL)
+    public void updateEventName(@Path(EVENT_PATHVAL) String eventId, @Body EventRequestDO name, Callback<EventSettings> callback);
+
+    /**
      * Delete an event
      *
      * @param eventId

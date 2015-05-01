@@ -511,6 +511,42 @@ public class AppManager {
     }
 
     /**
+     * Handles updating an event's name on our server from an event object
+     *
+     * @param name
+     * @param callback
+     */
+    public void updateEventName(String name, final CollabifyCallback<EventSettings> callback) {
+        EventRequestDO eventDO = new EventRequestDO();
+        eventDO.setName(name);
+        try {
+            mCollabifyApi.updateEventName(mEvent.getEventId(), eventDO, new Callback<EventSettings>() {
+                @Override
+                public void success(EventSettings settings, Response response) {
+                    // call callback
+                    if (callback != null) {
+                        callback.success(settings, response);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    // call callback
+                    if (callback != null) {
+                        callback.failure(retrofitError);
+                    }
+                }
+            });
+        } catch (CollabifyApiException e) {
+            if (callback != null) {
+                callback.exception(e);
+            }
+            mEventUpdating = false;
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Handles the user leaving an event
      *
      * @param callback
@@ -957,20 +993,20 @@ public class AppManager {
         RoleDO newRole = new RoleDO();
         newRole.setRole(role);
         mCollabifyApi.changeUserRole(mEvent.getEventId(), user.getId(), newRole, new Callback<space.collabify.android.collabify.models.domain.Role>() {
-          @Override
-          public void success(space.collabify.android.collabify.models.domain.Role newrole, Response response) {
-            if (callback != null) {
-              callback.success(newrole, response);
+            @Override
+            public void success(space.collabify.android.collabify.models.domain.Role newrole, Response response) {
+                if (callback != null) {
+                    callback.success(newrole, response);
+                }
             }
-          }
 
-          @Override
-          public void failure(RetrofitError retrofitError) {
-            // call callback failure
-            if (callback != null) {
-              callback.failure(retrofitError);
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // call callback failure
+                if (callback != null) {
+                    callback.failure(retrofitError);
+                }
             }
-          }
         });
       } catch (CollabifyApiException e) {
         if (callback != null) {
@@ -978,5 +1014,35 @@ public class AppManager {
         }
         e.printStackTrace();
       }
+    }
+
+    /**
+     * Get the user's details
+     *
+     * @param callback
+     */
+    public void getUserDetails(final CollabifyCallback<space.collabify.android.collabify.models.domain.User> callback) {
+        mCollabifyApi.getUser(mUser.getId(), new Callback<space.collabify.android.collabify.models.domain.User>() {
+            @Override
+            public void success(space.collabify.android.collabify.models.domain.User user, Response response) {
+                Log.i(TAG, "after get user role:" + user.getRole());
+                mUser.setName(user.getName());
+                mUser.setId(user.getUserId());
+                mUser.setRole(user.getRole());
+
+                if (callback != null) {
+                    callback.success(user, response);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // handle failure
+                if (callback != null) {
+                    callback.failure(retrofitError);
+                }
+            }
+
+        });
     }
 }

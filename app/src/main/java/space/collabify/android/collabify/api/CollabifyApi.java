@@ -252,7 +252,7 @@ public class CollabifyApi {
             throw new CollabifyApiException();
         }
 
-        return mCollabifyService.voteOnSong(eventId, songId, mCurrentUserId,vote);
+        return mCollabifyService.voteOnSong(eventId, songId, mCurrentUserId, vote);
     }
 
     /**
@@ -481,6 +481,38 @@ public class CollabifyApi {
         }
 
         mCollabifyService.updateEvent(eventId, eventInfo, callback);
+    }
+
+    /**
+     * Update an events name
+     *
+     * @param eventId
+     * @param name
+     * @return
+     * @throws CollabifyApiException
+     */
+    public EventSettings updateEventName(String eventId, EventRequestDO name) throws CollabifyApiException {
+        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
+            throw new CollabifyApiException();
+        }
+
+        return mCollabifyService.updateEventName(eventId, name);
+    }
+
+    /**
+     * Update an events name
+     *
+     * @param eventId
+     * @param name
+     * @param callback
+     * @throws CollabifyApiException
+     */
+    public void updateEventName(String eventId, EventRequestDO name, Callback<EventSettings> callback) throws CollabifyApiException {
+        if (mCurrentUserId == null || "".equals(mCurrentUserId)) {
+            throw new CollabifyApiException();
+        }
+
+        mCollabifyService.updateEventName(eventId, name, callback);
     }
 
     /**

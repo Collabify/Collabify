@@ -116,4 +116,11 @@ public class DjActivity extends PrimaryViewActivity implements BasePlayerFragmen
         endEvent();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String eventName = mAppManager.getEvent().getName();
+        setTitle(eventName);
+    }
+
 }
