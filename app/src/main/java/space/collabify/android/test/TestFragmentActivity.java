@@ -28,7 +28,7 @@ public class TestFragmentActivity extends CollabifyActivity implements PlaylistF
     public Song getSongFromId(String songId) {
         if (songId.equalsIgnoreCase("1")) {
             return new Song("on the sunny side of the street", "sonny stitt, etc.",
-                    "sonny side up", 1957, "0", "", "");
+                    "sonny side up", 1957, "0", "", "", "");
         }else {
             return null;
         }

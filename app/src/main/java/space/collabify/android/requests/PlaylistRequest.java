@@ -40,10 +40,10 @@ public class PlaylistRequest {
           String albumArtwork = oneObject.getString("artworkUrl");
           String userId = oneObject.getString("userId");
 
-          tempList.add(new Song(title, artist, album, year, id, albumArtwork, userId));
+          tempList.add(new Song(title, artist, album, year, id, albumArtwork, userId, userId));
         } catch (Exception e) {
-          tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", ""));
-          tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", ""));
+          tempList.add(new Song("Whoops, something went wrong!", "", "", 0, "", "", "", ""));
+          tempList.add(new Song("Please pull to refresh", "", "", 0, "", "", "", ""));
           break;
         }
       }

@@ -210,7 +210,8 @@ public class DetailedSearchActivity extends PrimaryViewActivity {
                     }
                   }
 
-                Song song = new Song(track.name, artists, track.album.name, 9999, track.id, highUrl, mAppManager.getUser().getId());
+                Song song = new Song(track.name, artists, track.album.name, 9999, track.id, highUrl,
+                  mAppManager.getUser().getId(), mAppManager.getUser().getName());
                 song.setLowArtwork(lowUrl);
 
                 songs.add(song);

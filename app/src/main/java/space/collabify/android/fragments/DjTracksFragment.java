@@ -254,7 +254,9 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
                             }
                         }
 
-                        Song newSong = new Song(track.name, artists, track.album.name, 9999, track.id, highUrl, mParentActivity.getAppManager().getUser().getId());
+                        Song newSong = new Song(track.name, artists, track.album.name, 9999, track.id,
+                          highUrl, mParentActivity.getAppManager().getUser().getId(),
+                          mParentActivity.getAppManager().getUser().getName());
                         newSong.setLowArtwork(lowUrl);
 
                         mDjTracksListAdapter.add(newSong);

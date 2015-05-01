@@ -95,7 +95,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
         //will probably just want empty list, but this is useful for debug
         List<Song> temp = new ArrayList<>();
-        temp.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
+        temp.add(new Song("Your playlist is empty :(", "", "", 0, "", "", "", ""));
         mAdapter = new PlaylistListAdapter(mParentActivity.getApplicationContext(), temp, mParentActivity.getCurrentUser(), this);
         setListAdapter(mAdapter);
 
@@ -162,7 +162,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
                 adapter.add(song);
             }
         } else {
-            adapter.add(new Song("Your playlist is empty :(", "", "", 0, "", "", ""));
+            adapter.add(new Song("Your playlist is empty :(", "", "", 0, "", "", "", ""));
         }
 
 
