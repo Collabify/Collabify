@@ -84,7 +84,7 @@
     android:layout_below="@+id/playlist_row_song_id"
     android:layout_toLeftOf="@+id/playlist_collabifier_downvote_button"
     android:layout_toStartOf="@+id/playlist_collabifier_downvote_button"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="16dp"
     android:background="#00ffffff"
     android:layout_marginRight="12dp"
     android:src="@drawable/ic_up_arrow_white"/>
