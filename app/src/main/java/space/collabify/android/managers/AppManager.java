@@ -511,6 +511,42 @@ public class AppManager {
     }
 
     /**
+     * Handles updating an event's name on our server from an event object
+     *
+     * @param name
+     * @param callback
+     */
+    public void updateEventName(String name, final CollabifyCallback<EventSettings> callback) {
+        EventRequestDO eventDO = new EventRequestDO();
+        eventDO.setName(name);
+        try {
+            mCollabifyApi.updateEventName(mEvent.getEventId(), eventDO, new Callback<EventSettings>() {
+                @Override
+                public void success(EventSettings settings, Response response) {
+                    // call callback
+                    if (callback != null) {
+                        callback.success(settings, response);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError retrofitError) {
+                    // call callback
+                    if (callback != null) {
+                        callback.failure(retrofitError);
+                    }
+                }
+            });
+        } catch (CollabifyApiException e) {
+            if (callback != null) {
+                callback.exception(e);
+            }
+            mEventUpdating = false;
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Handles the user leaving an event
      *
      * @param callback

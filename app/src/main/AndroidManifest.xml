@@ -36,10 +36,10 @@
         <!-- need 2 new activities for settings? -->
         <activity
             android:name=".activities.DjSettingsActivity"
-            android:label="DjSettingsActivity" />
+            android:label="DJ Settings" />
         <activity
             android:name=".activities.AboutActivity"
-            android:label="AboutActivity" />
+            android:label="About" />
         <activity
             android:name=".activities.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
