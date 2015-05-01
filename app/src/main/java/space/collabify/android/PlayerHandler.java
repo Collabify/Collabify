@@ -205,6 +205,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         }
         if(!mPlayer.isShutdown() && mPlayer.isInitialized()){
             mPlayer.queue("spotify:track:" + song.getId());
+            mLastQueuedSongId = song.getId();
         }else{
             Log.w(TAG, "Player is shutdown or not initialized yet...");
         }
