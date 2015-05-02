@@ -123,8 +123,19 @@ public class DjActivity extends PrimaryViewActivity implements
             return;
         }
         playerFragment.updatePlayerView();
-
     }
+
+    @Override
+    public boolean isSongPaused() {
+        BasePlayerFragment playerFragment = (BasePlayerFragment) mAdapter.getRegisteredFragment(0);
+        if(playerFragment == null){
+            Log.w(TAG, "Couldn't access player fragment to check play button status");
+            return false;
+        }
+
+       return playerFragment.isSongPaused();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

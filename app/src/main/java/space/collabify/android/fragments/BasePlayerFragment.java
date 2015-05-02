@@ -245,4 +245,8 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
             }
         }
     }
+
+    public boolean isSongPaused(){
+        return mPlayPauseBtn.isChecked();
+    }
 }

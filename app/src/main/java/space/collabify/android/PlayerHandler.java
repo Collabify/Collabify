@@ -57,6 +57,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
 
     public interface PlayerHandlerListener {
         void startNextSong();
+        boolean isSongPaused();
     }
 
     public Player getPlayer(){
@@ -79,8 +80,16 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         if (eventType.equals(EventType.TRACK_END)) {
             currSongDidStart = false;
             updateSong();
-            playCurrentSong();
+
+            //fixes bug where hitting next would start playing next song when playback is paused
+            if(!mSkippingSong || (mSkippingSong && mListener.isSongPaused())){
+                playCurrentSong();
+                currSongDidStart = true;
+            }
             mListener.startNextSong();
+
+            //clear skip flags
+            mSkippingSong = false;
         }
     }
 
