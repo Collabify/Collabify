@@ -140,39 +140,39 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         });
         mMicrophoneBtn = (ImageToggleButton) rootView.findViewById(R.id.player_microphone);
         mMicrophoneBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked) {
-              // start playing audio
-              isRecording = true;
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // start playing audio
+                    isRecording = true;
 
-              rThread = new Thread(new Runnable() {
-                public void run() {
-                  android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-                  int bufferSize = AudioRecord.getMinBufferSize(11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT);
-                  arec = new AudioRecord(MediaRecorder.AudioSource.MIC, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
-                  atrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
-                  atrack.setPlaybackRate(11025);
-                  byte[] buffer = new byte[bufferSize];
-                  arec.startRecording();
-                  atrack.play();
-                  Log.d("RECORDING", "Hay is for horses!");
-                  while (isRecording) {
-                    arec.read(buffer, 0, bufferSize);
-                    atrack.write(buffer, 0, buffer.length);
-                  }
-                  arec.stop();
-                  arec.release();
-                }
-              });
-              rThread.start();
-            } else {
-              // stop playing audio
-              isRecording = false;
-              try {
-                rThread.join();
-              } catch (Exception e) {
-                e.printStackTrace();
+                    rThread = new Thread(new Runnable() {
+                        public void run() {
+                            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+                            int bufferSize = AudioRecord.getMinBufferSize(11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT);
+                            arec = new AudioRecord(MediaRecorder.AudioSource.MIC, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+                            atrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+                            atrack.setPlaybackRate(11025);
+                            byte[] buffer = new byte[bufferSize];
+                            arec.startRecording();
+                            atrack.play();
+                            Log.d("RECORDING", "Hay is for horses!");
+                            while (isRecording) {
+                                arec.read(buffer, 0, bufferSize);
+                                atrack.write(buffer, 0, buffer.length);
+                            }
+                            arec.stop();
+                            arec.release();
+                        }
+                    });
+                    rThread.start();
+                } else {
+                    // stop playing audio
+                    isRecording = false;
+                    try {
+                        rThread.join();
+                    } catch (Exception e) {
+                        e.printStackTrace();
               }
             }
           }
