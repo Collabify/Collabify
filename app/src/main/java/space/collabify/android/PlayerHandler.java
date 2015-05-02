@@ -20,6 +20,7 @@ import retrofit.client.Response;
 import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
+import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.Song;
 
 /**
@@ -78,6 +79,12 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         }
 
         if (eventType.equals(EventType.TRACK_END)) {
+            //must come before updateSong() so that the current song returned is the
+            //next song in the playlist
+            if(!mSkippingSong) {
+                getServerNextSong();
+            }
+
             currSongDidStart = false;
             updateSong();
 
@@ -154,6 +161,24 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
             @Override
             public void failure(RetrofitError error) {
                 Log.w(TAG, "Failed to get current song: " + error.toString());
+            }
+        });
+    }
+
+    public void getServerNextSong() {
+        AppManager.getInstance().nextSong(new CollabifyResponseCallback() {
+            @Override
+            public void exception(Exception e) {
+                Log.w(TAG, "Couldn't skip to next song: " + e.toString());
+            }
+
+            @Override
+            public void success(Response response) {
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.w(TAG, "Couldn't skip to next song: " + error.toString());
             }
         });
     }

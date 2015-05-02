@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import retrofit.client.Response;
 import space.collabify.android.PlayerHandler;
 import space.collabify.android.R;
 
+import space.collabify.android.TabsPagerAdapter;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyResponseCallback;
@@ -35,7 +37,8 @@ import space.collabify.android.models.Song;
 /**
  * This file was born on March 11 at 14:11
  */
-public class BasePlayerFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class BasePlayerFragment extends Fragment implements CompoundButton.OnCheckedChangeListener,
+        TabsPagerAdapter.OnTabSelectedListener{
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
     private AppManager mAppManager;
@@ -56,6 +59,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     private boolean mViewRestored = false;
 
     private PlayerFragmentListener mListener;
+
 
     public interface PlayerFragmentListener{
         public PlayerHandler getPlayerHandler();
@@ -179,9 +183,9 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
                         rThread.join();
                     } catch (Exception e) {
                         e.printStackTrace();
-              }
+                    }
+                }
             }
-          }
         });
     }
 
@@ -207,10 +211,18 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         }
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
         //updateSong();
+        updatePlayerView();
+    }
+
+
+    @Override
+    public void onTabSelected() {
         updatePlayerView();
     }
 

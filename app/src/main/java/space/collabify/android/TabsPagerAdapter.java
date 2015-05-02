@@ -93,11 +93,15 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         if (getCurrentFragment() != object) {
             mCurrentFragment = ((Fragment) object);
 
-            if(mCurrentFragment instanceof BasePlayerFragment){
-                ((BasePlayerFragment)mCurrentFragment).updatePlayerView();
+            if(mCurrentFragment instanceof OnTabSelectedListener){
+                ((OnTabSelectedListener)mCurrentFragment).onTabSelected();
             }
         }
         super.setPrimaryItem(container, position, object);
+    }
+
+    public interface OnTabSelectedListener {
+        void onTabSelected();
     }
 
     @Override
