@@ -185,7 +185,6 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
     }
 
 
-
     /**
      * Plays the current song in the playlist via spotify player.
      */
