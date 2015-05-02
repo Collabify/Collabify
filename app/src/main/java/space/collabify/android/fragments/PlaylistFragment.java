@@ -18,6 +18,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.TabsPagerAdapter;
 import space.collabify.android.base.CollabifierPlaylistInfo;
 import space.collabify.android.base.CollabifyActivity;
 import space.collabify.android.collabify.models.Converter;
@@ -32,7 +33,7 @@ import space.collabify.android.models.Song;
 /**
  * This file was born on March 11, at 15:52
  */
-public class PlaylistFragment extends SwipeRefreshListFragment {
+public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPagerAdapter.OnTabSelectedListener{
     protected static final String TAG = PlaylistFragment.class.getSimpleName();
     public static final int ID_POS = 0;
     public static final int ALBUM_ART_POS = 1;
@@ -168,6 +169,13 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
 
         if (info != null && playlist.getCurrentSong() != null) {
           info.updateSong(playlist.getCurrentSong(), getActivity());
+        }
+    }
+
+    @Override
+    public void onTabSelected() {
+        if(super.mSwipeRefreshLayout != null){
+            initiateRefresh();
         }
     }
 

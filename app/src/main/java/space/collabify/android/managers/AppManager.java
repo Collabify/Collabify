@@ -977,6 +977,7 @@ public class AppManager {
         }
     }
 
+
     public void getCurrentSong(final CollabifyCallback<Song> callback) {
         if (mPlaylist != null) {
             callback.success(Converter.toSong(mPlaylist.getCurrentSong()), null);
