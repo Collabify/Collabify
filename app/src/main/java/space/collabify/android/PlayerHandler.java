@@ -144,7 +144,8 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
             @Override
             public void success(Song song, Response response) {
                 mHasCurrentSongChanged = false;
-                if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
+                if (mCurrentSong == null || song == null
+                        || mCurrentSong.getId() == null || !mCurrentSong.getId().equals(song.getId())) {
                     mHasCurrentSongChanged = true;
                     mCurrentSong = song;
                 }
