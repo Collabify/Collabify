@@ -904,6 +904,9 @@ public class AppManager {
     }
 
     private void callSongAddListeners(Song songAdded){
+        if(listeners == null){
+            return;
+        }
         for(OnSongAddListener listener : listeners){
             listener.onSongAdded(songAdded);
         }
