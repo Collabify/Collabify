@@ -37,9 +37,9 @@ public class PlaylistFragment extends SwipeRefreshListFragment {
     public static final int ID_POS = 0;
     public static final int ALBUM_ART_POS = 1;
     public static final int SONG_DESCRIPTION_POS = 2;
-    public static final int UPVOTE_POS = 5;
-    public static final int DOWNVOTE_POS = 6;
-    public static final int DELETE_POS = 7;
+    public static final int UPVOTE_POS = 7;
+    public static final int DOWNVOTE_POS = 8;
+    public static final int DELETE_POS = 9;
 
     protected OnPlaylistUpdateRequestListener mListener;
     protected CollabifyActivity mParentActivity;

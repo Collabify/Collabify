@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import space.collabify.android.R;
+import space.collabify.android.collabify.models.domain.Event;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.models.Song;
@@ -97,6 +98,9 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
         } else {
             upButton.setVisibility(View.INVISIBLE);
             downButton.setVisibility(View.INVISIBLE);
+
+
+            Event event = AppManager.getInstance().getEvent();
 
             if (AppManager.getInstance().getUser().getRole().isBlacklisted()
                   || (AppManager.getInstance().getEvent().getSettings() != null
