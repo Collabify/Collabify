@@ -25,7 +25,8 @@ import space.collabify.android.managers.CollabifyResponseCallback;
 /**
  * This file was born on March 11 at 14:02
  */
-public class DjActivity extends PrimaryViewActivity implements BasePlayerFragment.PlayerFragmentListener{
+public class DjActivity extends PrimaryViewActivity implements
+        BasePlayerFragment.PlayerFragmentListener, PlayerHandler.PlayerHandlerListener{
     private static final String TAG = DjActivity.class.getSimpleName();
     // Tab titles
     private String[] tabs = {"Player", "Playlist", "DJ Tracks", "User List"};
@@ -42,7 +43,7 @@ public class DjActivity extends PrimaryViewActivity implements BasePlayerFragmen
         SHOW_END = true;
         SHOW_LOGOUT = true;
 
-        mPlayerHandler = new PlayerHandler(this);
+        mPlayerHandler = new PlayerHandler(this, this);
 
 
         android.support.v7.app.ActionBar ab = getSupportActionBar();
@@ -93,6 +94,8 @@ public class DjActivity extends PrimaryViewActivity implements BasePlayerFragmen
         }
 
         mViewPager.setCurrentItem(1);
+
+
     }
 
     @Override
@@ -102,18 +105,35 @@ public class DjActivity extends PrimaryViewActivity implements BasePlayerFragmen
     }
 
     @Override
-    public Player getPlayer() {
-        return mPlayerHandler.getPlayer();
-    }
-
-    @Override
-    public boolean didCurrentSongStart() {
-        return mPlayerHandler.getCurrSongDidStart();
+    public PlayerHandler getPlayerHandler() {
+        return mPlayerHandler;
     }
 
     @Override
     public void onBackPressed() {
         endEvent();
+    }
+
+    @Override
+    public void startNextSong() {
+        BasePlayerFragment playerFragment = (BasePlayerFragment) mAdapter.getRegisteredFragment(0);
+
+        if(playerFragment == null){
+            Log.w(TAG, "Couldn't access player fragment to start next song");
+            return;
+        }
+        playerFragment.updatePlayerView();
+    }
+
+    @Override
+    public boolean isSongPaused() {
+        BasePlayerFragment playerFragment = (BasePlayerFragment) mAdapter.getRegisteredFragment(0);
+        if(playerFragment == null){
+            Log.w(TAG, "Couldn't access player fragment to check play button status");
+            return false;
+        }
+
+       return playerFragment.isSongPaused();
     }
 
     @Override

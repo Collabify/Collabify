@@ -19,24 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.spotify.sdk.android.player.Config;
-import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerNotificationCallback;
-import com.spotify.sdk.android.player.PlayerState;
-import com.spotify.sdk.android.player.Spotify;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.PlayerHandler;
 import space.collabify.android.R;
 
-import space.collabify.android.collabify.models.domain.Playlist;
 import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
-import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
 import space.collabify.android.models.Song;
 
@@ -47,8 +39,6 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     private static final String TAG = BasePlayerFragment.class.getSimpleName();
 
     private AppManager mAppManager;
-    private Player mPlayer;
-    private Song mCurrentSong;
 
     private TextView mSongTitle;
     private TextView mSongArtist;
@@ -63,14 +53,12 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     private Thread rThread;
 
     private boolean isDJ;
-    private boolean mWasDestroyed = false;
     private boolean mViewRestored = false;
 
     private PlayerFragmentListener mListener;
 
     public interface PlayerFragmentListener{
-        public Player getPlayer();
-        public boolean didCurrentSongStart();
+        public PlayerHandler getPlayerHandler();
     }
 
     @Override
@@ -88,8 +76,6 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         }catch(ClassCastException ex){
             throw new ClassCastException(activity.toString() + " must implement PlayerFragmentListener");
         }
-
-        mPlayer = mListener.getPlayer();
     }
 
     @Override
@@ -110,7 +96,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
             setUpForCollabifier(rootView);
         }
 
-        updateSong();
+        mListener.getPlayerHandler().updateSong();
 
         return rootView;
     }
@@ -127,20 +113,32 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         mNextSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!mPlayPauseBtn.isChecked()){
+                    Toast.makeText(getActivity().getApplicationContext(), "Skip can only be used while playing a song. :(", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 mAppManager.nextSong(new CollabifyResponseCallback() {
                     @Override
                     public void exception(Exception e) {
-                        updateSong();
+                        Log.w(TAG, "Couldn't skip to next song: " + e.toString());
                     }
 
                     @Override
                     public void success(Response response) {
-                        updateSong();
+                        mListener.getPlayerHandler().nextSong();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updatePlayerView();
+                            }
+                        });
+                        
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        updateSong();
+                        Log.w(TAG, "Couldn't skip to next song: " + error.toString());
                     }
                 });
 
@@ -148,89 +146,55 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         });
         mMicrophoneBtn = (ImageToggleButton) rootView.findViewById(R.id.player_microphone);
         mMicrophoneBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-          @Override
-          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked) {
-              // start playing audio
-              isRecording = true;
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // start playing audio
+                    isRecording = true;
 
-              rThread = new Thread(new Runnable() {
-                public void run() {
-                  android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-                  int bufferSize = AudioRecord.getMinBufferSize(11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT);
-                  arec = new AudioRecord(MediaRecorder.AudioSource.MIC, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
-                  atrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
-                  atrack.setPlaybackRate(11025);
-                  byte[] buffer = new byte[bufferSize];
-                  arec.startRecording();
-                  atrack.play();
-                  Log.d("RECORDING", "Hay is for horses!");
-                  while (isRecording) {
-                    arec.read(buffer, 0, bufferSize);
-                    atrack.write(buffer, 0, buffer.length);
-                  }
-                  arec.stop();
-                  arec.release();
-                }
-              });
-              rThread.start();
-            } else {
-              // stop playing audio
-              isRecording = false;
-              try {
-                rThread.join();
-              } catch (Exception e) {
-                e.printStackTrace();
+                    rThread = new Thread(new Runnable() {
+                        public void run() {
+                            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
+                            int bufferSize = AudioRecord.getMinBufferSize(11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT);
+                            arec = new AudioRecord(MediaRecorder.AudioSource.MIC, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+                            atrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 11025, AudioFormat.CHANNEL_CONFIGURATION_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+                            atrack.setPlaybackRate(11025);
+                            byte[] buffer = new byte[bufferSize];
+                            arec.startRecording();
+                            atrack.play();
+                            Log.d("RECORDING", "Hay is for horses!");
+                            while (isRecording) {
+                                arec.read(buffer, 0, bufferSize);
+                                atrack.write(buffer, 0, buffer.length);
+                            }
+                            arec.stop();
+                            arec.release();
+                        }
+                    });
+                    rThread.start();
+                } else {
+                    // stop playing audio
+                    isRecording = false;
+                    try {
+                        rThread.join();
+                    } catch (Exception e) {
+                        e.printStackTrace();
               }
             }
           }
         });
     }
 
-    public void updateSong() {
-        if (mListener == null || mListener.didCurrentSongStart()) {
-            return;
-        }
-
-        if (mSongTitle != null) {
-            mAppManager.getCurrentSong(new CollabifyCallback<Song>() {
-                @Override
-                public void exception(Exception e) {
-
-                }
-
-                @Override
-                public void success(Song song, Response response) {
-                    if (mCurrentSong == null || song == null || !mCurrentSong.getId().equals(song.getId())) {
-                        mCurrentSong = song;
-                    }
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            updatePlayerView();
-                        }
-                    });
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                }
-            });
-
-        }
-    }
-
     public void updatePlayerView() {
         // Song on queue
-        if (mCurrentSong != null) {
-            mSongTitle.setText(mCurrentSong.getTitle());
-            mSongArtist.setText(mCurrentSong.getAlbum() + "\n" + mCurrentSong.getArtist());
+        Song currentSong = mListener.getPlayerHandler().getCurrentSong();
+        if (currentSong != null) {
+            mSongTitle.setText(currentSong.getTitle());
+            mSongArtist.setText(currentSong.getAlbum() + "\n" + currentSong.getArtist());
             mPlayPauseBtn.enable();
             mNextSongBtn.setImageResource(R.drawable.ic_fast_forward_white_48dp);
-            if(mCurrentSong.getArtwork() != null && !mCurrentSong.getArtwork().isEmpty()) {
-                Picasso.with(getActivity()).load(mCurrentSong.getArtwork()).into(mAlbumImage);
+            if(currentSong.getArtwork() != null && !currentSong.getArtwork().isEmpty()) {
+                Picasso.with(getActivity()).load(currentSong.getArtwork()).into(mAlbumImage);
             }
         }
         // Nothing to play
@@ -243,15 +207,12 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         }
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
         //updateSong();
         updatePlayerView();
     }
-
 
     @Override
     public void onPause() {
@@ -274,23 +235,24 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(mViewRestored){
+            Player player = mListener.getPlayerHandler().getPlayer();
             if (isChecked) {
                 // play song
-                if (mListener.didCurrentSongStart()) {
-                    mPlayer.resume();
+                if (mListener.getPlayerHandler().getCurrSongDidStart()) {
+                    player.resume();
                 }
                 else {
-                    if(mPlayer != null && mCurrentSong != null) {
-                        mPlayer.play("spotify:track:" + mCurrentSong.getId());
-                    }else {
-                        Log.w(TAG, "Either player or currentSong was NULL, couldn't start playback");
-                    }
+                    mListener.getPlayerHandler().playCurrentSong();
                 }
             }
             else {
                 //pause song
-                mPlayer.pause();
+                player.pause();
             }
         }
+    }
+
+    public boolean isSongPaused(){
+        return mPlayPauseBtn.isChecked();
     }
 }
