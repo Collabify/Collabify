@@ -41,6 +41,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
 
 
     public PlayerHandler(Activity callingActivity, PlayerHandlerListener listener){
+        this.mSkippingSong = false;
         this.mListener = listener;
         this.mCallerActivity = callingActivity;
         if(AppManager.getInstance().getUser().getRole().isDJ()){
@@ -182,6 +183,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
             }
         });
     }
+
 
 
     /**
