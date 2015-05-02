@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.spotify.sdk.android.player.Player;
 import com.squareup.picasso.Picasso;
@@ -112,6 +113,11 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
         mNextSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!mPlayPauseBtn.isChecked()){
+                    Toast.makeText(getActivity().getApplicationContext(), "Skip can only be used while playing a song. :(", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 mAppManager.nextSong(new CollabifyResponseCallback() {
                     @Override
                     public void exception(Exception e) {
