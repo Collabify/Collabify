@@ -39,6 +39,8 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
     private boolean mHasCurrentSongChanged = false;
     private boolean mSkippingSong = false;
 
+    private boolean mLoadingNextSong = false;
+
 
     public PlayerHandler(Activity callingActivity, PlayerHandlerListener listener){
         this.mSkippingSong = false;
@@ -51,7 +53,7 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
 
     public Song getCurrentSong() {
         if(mCurrentSong == null){
-            updateSong();
+            updateSong(null);
         }
 
         return mCurrentSong;
@@ -82,15 +84,39 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
         if (eventType.equals(EventType.TRACK_END)) {
             //must come before updateSong() so that the current song returned is the
             //next song in the playlist
+            currSongDidStart = false;
             if(!mSkippingSong) {
-                getServerNextSong();
+                AppManager.getInstance().nextSong(new CollabifyResponseCallback() {
+                    @Override
+                    public void exception(Exception e) {
+                        Log.w(TAG, "Couldn't skip to next song: " + e.toString());
+                    }
+
+                    @Override
+                    public void success(Response response) {
+                        updateSong(new Runnable() {
+                            @Override
+                            public void run() {
+                                playCurrentSong();
+                                currSongDidStart = true;
+                                mListener.startNextSong();
+                                //clear skip flags
+                                mSkippingSong = false;
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.w(TAG, "Couldn't skip to next song: " + error.toString());
+                    }
+                });
             }
 
-            currSongDidStart = false;
-            updateSong();
+            updateSong(null);
 
             //fixes bug where hitting next would start playing next song when playback is paused
-            if(!mSkippingSong || (mSkippingSong && mListener.isSongPaused())){
+            if(mSkippingSong && mListener.isSongPaused()){
                 playCurrentSong();
                 currSongDidStart = true;
             }
@@ -136,13 +162,13 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
             }
         });
 
-        updateSong();
+        updateSong(null);
     }
 
     /**
      * Fetches the current song from the server, and updates mCurrentsong
      */
-    public void updateSong() {
+    public void updateSong(final Runnable runnable) {
         AppManager.getInstance().getCurrentSong(new CollabifyCallback<Song>() {
             @Override
             public void exception(Exception e) {
@@ -157,29 +183,15 @@ public class PlayerHandler implements PlayerNotificationCallback, ConnectionStat
                     mHasCurrentSongChanged = true;
                     mCurrentSong = song;
                 }
+
+                if(runnable != null){
+                    mCallerActivity.runOnUiThread(runnable);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.w(TAG, "Failed to get current song: " + error.toString());
-            }
-        });
-    }
-
-    public void getServerNextSong() {
-        AppManager.getInstance().nextSong(new CollabifyResponseCallback() {
-            @Override
-            public void exception(Exception e) {
-                Log.w(TAG, "Couldn't skip to next song: " + e.toString());
-            }
-
-            @Override
-            public void success(Response response) {
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.w(TAG, "Couldn't skip to next song: " + error.toString());
             }
         });
     }

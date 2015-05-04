@@ -100,7 +100,7 @@ public class BasePlayerFragment extends Fragment implements CompoundButton.OnChe
             setUpForCollabifier(rootView);
         }
 
-        mListener.getPlayerHandler().updateSong();
+        mListener.getPlayerHandler().updateSong(null);
 
         return rootView;
     }
