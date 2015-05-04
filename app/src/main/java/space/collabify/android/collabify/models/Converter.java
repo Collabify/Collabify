@@ -99,7 +99,7 @@ public class Converter {
         }
 
         Song appSong = new Song(song.getTitle(),song.getArtist(), song.getAlbum(),
-                song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId(), song.getUserId());
+                song.getYear(), song.getSongId(), song.getArtworkUrl(), song.getUserId(), song.getUsername());
 
         if (song.getVote().isDownvoted()) {
             appSong.downvote();
