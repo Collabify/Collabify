@@ -18,6 +18,7 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.R;
 import space.collabify.android.TabsPagerAdapter;
 import space.collabify.android.base.CollabifierPlaylistInfo;
 import space.collabify.android.base.CollabifyActivity;
@@ -27,6 +28,7 @@ import space.collabify.android.controls.ImageToggleButton;
 import space.collabify.android.managers.AppManager;
 import space.collabify.android.managers.CollabifyCallback;
 import space.collabify.android.managers.CollabifyResponseCallback;
+import space.collabify.android.models.Role;
 import space.collabify.android.models.Song;
 
 
@@ -116,6 +118,7 @@ public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPa
     private void initiateRefresh() {
 
         setRefreshing(true);
+        mAppManager.getUserDetails(null);
 
         mAppManager.getEventSettings(new CollabifyResponseCallback() {
             @Override
@@ -228,9 +231,52 @@ public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPa
 
             if (isChecked) {
                 downvoteButton.setChecked(false);
-                mAppManager.upvoteSong(song, new afterVoteClick());
+                mAppManager.upvoteSong(song, new afterVoteClick() {
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        retrofitError.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Could not track vote. Refresh playlist", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    @Override
+                    public void exception(Exception e) {
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getActivity(),  "Could not vote. Refresh playlist", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             } else if (!downvoteButton.isChecked()) {
-                mAppManager.clearSongVote(song, new afterVoteClick());
+                    mAppManager.clearSongVote(song, new afterVoteClick() {
+
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            retrofitError.printStackTrace();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), "Could not track vote. Refresh playlist", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void exception(Exception e) {
+                            e.printStackTrace();
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getActivity(), "Could not vote. Refresh playlist", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
             }
         }
     }
@@ -252,9 +298,51 @@ public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPa
                 //TODO: warning, causes onDownvoteClick to be called, resulting in
                 //two calls to the server when only one may be necessary...
                 upvoteButton.setChecked(false);
-                mAppManager.downvoteSong(song, new afterVoteClick());
+                mAppManager.downvoteSong(song, new afterVoteClick(){
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        retrofitError.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Could not track vote. Refresh playlist", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    @Override
+                    public void exception(Exception e) {
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getActivity(),  "Could not vote. Refresh playlist", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             } else if (!upvoteButton.isChecked()) {
-                mAppManager.clearSongVote(song, new afterVoteClick());
+                mAppManager.clearSongVote(song, new afterVoteClick(){
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        retrofitError.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Could not track vote. Refresh playlist", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                    @Override
+                    public void exception(Exception e) {
+                        e.printStackTrace();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getActivity(),  "Could not vote. Refresh playlist", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             }
         }
     }
@@ -292,6 +380,12 @@ public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPa
         @Override
         public void failure(RetrofitError retrofitError) {
           Log.e(TAG, "Failed to remove the song:\n" + retrofitError.getMessage());
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "Could not remove song. Refresh playlist", Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
@@ -315,6 +409,12 @@ public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPa
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.e(TAG, "Failed to remove the song:\n" + retrofitError.getMessage());
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Could not remove song. Refresh playlist", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             @Override

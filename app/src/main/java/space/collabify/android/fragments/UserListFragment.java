@@ -22,6 +22,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import space.collabify.android.TabsPagerAdapter;
 import space.collabify.android.collabify.api.CollabifyApi;
 import space.collabify.android.collabify.api.CollabifyApiException;
 import space.collabify.android.collabify.models.Converter;
@@ -35,7 +36,8 @@ import space.collabify.android.models.User;
 /**
  * This file was born on March 11, at 15:52
  */
-public class UserListFragment extends SwipeRefreshListFragment {
+public class UserListFragment extends SwipeRefreshListFragment
+        implements TabsPagerAdapter.OnTabSelectedListener{
     private static final String TAG = UserListFragment.class.getSimpleName();
 
     List<User> userlist;
@@ -129,6 +131,13 @@ public class UserListFragment extends SwipeRefreshListFragment {
 
         // Stop the refreshing indicator
         setRefreshing(false);
+    }
+
+    @Override
+    public void onTabSelected(){
+        if(super.mSwipeRefreshLayout != null){
+            initiateRefresh();
+        }
     }
 
     /**
@@ -226,11 +235,28 @@ public class UserListFragment extends SwipeRefreshListFragment {
                     @Override
                     public void failure (RetrofitError retrofitError){
                       retrofitError.printStackTrace();
-                      getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                          Toast.makeText(getActivity(), "Error changing " + u.getName() + "'s role", Toast.LENGTH_SHORT).show();
+                        int e = retrofitError.getResponse().getStatus();
+                        if (e == 400) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getActivity(), u.getName() + " already assigned that role", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
-                      });
+                        else if (e == 401) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getActivity(), u.getName() + " has left the event.\n Please update your user list", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else{
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getActivity(), "Error changing " + u.getName() + "'s role", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
 
                     }
 
