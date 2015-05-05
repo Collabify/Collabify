@@ -193,7 +193,13 @@ public class DjTracksFragment extends SwipeRefreshListFragment {
 
         currentPlaylistId = playlistId;
         currentPlaylistOwner = ownerId;
-        currentPlaylistName = playlistName;
+        if(playlistName.length() > 20){
+            currentPlaylistName = playlistName.substring(0, 20) + "...";
+        }
+        else{
+            currentPlaylistName = playlistName;
+        }
+
 
         progress = ProgressDialog.show(this.getmParentActivity(), "Populating DJ Tracks", "Fetching tracks...", true);
 

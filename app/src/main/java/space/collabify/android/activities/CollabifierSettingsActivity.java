@@ -2,6 +2,7 @@ package space.collabify.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import space.collabify.android.R;
@@ -20,6 +21,10 @@ public class CollabifierSettingsActivity extends CollabifyActivity { //BaseSetti
         SHOW_LOGOUT = false;
     }
 
+    public void showUsernameUpdate(View view){
+        Log.d(TAG, "check box hit");
+        return;
+    }
     public void toAbout(View view) {
         Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
