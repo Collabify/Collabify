@@ -73,7 +73,8 @@
             android:name=".activities.DjActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/label_dj"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- make for sending search string in an intent -->
         <activity
