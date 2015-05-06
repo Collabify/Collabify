@@ -200,7 +200,9 @@ public class JoinEventActivity extends CollabifyActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getBundleExtra(LocationService.BUNDLE_EXTRA);
             Location location = bundle.getParcelable(LocationService.PARCEL_LOCATION);
-            mJoinEventListFragment.initializeList();
+            if (mJoinEventListFragment != null) {
+                mJoinEventListFragment.initializeList();
+            }
         }
     };
 
