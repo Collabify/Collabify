@@ -75,37 +75,33 @@ public class CollabifyActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //handle presses on the action bar items
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                //TODO: the role is null before entering a mode. The role is also not being reset
-                // after leaving DJ or Collabifier mode
-                if (mUser.getRole().isNoRole()) {
-                    /** default settings */
-                    openSettings();
-                    return true;
-                }
-                else if (mUser.getRole().isDJ()) {
-                    openDJSettings();
-                    return true;
-                }
-                else if (mUser.getRole().isCollabifier()) {
-                    openCollabifierSettings();
-                    return true;
-                }
-                else if (mUser.getRole().isBlacklisted()) {
-                    //openBlacklistedSettings();
-                    return true;
-                }
-                else if (mUser.getRole().isPromoted()) {
-                    //openPromotedSettings();
-                    return true;
-                }
-                else {
-                    /** default settings */
-                    openSettings();
-                    return true;
-                }
+        if (mUser != null) {
+            //handle presses on the action bar items
+            switch (item.getItemId()) {
+                case R.id.action_settings:
+                    //TODO: the role is null before entering a mode. The role is also not being reset
+                    // after leaving DJ or Collabifier mode
+                    if (mUser.getRole().isNoRole()) {
+                        /** default settings */
+                        openSettings();
+                        return true;
+                    } else if (mUser.getRole().isDJ()) {
+                        openDJSettings();
+                        return true;
+                    } else if (mUser.getRole().isCollabifier()) {
+                        openCollabifierSettings();
+                        return true;
+                    } else if (mUser.getRole().isBlacklisted()) {
+                        //openBlacklistedSettings();
+                        return true;
+                    } else if (mUser.getRole().isPromoted()) {
+                        //openPromotedSettings();
+                        return true;
+                    } else {
+                        /** default settings */
+                        openSettings();
+                        return true;
+                    }
 
             /*
             //case for Collabifier settings
@@ -119,44 +115,47 @@ public class CollabifyActivity extends ActionBarActivity {
                 return true;
             */
 
-            case R.id.action_logout:
-                final Context ctx = this;
-                mAppManager.logout(this, new CollabifyResponseCallback() {
-                    @Override
-                    public void success(Response response) {
-                        //return to login activity
-                        Intent intent = new Intent(ctx, LoginScreenActivity.class);
-                        //makes the app actually close when hitting back on login screen
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK );
-                        startActivity(intent);
-                    }
+                case R.id.action_logout:
+                    final Context ctx = this;
+                    mAppManager.logout(this, new CollabifyResponseCallback() {
+                        @Override
+                        public void success(Response response) {
+                            //return to login activity
+                            Intent intent = new Intent(ctx, LoginScreenActivity.class);
+                            //makes the app actually close when hitting back on login screen
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
 
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        Log.e(TAG, "Retrofit error on logout: " + retrofitError.toString());
-                    }
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
+                            Log.e(TAG, "Retrofit error on logout: " + retrofitError.toString());
+                        }
 
-                    @Override
-                    public void exception(Exception e) {
-                        Log.e(TAG, "Exception on logout: " + e.toString());
-                    }
-                });
+                        @Override
+                        public void exception(Exception e) {
+                            Log.e(TAG, "Exception on logout: " + e.toString());
+                        }
+                    });
 
-                return true;
+                    return true;
 
-          case R.id.action_leave:
-            //Intent leave = new Intent("leave_event");
-            //sendBroadcast(leave);
-              leaveEvent();
-            return true;
-          case R.id.action_end:
-              //Intent end = new Intent("end_event");
-              //sendBroadcast(end);
-              endEvent();
-              return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                case R.id.action_leave:
+                    //Intent leave = new Intent("leave_event");
+                    //sendBroadcast(leave);
+                    leaveEvent();
+                    return true;
+                case R.id.action_end:
+                    //Intent end = new Intent("end_event");
+                    //sendBroadcast(end);
+                    endEvent();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
+        openSettings();
+        return true;
     } //TODO: add event event
 
     /** Launch settings activity */

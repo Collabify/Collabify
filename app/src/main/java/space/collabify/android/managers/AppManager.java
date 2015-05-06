@@ -129,6 +129,36 @@ public class AppManager {
     }
 
     /**
+     * Update user's showname
+     *
+     * @return  userSettings
+     */
+    public void updateUser(final CollabifyCallback<space.collabify.android.collabify.models.domain.UserSettings> callback) {
+        String userID = mUser.getId();
+        UserSettings userSettings = mUser.getSettings();
+        mCollabifyApi.updateUser(userID, userSettings, new Callback<space.collabify.android.collabify.models.domain.UserSettings>() {
+            @Override
+            public void success(space.collabify.android.collabify.models.domain.UserSettings userSettings, Response response) {
+                mUser.setSettings(userSettings);
+
+                if (callback != null) {
+                    callback.success(userSettings, response);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                // handle failure
+                if (callback != null) {
+                    callback.failure(retrofitError);
+                }
+            }
+
+        });
+
+    }
+
+    /**
      * Handles all the post Spotify login setup
      *
      * @param accessToken   the accessToken from spotify
@@ -173,8 +203,7 @@ public class AppManager {
     private void collabifyLogin(User user, final CollabifyCallback<String> callback) {
         UserRequestDO userDO = new UserRequestDO();
         userDO.setName(user.getName());
-        userDO.setSettings(new UserSettings());
-        userDO.getSettings().setShowName(true);
+        userDO.setSettings(user.getSettings());
 
         try {
             mCollabifyApi.addUser(userDO, new Callback<space.collabify.android.collabify.models.domain.User>() {
@@ -1061,6 +1090,8 @@ public class AppManager {
                 mUser.setName(user.getName());
                 mUser.setId(user.getUserId());
                 mUser.setRole(user.getRole());
+                mUser.setSettings(user.getSettings());
+                Log.d(TAG, "User settings:" + mUser.getSettings().isShowName());
 
                 if (callback != null) {
                     callback.success(user, response);

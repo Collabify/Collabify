@@ -2,6 +2,8 @@ package space.collabify.android.models;
 
 import android.location.Location;
 
+import space.collabify.android.collabify.models.domain.UserSettings;
+
 /**
  * This file was born on March 20, at 19:46
  */
@@ -12,18 +14,23 @@ public class User {
     private Location mLocation;
     private boolean isPremium;
     private String mAccessToken;
+    private UserSettings mSettings;
 
     public User(String name, String id, String role) {
       mName = name;
       mId = id;
       mRole = new Role();
       mRole.setRole(role);
+        mSettings = new UserSettings();
+        mSettings.setShowName(true);
     }
 
     public User(String name, String id) {
       mName = name;
       mId = id;
       mRole = new Role();
+        mSettings = new UserSettings();
+        mSettings.setShowName(true);
     }
 
     public Role getRole() {
@@ -72,5 +79,12 @@ public class User {
 
     public String getAccessToken() {
         return mAccessToken;
+    }
+    public UserSettings getSettings() {
+        return mSettings;
+    }
+
+    public void setSettings(UserSettings settings) {
+        this.mSettings.setShowName(settings.isShowName());
     }
 }

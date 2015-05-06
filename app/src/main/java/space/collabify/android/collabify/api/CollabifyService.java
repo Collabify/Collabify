@@ -111,18 +111,18 @@ public interface CollabifyService {
      * @return
      */
     @PUT(USER_SETTINGS_URL)
-    public UserSettings updateUser(@Path(USER_PATHVAL) String userId, @Body String showName);
+    public UserSettings updateUser(@Path(USER_PATHVAL) String userId, @Body UserSettings showName);
 
     /**
      * Update the user's showName
      *
      * @param userId
-     * @param showName
+     * @param userSettings
      * @param callback
      * @return
      */
     @PUT(USER_SETTINGS_URL)
-    public void updateUser(@Path(USER_PATHVAL) String userId, @Body String showName, Callback<UserSettings> callback);
+    public void updateUser(@Path(USER_PATHVAL) String userId, @Body UserSettings userSettings, Callback<UserSettings> callback);
 
     /**
      * Log out the user and remove him from the server
