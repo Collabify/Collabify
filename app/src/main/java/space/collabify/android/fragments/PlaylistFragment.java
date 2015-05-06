@@ -70,22 +70,20 @@ public class PlaylistFragment extends SwipeRefreshListFragment implements TabsPa
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
 
-        if (!mAppManager.getUser().getRole().isDJ()) {
-            info = new CollabifierPlaylistInfo(container.getContext());
-            info.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
+        info = new CollabifierPlaylistInfo(container.getContext());
+        info.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
 
-            rootView.addView(info);
+        rootView.addView(info);
 
-            info.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, info.getMeasuredHeight(), 0, 0);
-            listFragment.setLayoutParams(params);
+        info.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, info.getMeasuredHeight(), 0, 0);
+        listFragment.setLayoutParams(params);
 
-            rootView.bringChildToFront(info);
-        }
+        rootView.bringChildToFront(info);
 
         return rootView;
     }
