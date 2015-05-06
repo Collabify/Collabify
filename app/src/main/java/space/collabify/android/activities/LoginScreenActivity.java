@@ -48,7 +48,6 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         SHOW_SETTINGS = true;
         SHOW_LEAVE = false;
         SHOW_LOGOUT = false;
@@ -93,7 +92,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                         AppManager.getInstance().login(response.getAccessToken(), new CollabifyCallback<String>() {
                             @Override
                             public void success(String eventId, Response response) {
-
+                                mAppManager.updateUser(null);
                                 if(eventId != null){
                                     //needed in order to get the event name, but can't because incorrectly sets user role to COLLABIFIER
                                     //mAppManager.joinEvent(eventId, null);
@@ -105,6 +104,7 @@ public class LoginScreenActivity extends CollabifyActivity implements Connection
                                       @Override
                                       public void success(Response response) {
                                         Intent i;
+                                          //mAppManager.updateUser(null);
                                         if (mAppManager.getUser().getRole().isDJ()) {
                                           i = new Intent(mainContext, DjActivity.class);
                                         }

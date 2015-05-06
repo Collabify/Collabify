@@ -116,23 +116,23 @@ public class CollabifyApi {
      * Update the user's showName
      *
      * @param userId
-     * @param showName
+     * @param userSettings
      * @return
      */
-    public UserSettings updateUser(String userId, String showName) {
-        return mCollabifyService.updateUser(userId, showName);
+    public UserSettings updateUser(String userId, UserSettings userSettings) {
+        return mCollabifyService.updateUser(userId, userSettings);
     }
 
     /**
      * Update the user's showName
      *
      * @param userId
-     * @param showName
+     * @param userSettings
      * @param callback
      * @return
      */
-    public void updateUser(String userId, String showName, Callback<UserSettings> callback) {
-        mCollabifyService.updateUser(userId, showName, callback);
+    public void updateUser(String userId, UserSettings userSettings, Callback<UserSettings> callback) {
+        mCollabifyService.updateUser(userId, userSettings, callback);
     }
 
     /**
