@@ -167,13 +167,42 @@ public class AppManager {
     public void login(final String accessToken, final CollabifyCallback<String> callback) {
         mSpotifyApi.setAccessToken(accessToken);
         mSpotifyService = mSpotifyApi.getService();
-
         // get the user information
         mSpotifyService.getMe(new Callback<kaaes.spotify.webapi.android.models.User>() {
             @Override
             public void success(kaaes.spotify.webapi.android.models.User user, Response response) {
+
+                mCollabifyApi.getUser(user.id, new Callback<space.collabify.android.collabify.models.domain.User>() {
+                    @Override
+                    public void success(space.collabify.android.collabify.models.domain.User existing_user, Response response1) {
+                        Log.i(TAG, "after get user role:" + existing_user.getRole());
+                        mUser.setName(existing_user.getName());
+                        mUser.setId(existing_user.getUserId());
+                        mUser.setRole(existing_user.getRole());
+                        mUser.setSettings(existing_user.getSettings());
+                        Log.i(TAG, "Existing user Display name: " + existing_user.getName() + ", UserID: " + existing_user.getUserId());
+
+                        if (callback != null) {
+                            //callback.success(existing_user.getUserId(), response1);
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+                        // handle failure
+                        if (callback != null) {
+                            Log.d(TAG, "User not in DB");
+                            //callback.failure(retrofitError);
+                        }
+                    }
+
+                });
+
+
                 // set up the user
-                mUser = new User(user.display_name, user.id, Role.NO_ROLE);
+                if (mUser == null) {
+                    mUser = new User(user.display_name, user.id, Role.NO_ROLE);
+                }
                 mUser.setPremium(user.product.contains(PRODUCT_PREMIUM));
                 mUser.setAccessToken(accessToken);
                 mCollabifyApi.setCurrentUserId(mUser.getId());
@@ -225,6 +254,7 @@ public class AppManager {
 
                     // handle failure
                     if (callback != null) {
+                        Log.d(TAG,"appmanager addUser failure");
                         callback.failure(retrofitError);
                     }
                 }
