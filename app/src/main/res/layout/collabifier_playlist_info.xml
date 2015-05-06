@@ -27,7 +27,7 @@
         android:layout_alignTop="@id/song_album_art"
         android:layout_toRightOf="@id/song_album_art"
         android:layout_toEndOf="@id/song_album_art"
-        android:layout_marginTop="5dp"/>
+      />
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -46,7 +46,14 @@
         android:layout_below="@id/playlist_status"
         android:layout_alignLeft="@+id/playlist_status"
         android:layout_alignStart="@+id/playlist_status"
-        android:layout_marginTop="2dp" />
+        android:layout_marginTop="2dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"/>
     <TextView
         android:id="@+id/currently_playing_song_artist"
         android:layout_width="wrap_content"
@@ -55,6 +62,13 @@
         android:layout_alignLeft="@+id/playlist_status"
         android:layout_alignStart="@+id/playlist_status"
         android:textColor="#999"
-        android:layout_marginTop="2dp"/>
+        android:layout_marginTop="2dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"/>
 
 </RelativeLayout>

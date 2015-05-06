@@ -30,7 +30,6 @@
             android:focusableInTouchMode="true"
             android:clickable="true"
 
-            android:text="title"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/playlist_collabifier_album_art"
             android:layout_toLeftOf="@+id/playlist_dj_up_button"
@@ -48,7 +47,6 @@
             android:focusableInTouchMode="true"
             android:clickable="true"
 
-            android:text="artist"
             android:layout_below="@+id/song_row_title"
             android:layout_alignLeft="@+id/song_row_title"
             android:layout_alignStart="@+id/song_row_title"
@@ -66,7 +64,6 @@
             android:focusableInTouchMode="true"
             android:clickable="true"
 
-            android:text="added by"
             android:layout_below="@+id/song_row_artist"
             android:layout_alignLeft="@+id/song_row_artist"
             android:layout_alignStart="@+id/song_row_artist"

@@ -4,16 +4,16 @@ package space.collabify.android.collabify.models.domain;
  * Created by ricardolopez on 4/10/15.
  */
 public class Song {
-    private String title;
-    private String artist;
-    private String album;
+    private String  title;
+    private String  artist;
+    private String  album;
     private Integer year;
-    private String songId;
-    private String artworkUrl;
-    private String userId;
-    private String username;
+    private String  songId;
+    private String  artworkUrl;
+    private String  userId;
+    private String  username;
     private Integer voteCount;
-    private Vote   vote;
+    private Vote    vote;
 
     public String getTitle() {
         return title;

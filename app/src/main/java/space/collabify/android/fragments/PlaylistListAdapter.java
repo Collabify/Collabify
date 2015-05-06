@@ -95,6 +95,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Song> {
           } else if (position == songs.size() - 1) {
             downButton.setImageResource(R.drawable.ic_down_arrow_grey);
           }
+
+          if (songs.size() == 2) {
+            downButton.setImageResource(R.drawable.ic_down_arrow_grey);
+          }
         } else {
             upButton.setVisibility(View.INVISIBLE);
             downButton.setVisibility(View.INVISIBLE);
